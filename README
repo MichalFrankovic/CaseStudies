@@ -1,1 +1,26 @@
 Welcome to 'Pripadove studie' repository on GitHub
+
+-------------------------------------------------------
+
+GIT na Windows:
+- odporucam: http://code.google.com/p/tortoisegit/
+- kto pouziva Eclipse, tak tu je plugin: http://www.eclipse.org/egit/
+- Github aplikacia: http://windows.github.com/ (ja som s nou nemal dobre skusenosti)
+
+Linux / OSX - pouzite prikazovy riadok:
+- oficialna stranka: http://git-scm.com/
+- prirucka: http://gitref.org/
+
+
+-------------------------------------------------------
+
+Nech si uz vyberiete akekolvek prostredie, oboznamte sa prosim s jeho pouzivanim. 
+Kazdy by mal zvladnut nasledovne operacie:
+- naklonovat repozitar z GitHub (git clone)
+- stiahnut si aktualnu verziu repozitaru (git pull, git fetch)
+- ulozit zmeny vo vlastnom lokalnom repozitari (git add, git commit)
+- poslat lokalne vykonane zmeny do "centralneho" repozitara na Githube (git push)
+- spojit svoje lokalne zmeny so zmenami v centralnom repozitari od ostatnych ludi (git merge)
+
+V pripade problemov mi dajte vediet
+-- Matej Lednicky
