@@ -1,4 +1,4 @@
-ss MIT Licensesds
+MIT
 
 Copyright (c) <2012> <Taylor Otwell> <taylorotwell@gmail.com>
 
