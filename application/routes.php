@@ -32,10 +32,14 @@
 |
 */
 
-Route::get('/', function()
+Route::controller(Controller::detect());
+
+/*
+Route::get('/base', function()
 {
-	return View::make('home.index');
+	return Redirect::to_action('home@index');
 });
+*/
 
 /*
 |--------------------------------------------------------------------------
