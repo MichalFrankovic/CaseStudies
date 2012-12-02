@@ -28,4 +28,6 @@
     <span class="add-on">Hodnota v&yacute;davku: </span>
     <input class="span3" type="text">
 </div>
+<input type="button" class="btn" value="Ulo&zcaron;i&tcaron;" />
+<input type="button" class="btn" value="N&aacute;vrat" />
 @include('foot');
