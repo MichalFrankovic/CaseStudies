@@ -34,6 +34,16 @@
 
 Route::controller(Controller::detect());
 
+Route::filter('pattern: admin/*', 'auth');
+Route::filter('pattern: spendings/*', 'auth');
+Route::filter('pattern: incomes/*', 'auth');
+Route::filter('pattern: savings/*', 'auth');
+Route::filter('pattern: settings/*', 'auth');
+
+
+Route::get('about', 'home@index');
+
+
 /*
 Route::get('/base', function()
 {
@@ -102,6 +112,23 @@ Route::filter('before', function()
 Route::filter('after', function($response)
 {
 	// Do stuff after every request to your application...
+	
+	//if ($_SERVER['LARAVEL_ENV'] == 'local') {
+		$queries = Laravel\Database::profile();
+		$count = 0;
+		$sum = 0;
+		$queries = array_map(function ($query) use (&$count, &$sum) {
+			$sum += $query['time'];
+			return (++$count) . '. ' . $query['sql'] . PHP_EOL . implode(',',$query['bindings']) . PHP_EOL . 'Time: ' . $query['time'] . 'ms' . PHP_EOL . '---';
+		}, $queries);
+		
+			$queries[] = 'Total time: ' . $sum . 'ms' . PHP_EOL . '---';
+		
+			//if ( Laravel\Input::has('debug-query') || Laravel\Input::has('dq') ) {
+				View::share('sql_debug', implode(PHP_EOL, $queries));
+			//}
+		
+	//}
 });
 
 Route::filter('csrf', function()
@@ -111,5 +138,8 @@ Route::filter('csrf', function()
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::to('login');
+	if (Auth::guest()) {
+		return Redirect::to('user/login');
+	}
 });
+

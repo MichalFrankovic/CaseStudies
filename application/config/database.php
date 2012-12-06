@@ -69,10 +69,10 @@ return array(
 
 		'mysql' => array(
 			'driver'   => 'mysql',
-			'host'     => 'localhost',
-			'database' => 'database',
+			'host'     => 'smarthosting.sk',
+			'database' => 'web',
 			'username' => 'root',
-			'password' => '',
+			'password' => 'pripadove2012',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 		),

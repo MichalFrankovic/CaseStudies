@@ -21,7 +21,9 @@
 				<small>Systém na správu výdavkov pre jednotlivcov a rodiny</small>
 				
 				<div class="user">
-					Prihlásený ako: <b>user1</b> | <a href="#">Odhlásiť</a>
+@if (!Auth::guest())
+					Prihlásený ako: <b title="{{ Auth::user()->t_email_login }}">{{ Auth::user()->t_nazov_domacnosti }}</b> | {{ HTML::link('user/logout', 'Odhlásiť'); }}
+@endif
 				</div>
 				
 			</div>
@@ -29,11 +31,19 @@
 			<div class="navbar">
 				<div class="navbar-inner">
 					<ul class="nav">
-					    <li<?php echo $active=='admin' ? ' class="active"' : ''; ?>>{{ HTML::link('admin', 'Administrácia'); }}</li>
-						<li<?php echo $active=='prijmy' ? ' class="active"' : ''; ?>>{{ HTML::link('/incomes', 'Príjmy'); }}</li>
-						<li<?php echo $active=='vydavky' ? ' class="active"' : ''; ?>>{{ HTML::link('spendings', 'Výdavky'); }}</li>
-						<li<?php echo $active=='sporenie' ? ' class="active"' : ''; ?>>{{ HTML::link('/savings', 'Sporenie'); }}</li>
-						<li<?php echo $active=='nastavenia' ? ' class="active"' : ''; ?>>{{ HTML::link('/settings', 'Nastavenia'); }}</li>
+@if (Auth::guest())
+						<li{{ isset($active) && $active=='about' ? ' class="active"' : ''; }}>{{ HTML::link('', 'Výdavkovač - čo je to?'); }}</li>
+						<li{{ isset($active) && $active=='login' ? ' class="active"' : ''; }}>{{ HTML::link('user/login', 'Prihlásenie'); }}</li>
+						<li{{ isset($active) && $active=='register' ? ' class="active"' : ''; }}>{{ HTML::link('user/register', 'Registrácia'); }}</li>
+@else
+	@if (Auth::user()->fl_admin == 'A')
+					    <li{{ isset($active) && $active=='admin' ? ' class="active"' : ''; }}>{{ HTML::link('admin', 'Administrácia'); }}</li>
+	@endif
+						<li{{ isset($active) && $active=='prijmy' ? ' class="active"' : ''; }}>{{ HTML::link('/incomes', 'Príjmy'); }}</li>
+						<li{{ isset($active) && $active=='vydavky' ? ' class="active"' : ''; }}>{{ HTML::link('spendings', 'Výdavky'); }}</li>
+						<li{{ isset($active) && $active=='sporenie' ? ' class="active"' : ''; }}>{{ HTML::link('/savings', 'Sporenie'); }}</li>
+						<li{{ isset($active) && $active=='nastavenia' ? ' class="active"' : ''; }}>{{ HTML::link('/settings', 'Nastavenia'); }}</li>
+@endif
 				    </ul>
 			    </div>
 			</div>

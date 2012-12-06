@@ -32,7 +32,7 @@ class Home_Controller extends Base_Controller {
 
 	public function action_index()
 	{
-		return View::make('home.index')->with('active', 'admin')->with('subactive', 'admin/settings');
+		return View::make('home.index')->with('guest', true)->with('active', 'about');
 	}
 
 }
