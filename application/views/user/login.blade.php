@@ -15,7 +15,7 @@
 	</div>
 @endif
 
-<div class="alert alert-info"><b>Prihlasovacie udaje:</b> domacnost1@gmail.com / domacnost</div>
+<div class="alert alert-info"><b>Prihlasovacie udaje:</b> domacnost1@gmail.com / domacnost1</div>
 
 <div>
 	{{ Form::label('email', 'E-mailová adresa') }}
