@@ -26,11 +26,9 @@
 <div class="input-prepend">
         <span class="add-on">Kategória: </span>
         <select class="span3">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
+          @foreach ($kategorie as $kat)
+            <option>{{ $kat->t_nazov }}</option>
+            @endforeach
         </select>
     </div>
   <input type="button" class="btn" value="Zobraziť" />
@@ -47,39 +45,27 @@
             </th>
             <th>Dátum</th>
             <th>Príjemca platby</th>
-            <th>Kategória</th>
+            <th>Názov</th>
             <th>Suma v €</th>
             <th>Výbe akcie</th>
         </tr>
         </thead>
         <tbody>
+        @foreach ($vydavky as $vydavok)
         <tr>
             <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td>{{ $vydavok->d_datum }}</td>
+            <td>{{ $vydavok->partner->t_nazov }}</td>
+            <td>{{ $vydavok->t_poznamka }}</td>
+            <td>{{ round($vydavok->vl_cena_so_zlavou,2) }} EUR</td>
             <td><input type="button" class="btn" value="Upraviť" />
                 <input type="button" class="btn" value="Vymazať" /></td>
         </tr>
-        <tr>
-            <td><input type="checkbox" name="checkbox3" id="checkbox3" /></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" name="checkbox4" id="checkbox4" /></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
+        @endforeach
         </tbody>
     </table>
 </form>
+<pre>
 
+  </pre>
 @include('foot');

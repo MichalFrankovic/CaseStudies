@@ -32,7 +32,15 @@ class Spendings_Controller extends Base_Controller {
 
 	public function action_index()
 	{
-		return View::make('spendings.main')->with('active', 'vydavky')->with('subactive', 'admin/settings');
+
+        $view = View::make('spendings.main')
+            ->with('active', 'vydavky')->with('subactive', 'admin/settings');
+        $view->vydavky = Vydavok::where('id_osoba','=', '9')->get();
+        $view->kategorie = Kategoria::where('id_kategoria_a_produkt', 'LIKE','%K%')->get();
+        //$p = Partner::all();
+        //print_r($view->kategorie);
+        //$view->p = Vydavok::where('id_obchodny_partner' ,'=', '4')->join('phone', 'users.id', '=', 'phone.user_id') ;
+        return $view;
 	}
     public function action_periodicalspending()
     {
