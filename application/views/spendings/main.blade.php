@@ -3,36 +3,41 @@
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 <h2>Filter výdavkov</h2>
+{{ Form::open('spendings/filter', 'POST', array('class' => 'side-by-side')); }}
 <div class="thumbnail">
     <h4>Dátum</h4>
     <div class="input-prepend">
         <span class="add-on">Od: </span>
-        <input class="span3" type="date">
+        <input class="span3" type="date" name="od" value="{{ $od }}">
     </div>
     <div class="input-prepend">
     <span class="add-on">Do: </span>
-    <input class="span3" type="date">
+    <input class="span3" type="date" name="do" value="{{ $do }}">
 </div>
  <div class="input-prepend">
         <span class="add-on">Príjemca: </span>
-    <select class="span3">
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-        <option>D</option>
-        <option>E</option>
+    <select name="prijemca" class="span3">
+        <option value="all" selected="selected">VŠETCI</option>
+        @foreach ($partneri as $partner)
+        <option value="{{ $partner->id }}"> {{ $partner->t_nazov }}</option>
+        @endforeach
     </select>
      </div>
 <div class="input-prepend">
         <span class="add-on">Kategória: </span>
-        <select class="span3">
+        <select name="category" class="span3">
           @foreach ($kategorie as $kat)
-            <option>{{ $kat->t_nazov }}</option>
+            <option value="{{ $kat->id_kategoria_a_produkt }}">{{ $kat->t_nazov }}</option>
             @endforeach
         </select>
+    <div class="submit">
+        {{ Form::submit('Zobraziť' , array('class' => 'btn')); }}
     </div>
-  <input type="button" class="btn" value="Zobraziť" />
+    {{ Form::close() }}
+    </div>
  </div>
+
+{{ Form::close() }}
 
 <h2 class="">Zoznam výdavkov</h2>
 <form id="form1" name="form1" method="post" action="">
@@ -40,8 +45,6 @@
         <thead>
         <tr>
             <th>
-                <input type="checkbox" name="checkbox" id="checkbox" />
-                <label for="checkbox"></label>
             </th>
             <th>Dátum</th>
             <th>Príjemca platby</th>
@@ -58,8 +61,8 @@
             <td>{{ $vydavok->partner->t_nazov }}</td>
             <td>{{ $vydavok->t_poznamka }}</td>
             <td>{{ round($vydavok->vl_cena_so_zlavou,2) }} EUR</td>
-            <td><input type="button" class="btn" value="Upraviť" />
-                <input type="button" class="btn" value="Vymazať" /></td>
+            <td><input type="button" class="btn" value="Upraviť" disabled="disabled" />
+                <input type="button" class="btn" value="Vymazať" disabled="disabled" /></td>
         </tr>
         @endforeach
         </tbody>
