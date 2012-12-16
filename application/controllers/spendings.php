@@ -39,7 +39,7 @@ class Spendings_Controller extends Base_Controller {
             ->with('active', 'vydavky')->with('subactive', 'admin/settings');
         $view->vydavky = Vydavok::all();
         $view->partneri = Partner::All();
-        $view->kategorie = Kategoria::where('id_kategoria_a_produkt', 'LIKE','%K%')->get();
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->get();
         //$p = Partner::all();
         //print_r($view->kategorie);
         //$view->p = Vydavok::where('id_obchodny_partner' ,'=', '4')->join('phone', 'users.id', '=', 'phone.user_id') ;
@@ -62,7 +62,7 @@ class Spendings_Controller extends Base_Controller {
         $prijemca = Input::get('prijemca');
 
         $view->partneri = Partner::All();
-        $view->kategorie = Kategoria::where('id_kategoria_a_produkt', 'LIKE','%K%')->get();
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->get();
         $view->vydavky = Vydavok::where('d_datum', '>=', $od)->where('d_datum', '<=', $do);
         if ($prijemca != 'all') $view->vydavky->where("id_obchodny_partner",'=',$prijemca);
         $view->do = $do;

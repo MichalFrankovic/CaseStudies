@@ -8,6 +8,11 @@
 	<div class="alert alert-error">{{ $error }}</div>
 @endif
 
+<div>
+	{{ Form::label('name', 'Názov domácnosti', array('class' => 'control-label')) }}
+	{{ Form::text('name', $name) }}
+</div>
+
 <div {{ isset($errors->email) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('email', 'E-mailová adresa', array('class' => 'control-label')) }}
 	{{ Form::text('email', $email) }}

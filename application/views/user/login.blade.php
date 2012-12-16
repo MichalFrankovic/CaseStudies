@@ -27,12 +27,11 @@
 	{{ Form::password('password') }}
 </div>
 
-<?php /*
-<div>
+<?php /*<div>
 	{{ Form::label('remember', 'Zapamätať') }}
 	{{ Form::checkbox('remember', '1') }}
-</div>
-*/ ?>
+	<span class="help-inline">automaticky Vás prihlásime pri ďalšej návšteve (aj po zatvorení prehliadača)</span>
+</div>*/ ?>
 
 @if (isset($show_captcha) && $show_captcha == true)
 	@include('user/captcha')

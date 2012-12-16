@@ -31,6 +31,7 @@ class User_Controller extends Base_Controller {
 			}
 			
 			$view->email = Input::get('email');
+			$remember = Input::get('remember');
 			$password = Input::get('password');
 			
 			$auth = Auth::attempt(array('username' => $view->email, 'password' => $password));	//check email & password
@@ -40,11 +41,21 @@ class User_Controller extends Base_Controller {
 				Session::put('login_attemps', 0);
 				
 				if (Auth::user()->fl_aktivna != 'A') {	//inactive account
+					
 					$view->error = 'Váš účet bol zablokovaný';
-				} elseif (Auth::user()->fl_admin == 'A') {	//admin account
-					return Redirect::to('admin');
-				} else {	//ordinary account
-					return Redirect::to('spendings');
+					
+				} else {
+					
+					/*if (isset($remember) && $remember == 1) {
+						Laravel\Cookie::put('remember_login', md5(Auth::user()->id . Auth::user()->t_email_login . Auth::user()->t_heslo), 3600*24*30);
+					}*/
+					
+					if (Auth::user()->fl_admin == 'A') {	//admin account
+						return Redirect::to('admin');
+					} else {	//ordinary account
+						return Redirect::to('spendings');
+					}
+					
 				}
 				
 			} else {	//auth failed, display error
@@ -86,11 +97,13 @@ class User_Controller extends Base_Controller {
 				->with('active', 'register');
 		
 		$view->email = isset($_GET['email']) ? $_GET['email'] : '';
+		$view->name = '';
 		$errors = array();
 		
 		if (!empty($_POST)) {
 			
 			$view->email = Input::get('email');
+			$view->name = Input::get('name');
 			$password = Input::get('password');
 			$password_repeat = Input::get('password_repeat');
 			
@@ -131,6 +144,7 @@ class User_Controller extends Base_Controller {
 			//save to DB
 			{
 				$user = new Domacnost;
+				$user->t_nazov_domacnosti = $view->name;
 				$user->t_email_login = $view->email;
 				$user->t_heslo = Hash::make($password);
 				$user->fl_aktivna = 'A';
@@ -141,7 +155,7 @@ class User_Controller extends Base_Controller {
 			Session::flush('captcha_correct');
 			Session::flash('msg', 'Registrácia úspešná, môžete sa prihlásiť');
 			
-			Redirect::to('user/login');
+			return Redirect::to('user/login');
 			
 		}
 		
@@ -170,13 +184,7 @@ class User_Controller extends Base_Controller {
 		
 		if (isset($_GET['sent'])) {	//display success message
 			
-			$view->sent = 'Na Vašu e-mailpvú adresu sme odoslali ďalšie pokyny pre zmenu Vášho zabudnutého hesla';
-
-			//temp solution till email is not being send
-			{
-				$user = Domacnost::find( $_GET['sent'] );
-				$view->sent .= '<br /><b>Toto akože prišlo v e-maily:</b> Bla, bla ... '.Laravel\Html::link('user/password?hash='.substr($user->t_recovery_hash, 7), 'Klikni sem pre zmenu hesla').'. Bla, bla, bla.';
-			}
+			$view->sent = 'Na Vašu e-mailovú adresu sme odoslali ďalšie pokyny pre zmenu Vášho zabudnutého hesla';
 			
 		} elseif (!empty($_POST)) {	//submited form
 				
@@ -199,9 +207,24 @@ class User_Controller extends Base_Controller {
 				$user->t_recovery_hash = Hash::make( $user->email . microtime() . uniqid() );
 				$user->save();
 				
-				//TODO: send email
+				$sent = mail($user->t_email_login, 'Výdavkovač - zabudnuté heslo', "Dobrý deň " . $user->t_nazov_domacnosti . ",
+
+na základe Vašej žiadosti o zmenu zabudnutého hesla do webovej aplikácie Výdavkovač Vám posielame odkaz na ktorom si môžete zmeniť Vaše heslo:
+
+" . Laravel\Html::link('user/password?hash='.substr($user->t_recovery_hash, 7)) . "
+
+Ak ste nežiadali o zmenu hesla, ignorujte prosím túto správu.
+
+-- 
+S pozdravom
+Tím Výdavkovač
+");
+				if ($sent) {
+					return Redirect::to('user/recovery?sent=' . $user->id);
+				} else {
+					$view->error = 'Bohužiaľ z technických príčin sa nám nepodarilo odoslať e-mail s pokynmi pre zmenu hesla.';
+				}
 				
-				return Redirect::to('user/recovery?sent=' . $user->id);
 			}
 				
 		}

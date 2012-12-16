@@ -32,6 +32,16 @@
 |
 */
 
+$autologin = Laravel\Cookie::get('remember_login', false);
+
+/*if ($autologin !== false) {
+	
+	$user = DB::first('select t_email_login from D_DOMACNOST where md5( concat(id, t_email_login, t_heslo) ) = ? limit 1', array($autologin));
+	$auto = Auth::attempt(array('username' => $user->t_email_login));
+	var_dump($auto);
+	
+}*/
+
 Route::controller(Controller::detect());
 
 Route::filter('pattern: admin/*', 'auth');
