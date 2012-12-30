@@ -1,5 +1,7 @@
 @include('head')
-
+@if (isset($message) )
+    <h3 style="color: #bc8f8f;">{{ $message }}</h3>
+@endif
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 <h2>Filter výdavkov</h2>
@@ -23,7 +25,9 @@
         @endforeach
     </select>
      </div>
+    <span>Filtrovanie podla kategorii je nefunkcne</span>
 <div class="input-prepend">
+
         <span class="add-on">Kategória: </span>
         <select name="category" class="span3">
           @foreach ($kategorie as $kat)
@@ -37,7 +41,6 @@
     </div>
  </div>
 
-{{ Form::close() }}
 
 <h2 class="">Zoznam výdavkov</h2>
 <form id="form1" name="form1" method="post" action="">
@@ -57,11 +60,11 @@
         @foreach ($vydavky as $vydavok)
         <tr>
             <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
-            <td>{{ $vydavok->d_datum }}</td>
+            <td>{{ date('d.m.Y',strtotime($vydavok->d_datum)) }}</td>
             <td>{{ $vydavok->partner->t_nazov }}</td>
             <td>{{ $vydavok->t_poznamka }}</td>
             <td>{{ round($vydavok->vl_cena_so_zlavou,2) }} EUR</td>
-            <td><input type="button" class="btn" value="Upraviť" disabled="disabled" />
+            <td><a class="btn" href="spendings/simplespending?id={{ $vydavok->id }}">Upraviť</a>
                 <input type="button" class="btn" value="Vymazať" disabled="disabled" /></td>
         </tr>
         @endforeach
