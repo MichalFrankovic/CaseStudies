@@ -5,7 +5,7 @@
 <h4>Pravideln&yacute; v&yacute;davok</h4>
 <div class="input-prepend">
      <span class="add-on">D&aacute;tum:</span>
-     <input class="span3" type="date">
+     <input name="datum" class="span3" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">
 </div>
 <div class="input-prepend">
         <span class="add-on">N&aacute;zov v&yacute;davku: </span>
