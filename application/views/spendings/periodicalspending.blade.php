@@ -4,13 +4,11 @@
 
 <h2>Pravideln&yacute; v&yacute;davok</h2>
 {{ Form::open('spendings/savespending?update=1', 'POST', array('class' => 'side-by-side')); }}
-<input type="hidden" name="hlavicka-id" id="hidden" value="{{ $vydavky[0]->id }}"/>
 
 <div class="thumbnail">
     <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
      <div class="input-prepend" style="float:left;width:295px">
           <span class="add-on">D&aacute;tum:</span>
-          <input name="datum" class="span3" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">
      </div>
 
 <div class="input-prepend" style="float:left;width:350px">
