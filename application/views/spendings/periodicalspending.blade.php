@@ -3,16 +3,18 @@
 @include('spendings/sp-submenu')
 
 <h2>Pravideln&yacute; v&yacute;davok</h2>
-{{ Form::open('spendings/savespending?update=1', 'POST', array('class' => 'side-by-side')); }}
 
+<table border="0">
+<tr><td>
 <div class="thumbnail">
     <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
-     <div class="input-prepend" style="float:left;width:295px">
+     <div class="input-prepend" style="float:left">
           <span class="add-on">D&aacute;tum:</span>
           <input class="span3" type="date">
      </div>
-
-<div class="input-prepend" style="float:left;width:350px">
+</td>
+<td>
+<div class="input-prepend" style="float:left">
      <span class="add-on">N&aacute;zov v&yacute;davku: </span>
     <select class="span3">
         <option>&nbsp;</option>
@@ -23,12 +25,14 @@
         <option>&Scaron;abl&oacute;na 5</option>
     </select>
 </div>
-
-<div class="input-prepend" style="float:left;width:200px">
+</td>
+<td>
+<div class="input-prepend" style="float:left">
      <span class="add-on">Hodnota v&yacute;davku:</span>
     <input class="span3" type="text">
 </div>
-<br>
+</td></tr>
+<tr><td>
 <div class="input-prepend">
     <span class="add-on">Zaplatil: </span>
     <select name="osoba" class="span3">
@@ -39,11 +43,13 @@
         <option>dc&eacute;ra&nbsp;Z&aacute;vodn&aacute;</option>
     </select>
 </div>
-
+</td></tr>
+<tr><td>
 <div>
     <input type="button" class="btn" value="Potvrdi&tcaron;" />
 </div>
-
+</td></tr>
+</table>
 <hr>
 <h4 class="">Zoznam výdavkov</h4>
 <form id="form1" name="form1" method="post" action="">
