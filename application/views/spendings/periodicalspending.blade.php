@@ -9,6 +9,7 @@
     <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
      <div class="input-prepend" style="float:left;width:295px">
           <span class="add-on">D&aacute;tum:</span>
+          <input class="span3" type="date">
      </div>
 
 <div class="input-prepend" style="float:left;width:350px">
@@ -23,7 +24,7 @@
      </select>
 </div>
 
-<div class="input-prepend">
+<div class="input-prepend" style="float:left;width:200px">
      <span class="add-on">Hodnota v&yacute;davku:</span>
      <input class="span3" type="text">
 </div>
