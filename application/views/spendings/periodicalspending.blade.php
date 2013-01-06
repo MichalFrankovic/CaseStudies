@@ -29,12 +29,14 @@
 </div>
 
 <div class="input-prepend">
-     <span class="add-on">Zaplatil: </span>
-     <select name="osoba" class="span3">
-          @foreach($osoby as $osoba)
-               <option value="{{ $osoba->id }}" @if ($vydavky[0]->id_osoba ==  $osoba->id) selected="selected" @endif> {{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }}</option>
-          @endforeach
-     </select>
+    <span class="add-on">Zaplatil: </span>
+    <select name="osoba" class="span3">
+        <option>&Zcaron;atkovci</option>
+        <option>otec &Zcaron;atko</option>
+        <option>matka &Zcaron;atkov&aacute;</option>
+        <option>syn &Zcaron;atko</option>
+        <option>dc&eacute;ra Z&aacute;vodn&aacute;</option>
+    </select>
 </div>
 
 <div><input type="button" class="btn" value="Potvrdi&tcaron;" /></div>
