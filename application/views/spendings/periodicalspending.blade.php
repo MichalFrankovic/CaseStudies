@@ -4,14 +4,14 @@
 
 <h2>Pravideln&yacute; v&yacute;davok</h2>
 
-<table border="0">
-<tr><td>
 <div class="thumbnail">
     <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
-     <div class="input-prepend" style="float:left">
+<table border="0">
+<tr><td>
+    <div class="input-prepend" style="float:left">
           <span class="add-on">D&aacute;tum:</span>
           <input class="span3" type="date">
-     </div>
+    </div>
 </td>
 <td>
 <div class="input-prepend" style="float:left">
