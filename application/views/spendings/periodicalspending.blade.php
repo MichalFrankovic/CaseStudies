@@ -1,6 +1,4 @@
 @include('head')
-<script>var js_polozky = {{ $dzejson }}</script>
-<h3 style="color: #bc8f8f;">{{ $message }}</h3>
 <h2>V&yacute;davky</h2>
 @include('spendings/sp-submenu')
 
