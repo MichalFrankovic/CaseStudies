@@ -17,14 +17,10 @@ class User_Controller extends Base_Controller {
 		
 		$view->email = '';
 		
-		if (Session::get('login_attemps') > 3) {	//too many login attemps (possible attack?), show captcha
-			$view->show_captcha = true;
-		}
-		
 		if (!empty($_POST)) {	//form submited
 			
 			if (isset($view->show_captcha) && $view->show_captcha == true) {
-				if (Input::get('captcha') != Session::get('user_captcha')) {	//check captcha
+				if (mb_strtolower(Input::get('captcha')) != mb_strtolower(Session::get('user_captcha'))) {	//check captcha
 					$view->error = 'Nesprávne zadaná CAPTCHA';
 					return $view;
 				}
@@ -70,6 +66,10 @@ class User_Controller extends Base_Controller {
 			
 		}	//end - form submited
 		
+		if (Session::get('login_attemps') >= 3) {	//too many login attemps (possible attack?), show captcha
+			$view->show_captcha = true;
+		}
+		
 		return $view;;
 		
 	}
@@ -108,7 +108,7 @@ class User_Controller extends Base_Controller {
 			$password_repeat = Input::get('password_repeat');
 			
 			if (!Session::get('captcha_valid')) {
-				if (Input::get('captcha') != Session::get('user_captcha')) {	//check captcha
+				if (mb_strtolower(Input::get('captcha')) != mb_strtolower(Session::get('user_captcha'))) {	//check captcha
 					$view->error = 'Nesprávne zadaná CAPTCHA';
 					return $view;
 				}
