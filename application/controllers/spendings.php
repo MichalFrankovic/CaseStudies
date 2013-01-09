@@ -252,10 +252,62 @@ class Spendings_Controller extends Base_Controller {
     {
         return View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
     }
-    public function action_templatespending()
-    {
-        return View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+    
+    public function action_templatespending() {
+    	$view = View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+    	
+    	$view->message = Session::get('message');
+    	
+    	$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+    	foreach ($view->osoby as $osoba)
+    	{
+    		$id_osob[] = $osoba->id;
+    	}
+    	
+    	$view->polozky = DB::query("select
+                                      a.id,
+                                      concat(
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    else space(length(a.id_kategoria)-4)
+                                    end,
+                                    ' ',
+                                    a.nazov
+                                    ) nazov
+                                    from
+                                    (
+                                    select
+                                    kategoria.id id,
+                                    kategoria.id id_kategoria,
+                                    kategoria.t_nazov nazov,
+                                    kategoria.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT kategoria
+                                    where kategoria.fl_typ = 'K'
+                                    and kategoria.id_domacnost = ". Auth::user()->id ."
+    	
+                                    union all
+    	
+                                    select
+                                    produkt.id id,
+                                    produkt.id_kategoria_parent id_kategoria,
+                                    produkt.t_nazov nazov,
+                                    produkt.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT produkt
+                                    where produkt.fl_typ = 'P'
+                                    and produkt.id_domacnost = ". Auth::user()->id ."
+                                    ) a
+                                    order by a.id_kategoria,a.typ
+                                   ");
+    	
+    	$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+    	return $view;
     }
+
+    public function action_savetemplate() {
+    	$data = Input::All() ;
+
+    	return Redirect::to('spendings/templatespending')->with('message', 'Šablóna bola úspešne pridaná!');
+    }
+
     public function  getVydavok($id){
         return null;
 
