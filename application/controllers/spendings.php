@@ -87,7 +87,7 @@ class Spendings_Controller extends Base_Controller {
         $view = View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending');
 
         $view->message = Session::get('message');
-        
+        $view->vydavky = Vydavok::where('id', '=', $id);
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
      foreach ($view->osoby as $osoba)
      {
