@@ -78,7 +78,6 @@ class Spendings_Controller extends Base_Controller {
         $view->do = $do;
         $view->od = $od;
         $view->vydavky = $view->vydavky->get();
-
         return $view;
     }
 
@@ -89,6 +88,7 @@ class Spendings_Controller extends Base_Controller {
 
         $view->message = Session::get('message');
         $view->vydavky = Vydavok::where('id', '=', $id);
+
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
      foreach ($view->osoby as $osoba)
      {
@@ -131,6 +131,9 @@ class Spendings_Controller extends Base_Controller {
         $view->dzejson = Response::json($view->polozky);
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
         $view->message = Session::get('message');
+        $view->vydavky = $view->vydavky->get();
+        //echo "<PRE>";
+        //print_r($view->vydavky);
         return $view;
     }
     public function action_saveperiodical() {
