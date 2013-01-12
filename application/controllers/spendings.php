@@ -84,6 +84,7 @@ class Spendings_Controller extends Base_Controller {
 
     public function action_periodicalspending()
     {
+        $id = Input::get('id');
         $view = View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending');
 
         $view->message = Session::get('message');
