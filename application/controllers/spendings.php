@@ -132,6 +132,11 @@ class Spendings_Controller extends Base_Controller {
         $view->message = Session::get('message');
         return $view;
     }
+    public function action_saveperiodical() {
+    	$data = Input::All() ;
+
+    	return Redirect::to('spendings/periodicalspending')->with('message', 'Pravideln&yacute; v&yacute;davok bol ulo&zcaron;en&yacute;!');
+    }
     
     public function action_simplespending()
     {
