@@ -53,6 +53,8 @@ Route::filter('pattern: settings/*', 'auth');
 
 Route::get('about', 'home@index');
 
+Route::get('incomes', array('uses'=>'incomes@index'));
+
 
 /*
 Route::get('/base', function()
