@@ -16,13 +16,11 @@
 <td>
 <div class="input-prepend" style="float:left">
      <span class="add-on">N&aacute;zov v&yacute;davku: </span>
-     <select name="polozka-id[]" class="span4" style="font-family: Courier, 'Courier New', monospace;">
-        @foreach ($polozky as $polozka)
-    	<option value="{{ $polozka->id }}" @if ($polozka->id == $polozka_vydavku->id_kategoria_a_produkt)
-							selected="selected" @endif> {{str_replace("", "&nbsp;",$polozka->nazov);}}
-		</option>
-	@endforeach
-    </select>
+     <select name="polozka-id" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
+              @foreach ($polozky as $polozka)
+                  <option value="{{ $polozka->id }}"> {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
+             @endforeach
+      </select>
 </div>
 </td>
 <td>
