@@ -8,7 +8,7 @@ class User_Controller extends Base_Controller {
 			if (Auth::user()->fl_admin == 'A') {	//admin account
 				return Redirect::to('admin');
 			} else {	//ordinary account
-				return Redirect::to('spendings');
+				return Redirect::to('home');
 			}
 		}
 		
@@ -49,7 +49,7 @@ class User_Controller extends Base_Controller {
 					if (Auth::user()->fl_admin == 'A') {	//admin account
 						return Redirect::to('admin');
 					} else {	//ordinary account
-						return Redirect::to('spendings');
+						return Redirect::to('home');
 					}
 					
 				}
