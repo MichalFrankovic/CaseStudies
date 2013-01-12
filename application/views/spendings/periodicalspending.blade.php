@@ -16,13 +16,12 @@
 <td>
 <div class="input-prepend" style="float:left">
      <span class="add-on">N&aacute;zov v&yacute;davku: </span>
-    <select class="span3">
-        <option>&nbsp;</option>
-        <option>&Scaron;abl&oacute;na 1</option>
-        <option>&Scaron;abl&oacute;na 2</option>
-        <option>&Scaron;abl&oacute;na 3</option>
-        <option>&Scaron;abl&oacute;na 4</option>
-        <option>&Scaron;abl&oacute;na 5</option>
+     <select name="polozka-id[]" class="span4" style="font-family: Courier, 'Courier New', monospace;">
+        @foreach ($polozky as $polozka)
+    	<option value="{{ $polozka->id }}" @if ($polozka->id == $polozka_vydavku->id_kategoria_a_produkt)
+							selected="selected" @endif> {{str_replace("", "&nbsp;",$polozka->nazov);}}
+		</option>
+	@endforeach
     </select>
 </div>
 </td>
@@ -36,11 +35,9 @@
 <div class="input-prepend">
     <span class="add-on">Zaplatil: </span>
     <select name="osoba" class="span3">
-        <option>&Zcaron;atkovci</option>
-        <option>otec&nbsp;&Zcaron;atko</option>
-        <option>matka&nbsp;&Zcaron;atkov&aacute;</option>
-        <option>syn&nbsp;&Zcaron;atko</option>
-        <option>dc&eacute;ra&nbsp;Z&aacute;vodn&aacute;</option>
+        @foreach ($osoby as $osoba)
+        <option value="{{ $osoba->id }}" @if ($vydavky[0]->id_osoba == $osoba->id) selected="selected" @endif> {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby }}</option>
+        @endforeach
     </select>
 </div>
 </td></tr>
