@@ -479,4 +479,28 @@ class Spendings_Controller extends Base_Controller {
 
 
     }
+
+    public function action_pridanie()
+    {
+        $subactive = 'spendings/pridanie';
+
+        $view = View::make('spendings.addstuff')
+            ->with('active', 'vydavky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+        return $view;
+
+    }
+    public function action_pridajprodukt()
+    {
+        $data_for_sql['id_domacnost'] = Auth::user()->id;
+        $data_for_sql['t_nazov'] = Input::get('nazov');
+        $data_for_sql['t_merna_jednotka'] = 'ks';
+        $data_for_sql['vl_zakladna_cena'] = Input::get('cena');
+        $data_for_sql['fl_typ'] = 'P';
+        $data_for_sql['id_kategoria_parent'] = Input::get('category');
+        DB::table('D_KATEGORIA_A_PRODUKT')
+            ->insert_get_id($data_for_sql);
+        return Redirect::to('spendings/pridanie')->with('message', 'Produkt bol pridaný!');
+
+    }
 }

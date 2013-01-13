@@ -69,8 +69,8 @@ return array(
 
 		'mysql' => array(
 			'driver'   => 'mysql',
-			// 'host'     => 'smarthosting.sk',
-			'host'     => 'localhost',
+			'host'     => 'smarthosting.sk',
+			//'host'     => 'localhost',
 			'database' => 'ps',
 			'username' => 'root',
 			// 'password' => 'pripadove2012',
