@@ -2,10 +2,10 @@
 <h2>V&yacute;davky</h2>
 @include('spendings/sp-submenu')
 
-<h2>Pravideln&yacute;&nbsp;v&yacute;davok</h2>
+<h2>Pravideln&yacute; v&yacute;davok</h2>
 
 <div class="thumbnail">
-    <h4>Syst&eacute;mov&eacute;&nbsp;spr&aacute;vy:</h4>
+    <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
 <table border="0">
 <tr><td>
     <div class="input-prepend" style="float:left">
@@ -16,18 +16,19 @@
 <td>
 <div class="input-prepend" style="float:left">
      <span class="add-on">N&aacute;zov v&yacute;davku: </span>
-     <select name="polozka-id" class="span4">
-       <option>Varianta 1</option>
-	   <option>Varianta 2</option>
-	   <option>Varianta 3</option>
-       <option>Varianta 4</option>
-       <option>Varianta 5</option>
-      </select>
+    <select class="span3">
+        <option>&nbsp;</option>
+        <option>&Scaron;abl&oacute;na 1</option>
+        <option>&Scaron;abl&oacute;na 2</option>
+        <option>&Scaron;abl&oacute;na 3</option>
+        <option>&Scaron;abl&oacute;na 4</option>
+        <option>&Scaron;abl&oacute;na 5</option>
+    </select>
 </div>
 </td>
 <td>
 <div class="input-prepend" style="float:left">
-     <span class="add-on">Hodnota&nbsp;v&yacute;davku:</span>
+     <span class="add-on">Hodnota v&yacute;davku:</span>
     <input class="span3" type="text">
 </div>
 </td></tr>
@@ -35,9 +36,11 @@
 <div class="input-prepend">
     <span class="add-on">Zaplatil: </span>
     <select name="osoba" class="span3">
-        @foreach ($osoby as $osoba)
-        <option value="{{ $osoba->id }}"> {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby }}</option>
-        @endforeach
+        <option>&Zcaron;atkovci</option>
+        <option>otec&nbsp;&Zcaron;atko</option>
+        <option>matka&nbsp;&Zcaron;atkov&aacute;</option>
+        <option>syn&nbsp;&Zcaron;atko</option>
+        <option>dc&eacute;ra&nbsp;Z&aacute;vodn&aacute;</option>
     </select>
 </div>
 </td></tr>
