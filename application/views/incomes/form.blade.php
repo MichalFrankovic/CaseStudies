@@ -1,4 +1,6 @@
 @layout('layouts.base')
+
+
 @section('scripts')
 <script>
 function resetSourceList()
@@ -20,6 +22,7 @@ $(document).ready(function(){
 			data:	{id: $(this).val()},
 			url:	'incomes/get_source',
 			success:	function(response){
+				response += '<option val="0">iný</option>';
 				$('[name=id_zdroj_prijmu]').html( response );
 			}
 		})
@@ -40,16 +43,57 @@ $(document).ready(function(){
 });
 </script>
 @endsection
+
+
 @section('content')
 
 
-{{ Form::open_for_files(URL::current()) }}
-	{{ Form::select('id_osoba', $list_person) }}
-	{{ Form::select('typ', array(''=>'Vyberte typ', 'A' => 'pravidelny', 'N' => 'nepravidelny')) }}
-	{{ Form::text('d_datum', date('d.m.Y')) }}
-	{{ Form::text('vl_suma_prijmu', '') }}
-	{{ Form::select('id_zdroj_prijmu', array('' => 'zdroj príjmu')) }}
-	{{ Form::textarea('t_poznamka') }}
-	{{ Form::submit('Ulož príjem', array('class'=>'btn')) }}
+{{ Form::open(URL::current(), 'POST', array('class'=>'form-horizontal')) }}
+	<div class="control-group">
+		{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
+	    <div class="controls">
+	      {{ Form::select('id_osoba', $list_person) }}
+	    </div>
+  	</div>
+
+  	<div class="control-group">
+  		{{ Form::label(null, 'Typ príjmu', array('class'=>'control-label')) }}
+  		<div class="controls">
+  			{{ Form::select('typ', array(''=>'vyberte typ', 'A' => 'pravidelný', 'N' => 'nepravidelný')) }}
+  		</div>
+  	</div>
+
+  	<div class="control-group">
+  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
+  		<div class="controls">
+  			{{ Form::text('d_datum', date('d.m.Y')) }}		
+  		</div>
+  	</div>
+	
+	<div class="control-group">
+		{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
+		<div class="controls">
+			{{ Form::text('vl_suma_prijmu', '') }}
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<div class="controls">
+			{{ Form::select('id_zdroj_prijmu', array('' => 'zdroj príjmu')) }}
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<div class="controls">
+			{{ Form::textarea('t_poznamka', null, array('rows'=>5)) }}
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<div class="controls">
+			{{ Form::submit('Ulož príjem', array('class'=>'btn btn-primary')) }}
+		</div>
+	</div>
+
 {{ Form::close() }}
 @endsection

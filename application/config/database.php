@@ -70,11 +70,9 @@ return array(
 		'mysql' => array(
 			'driver'   => 'mysql',
 			'host'     => 'smarthosting.sk',
-			//'host'     => 'localhost',
 			'database' => 'web',
 			'username' => 'root',
 			'password' => 'pripadove2012',
-			//'password' => '',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 		),
