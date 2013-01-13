@@ -1,20 +1,20 @@
 @include('head')
 @if (isset($message) )
-    <h3 style="color: #bc8f8f;">{{ $message }}</h3>
+    <h3 style="color: #bc4348;">{{ $message }}</h3>
 @endif
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 <h2>Filter výdavkov</h2>
 {{ Form::open('spendings/filter', 'POST', array('class' => 'side-by-side')); }}
-<div class="thumbnail">
+<div class="thumbnail" >
     <h4>Dátum</h4>
-    <div class="input-prepend">
+    <div class="input-prepend" style="float:left;width:275px">
         <span class="add-on">Od: </span>
-        <input class="span3" type="date" name="od" value="{{ $od }}">
+        <input class="span3 datepicker" type="text" name="od" value="{{ $od }}">
     </div>
     <div class="input-prepend">
     <span class="add-on">Do: </span>
-    <input class="span3" type="date" name="do" value="{{ $do }}">
+    <input class="span3 datepicker" type="text" name="do" value="{{ $do }}">
 </div>
  <div class="input-prepend">
         <span class="add-on">Príjemca: </span>
@@ -63,9 +63,9 @@
             <td>{{ date('d.m.Y',strtotime($vydavok->d_datum)) }}</td>
             <td>{{ $vydavok->partner->t_nazov }}</td>
             <td>{{ $vydavok->t_poznamka }}</td>
-            <td>{{ round($vydavok->vl_cena_so_zlavou,2) }} EUR</td>
-            <td><a class="btn" href="spendings/simplespending?id={{ $vydavok->id }}">Upraviť</a>
-                <input type="button" class="btn" value="Vymazať" disabled="disabled" /></td>
+            <td>{{ round($vydavok->suma_vydavku_po_celk_zlave,2) }} EUR</td>
+            <td><a class="btn" href="simplespending?id={{ $vydavok->id }}">Upraviť</a>
+                <a class="btn" href="deletespending?vydavok={{ md5($vydavok->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
         </tr>
         @endforeach
         </tbody>

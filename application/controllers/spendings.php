@@ -34,16 +34,21 @@ class Spendings_Controller extends Base_Controller {
 
 	public function action_index()
 	{
+        return Redirect::to('spendings/list');
+	}
+
+    public function action_list()
+    {
 
         $view = View::make('spendings.main')
-          ->with('active', 'vydavky')->with('subactive', 'admin/settings');
+            ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         $view->message = Session::get('message');
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
         }
-        $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->get();
+        $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
         //$p = Partner::all();
@@ -52,28 +57,28 @@ class Spendings_Controller extends Base_Controller {
         $view->do = '';
         $view->od = '';
         return $view;
-	}
+    }
 
     public function action_filter()
     {
         //Auth::user()->id = 2;
         $view = View::make('spendings.main')
-            ->with('active', 'vydavky')->with('subactive', 'admin/settings');
+            ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
         }
         $od = Input::get('od');
-        $od = ($od!='') ? $od : '';
+        $od = ($od!='') ? date('Y-m-d',strtotime($od)) : '';
 
         $do = Input::get('do');
-        $do = ($do!='') ? $do : date('Y-m-d');
+        $do = ($do!='') ? date('Y-m-d',strtotime($do)) : date('Y-m-d');
 
         $prijemca = Input::get('prijemca');
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-        $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do);
+        $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do)->order_by('d_datum', 'DESC');
         if ($prijemca != 'all') $view->vydavky->where("id_obchodny_partner",'=',$prijemca);
         $view->do = $do;
         $view->od = $od;
@@ -147,15 +152,16 @@ class Spendings_Controller extends Base_Controller {
         //Auth::user()->id = 1;
         $id = Input::get('id');
         //if (!isset($id)) $id = Session::get('id');
+        $subactive = 'spendings/simplespending';
 
         if (!isset($id))
         {
             $view = View::make('spendings.newspending')
-                ->with('active', 'vydavky')->with('subactive', 'admin/settings')->with('secretword', md5(Auth::user()->t_heslo));
+                ->with('active', 'vydavky')->with('subactive', $subactive)->with('secretword', md5(Auth::user()->t_heslo));
         }else
         {
             $view = View::make('spendings.simplespending')
-                ->with('active', 'vydavky')->with('subactive', 'admin/settings')->with('secretword', md5(Auth::user()->t_heslo));
+                ->with('active', 'vydavky')->with('subactive', $subactive)->with('secretword', md5(Auth::user()->t_heslo));
             $view->vydavky = Vydavok::where('id', '=', $id);
             $view->polozky_vydavku = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->where('id_vydavok','=', $id)->get();
             $view->celkova_suma = 0;
@@ -272,6 +278,8 @@ class Spendings_Controller extends Base_Controller {
          * INSERT NOVEHO VYDAVKU
          */
         }else{
+                $data_for_sql['fl_sablona'] =  'N';
+                $data_for_sql['fl_pravidelny'] =  'N';
                  $idvydavku = DB::table('F_VYDAVOK')
                        ->insert_get_id($data_for_sql);
 
@@ -305,7 +313,11 @@ class Spendings_Controller extends Base_Controller {
     }
     public function action_deletespending()
     {
-        return View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+        $secretword = md5(Auth::user()->t_heslo);
+        $vydavok_id = Input::get('vydavok');
+        DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
+        DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
+        return Redirect::to('spendings/list')->with('message', 'Výdavok bol vymazaný!');
     }
     
     public function action_templatespending() {

@@ -6,10 +6,12 @@
 	<title>Vydavkovač</title>
 	<meta name="viewport" content="width=device-width">
 	{{ HTML::style('assets/css/bootstrap.min.css') }}
+    {{ HTML::style('assets/css/jquery-ui-1.9.2.custom.css') }}
 	{{ HTML::style('assets/css/app.css') }}
 	{{ HTML::script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js') }}
 	{{ HTML::script('assets/js/bootstrap.min.js') }}
 	{{ HTML::script('assets/js/app.js') }}
+    {{ HTML::script('assets/js/jquery-ui-1.9.2.custom.js') }}
 </head>
 <body>
 	<div class="wrapper">
