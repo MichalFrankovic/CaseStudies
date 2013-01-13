@@ -57,4 +57,37 @@ class Incomes_Controller extends Base_Controller {
 	}
 
 	
+	public function get_form()
+	{
+		$viewData = array(
+			'list_person'	=> Prijem::get_person_for_list()
+		);
+		return View::make('incomes.form', $viewData);
+	}
 
+	public function post_form()
+	{
+		$rules = array(
+		    'id_osoba'	=> 'required',
+		    'd_datum'	=> 'required',
+		    'vl_suma_prijmu'	=> 'required',
+		    'id_zdroj_prijmu'	=> 'required'
+		);
+
+		$validation = Validator::make(Input::all(), $rules);
+		if($validation->fails()):
+			print_r($validation->errors);
+		endif;
+		// if ($validation->fails())
+		// {
+		//     return $validation->errors;
+		// }
+	}
+
+	/**
+	 * AJAX actions
+	 */
+	public function post_get_source()
+	{
+		return Response::json(Prijem::get_source_list(Input::get('id')));
+	}
