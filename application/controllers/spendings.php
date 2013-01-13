@@ -43,7 +43,7 @@ class Spendings_Controller extends Base_Controller {
         {
             $id_osob[] = $osoba->id;
         }
-        $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->get();
+        $view->vydavky = Vydavok::where('fl_sablona', '=','N')->where_in('id_osoba',$id_osob)->get();
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
         //$p = Partner::all();
@@ -84,8 +84,34 @@ class Spendings_Controller extends Base_Controller {
 
     public function action_periodicalspending()
     {
-        return View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending');
+        $view = View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending');
 
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        foreach ($view->osoby as $osoba)
+        {
+        	$id_osob[] = $osoba->id;
+        }
+//         echo "select f.id,f.id_obchodny_partner,f.t_poznamka,f.fl_pravidelny,r.id_kategoria_a_produkt,r.vl_jednotkova_cena from F_VYDAVOK f, R_VYDAVOK_KATEGORIA_A_PRODUKT r where f.id = r.id_vydavok and f.fl_sablona = 'A' and f.id_osoba in (".implode(",", $id_osob).")";
+//         $s = "SELECT * FROM F_VYDAVOK WHERE id = 71";
+//         $q = mysql_query($s);
+//         $r = mysql_fetch_array($q);
+
+//          $data_for_sql['fl_sablona'] = 'A';
+        
+//          $aktualizacia = DB::table('F_VYDAVOK')
+//          ->where('id', '=', 73)
+//          ->update($data_for_sql);
+        
+        $x = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->where('id_vydavok', '=', 80)->get();
+        echo serialize($x);
+
+        $view->datum = date("Y-m-d");
+        
+        $view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
+        		"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
+        		"where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).")");
+        
+        return $view;
     }
     public function action_simplespending()
     {
@@ -254,17 +280,22 @@ class Spendings_Controller extends Base_Controller {
     }
     
     public function action_templatespending() {
-    	$view = View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
     	
-    	$view->message = Session::get('message');
+    	$id = Input::get('id');
     	
-    	$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-    	foreach ($view->osoby as $osoba)
-    	{
-    		$id_osob[] = $osoba->id;
-    	}
-    	
-    	$view->polozky = DB::query("select
+    	if (isset($id)) {
+    		
+    		$view = View::make('spendings.templateedit')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+    		
+    		$view->message = Session::get('message');
+    		
+    		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+    		foreach ($view->osoby as $osoba)
+    		{
+    			$id_osob[] = $osoba->id;
+    		}
+    		
+    		$view->polozky = DB::query("select
                                       a.id,
                                       concat(
                                     case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
@@ -283,9 +314,9 @@ class Spendings_Controller extends Base_Controller {
                                     from D_KATEGORIA_A_PRODUKT kategoria
                                     where kategoria.fl_typ = 'K'
                                     and kategoria.id_domacnost = ". Auth::user()->id ."
-    	
+  
                                     union all
-    	
+  
                                     select
                                     produkt.id id,
                                     produkt.id_kategoria_parent id_kategoria,
@@ -297,15 +328,135 @@ class Spendings_Controller extends Base_Controller {
                                     ) a
                                     order by a.id_kategoria,a.typ
                                    ");
-    	
-    	$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
-    	return $view;
+    		 
+    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+    		
+    		$view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
+    				"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
+    				"where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).") and v.id = '".$id."'");
+    		
+    		
+    		return $view;
+    		
+    	} else {
+    		
+    		$view = View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+    		 
+    		$view->message = Session::get('message');
+    		 
+    		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+    		foreach ($view->osoby as $osoba)
+    		{
+    			$id_osob[] = $osoba->id;
+    		}
+    		 
+    		$view->polozky = DB::query("select
+                                      a.id,
+                                      concat(
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    else space(length(a.id_kategoria)-4)
+                                    end,
+                                    ' ',
+                                    a.nazov
+                                    ) nazov
+                                    from
+                                    (
+                                    select
+                                    kategoria.id id,
+                                    kategoria.id id_kategoria,
+                                    kategoria.t_nazov nazov,
+                                    kategoria.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT kategoria
+                                    where kategoria.fl_typ = 'K'
+                                    and kategoria.id_domacnost = ". Auth::user()->id ."
+   
+                                    union all
+   
+                                    select
+                                    produkt.id id,
+                                    produkt.id_kategoria_parent id_kategoria,
+                                    produkt.t_nazov nazov,
+                                    produkt.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT produkt
+                                    where produkt.fl_typ = 'P'
+                                    and produkt.id_domacnost = ". Auth::user()->id ."
+                                    ) a
+                                    order by a.id_kategoria,a.typ
+                                   ");
+    		 
+    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+    		 
+    		return $view;
+    		
+    	}
     }
 
     public function action_savetemplate() {
-    	$data = Input::All() ;
+    	
+    	$data = Input::All();
+    	$data_for_sql['t_poznamka'] =  $data['nazov'];
+    	$data_for_sql['id_obchodny_partner'] =  $data['dodavatel'];
+    	$data_for_sql['fl_pravidelny'] =  $data['pravidelnost'];
+    	
+    	$polozky_for_sql['id_kategoria_a_produkt'] = $data['polozka-id'];
+    	$polozky_for_sql['vl_jednotkova_cena'] = $data['hodnota'];
+    	
+    	if (isset($data['update'])) {
+    		
+    		$aktualizacia = DB::table('F_VYDAVOK')
+    		->where('id', '=', $data['hlavicka-id'])
+    		->update($data_for_sql);
+    		
+    		DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')
+    		->where('id_vydavok', '=', $data['hlavicka-id'])
+    		->update($polozky_for_sql);
+    		
+    		return Redirect::to('spendings/templatespending')->with('message', 'Šablóna bola úspešne zmenená!');
+    		
+    	} else {
 
-    	return Redirect::to('spendings/templatespending')->with('message', 'Šablóna bola úspešne pridaná!');
+    		$data_for_sql['fl_sablona'] = 'A';
+    		
+    		$osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+    		$data_for_sql['id_osoba'] = $osoby[0]->id;
+    		$idvydavku = DB::table('F_VYDAVOK')->insert_get_id($data_for_sql);
+    		
+    		$polozky_for_sql['id_vydavok'] = $idvydavku;
+    		
+    		$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
+    		
+    		return Redirect::to('spendings/templatespending')->with('message', 'Šablóna bola úspešne pridaná!');
+    		
+    	}
+    	
+    }
+
+    public function action_savefromtemplate() {
+    	
+    	$data = Input::All();
+    	
+    	$sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena " .
+    			"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp ".
+    			"where v.id = vkp.id_vydavok and v.id = ".$data['sablona']);
+    	
+    	$data_for_sql['id_osoba'] = $data['osoba'];
+    	$data_for_sql['id_obchodny_partner'] =  $sablony[0]->id_obchodny_partner;
+    	$data_for_sql['d_datum'] =  date('Y-m-d',strtotime($data['datum']));
+    	$data_for_sql['t_poznamka'] =  $sablony[0]->t_poznamka;
+    	$data_for_sql['vl_zlava'] =  0;
+    	
+    	$idvydavku = DB::table('F_VYDAVOK')->insert_get_id($data_for_sql);
+    	
+    	$polozky_for_sql['id_kategoria_a_produkt'] = $sablony[0]->id_kategoria_a_produkt;
+    	$polozky_for_sql['vl_jednotkova_cena'] = $sablony[0]->vl_jednotkova_cena;
+    	$polozky_for_sql['num_mnozstvo'] = 1;
+    	$polozky_for_sql['vl_zlava'] = 0;
+    	$polozky_for_sql['id_vydavok'] = $idvydavku;
+    	
+    	$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
+    	echo $idvydavku ." : ". $idvydavku2;
+    	//return Redirect::to('spendings/periodicalspending?r')->with('message', 'Výdavok bol úspešne pridaný!');
+    	
     }
 
     public function  getVydavok($id){

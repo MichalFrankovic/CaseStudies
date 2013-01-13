@@ -20,7 +20,7 @@
 </div>
 <div class="input-prepend">
         <span class="add-on">Pravidelnosť: </span>
-    <select class="span3">
+    <select class="span3" name="pravidelnost">
         <option value="A">Pravidelný</option>
         <option value="N">Nepravidelný</option>
     </select>

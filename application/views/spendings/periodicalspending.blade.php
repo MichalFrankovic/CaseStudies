@@ -1,55 +1,46 @@
 @include('head')
-<h2>V&yacute;davky</h2>
+<h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 
-<h2>Pravideln&yacute; v&yacute;davok</h2>
+<h2>Pravidelný výdavok</h2>
 
 <div class="thumbnail">
-    <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
+    <h4>Systémové správy:</h4>
+{{ Form::open('spendings/savefromtemplate', 'POST', array('class' => '')); }}
 <table border="0">
 <tr><td>
-    <div class="input-prepend" style="float:left">
-          <span class="add-on">D&aacute;tum:</span>
-          <input class="span3" type="date">
+    <div class="input-prepend">
+        <span class="add-on">Dátum:</span>
+        <input class="span3" type="date" name="datum" value="{{ $datum }}">
     </div>
 </td>
 <td>
 <div class="input-prepend" style="float:left">
-     <span class="add-on">N&aacute;zov v&yacute;davku: </span>
-    <select class="span3">
-        <option>&nbsp;</option>
-        <option>&Scaron;abl&oacute;na 1</option>
-        <option>&Scaron;abl&oacute;na 2</option>
-        <option>&Scaron;abl&oacute;na 3</option>
-        <option>&Scaron;abl&oacute;na 4</option>
-        <option>&Scaron;abl&oacute;na 5</option>
+     <span class="add-on">Názov výdavku: </span>
+    <select name="sablona" class="span3">
+    @foreach ($sablony as $sablona)
+        <option value="{{ $sablona->id }}">{{ $sablona->t_poznamka }}</option>
+    @endforeach
     </select>
 </div>
 </td>
 <td>
-<div class="input-prepend" style="float:left">
-     <span class="add-on">Hodnota v&yacute;davku:</span>
-    <input class="span3" type="text">
-</div>
-</td></tr>
-<tr><td>
 <div class="input-prepend">
     <span class="add-on">Zaplatil: </span>
     <select name="osoba" class="span3">
-        <option>&Zcaron;atkovci</option>
-        <option>otec&nbsp;&Zcaron;atko</option>
-        <option>matka&nbsp;&Zcaron;atkov&aacute;</option>
-        <option>syn&nbsp;&Zcaron;atko</option>
-        <option>dc&eacute;ra&nbsp;Z&aacute;vodn&aacute;</option>
+    @foreach ($osoby as $osoba)
+        <option value="{{ $osoba->id }}">{{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }}</option>
+    @endforeach
     </select>
 </div>
 </td></tr>
 <tr><td>
 <div>
-    <input type="button" class="btn" value="Potvrdi&tcaron;" />
+    <input type="submit" class="btn" value="Potvrdiť" />
 </div>
 </td></tr>
 </table>
+{{ Form::close() }}
 <hr>
 <h4 class="">Zoznam výdavkov</h4>
 <form id="form1" name="form1" method="post" action="">
@@ -60,43 +51,27 @@
                 <input type="checkbox" name="checkbox" id="checkbox" />
                 <label for="checkbox"></label>
             </th>
-            <th>D&aacute;tum</th>
-            <th>Pr&iacute;jemca platby</th>
-            <th>Pravidelnos&tcaron;</th>
-            <th>Kateg&oacute;ria</th>
+            <th>Názov</th>
+            <th>Príjemca platby</th>
+            <th>Pravidelnosť</th>
+            <th>Kategória</th>
             <th>Suma v €</th>
-            <th>V&yacute;ber akcie</th>
+            <th>Výber akcie</th>
         </tr>
         </thead>
         <tbody>
+        @foreach ($sablony as $sablona)
         <tr>
             <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td><input type="button" class="btn" value="Upraviť" />
-                <input type="button" class="btn" value="Vymazať" /></td>
+            <td>{{ $sablona->t_poznamka }}</td>
+            <td>{{ $sablona->prijemca }}</td>
+            <td>{{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }}</td>
+            <td>{{ $sablona->kategoria }}</td>
+            <td>{{ $sablona->vl_jednotkova_cena }} €</td>
+            <td><a class="btn" href="templatespending?id={{ $sablona->id }}">Upraviť</a>
+                <input type="button" class="btn" value="Vymazať" disabled="disabled" /></td>
         </tr>
-        <tr>
-            <td><input type="checkbox" name="checkbox3" id="checkbox3" /></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox" name="checkbox4" id="checkbox4" /></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
+        @endforeach
         </tbody>
     </table>
 </form>
