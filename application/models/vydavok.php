@@ -8,7 +8,7 @@
  */
 class Vydavok extends Eloquent
 {
-    public static $table = 'F_VYDAVOK';
+    public static $table = 'VIEW_F_VYDAVOK';
 
     public function partner() {
 

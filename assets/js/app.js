@@ -1,4 +1,7 @@
 /* javascript */
+$(function() {
+    $( ".datepicker" ).datepicker();
+});
 function pridaj_riadok_do_vydavkov()
 {
     //console.log(js_polozky[0].nazov);

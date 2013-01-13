@@ -1,16 +1,16 @@
 @include('head')
 <script>var js_polozky = {{ $dzejson }}</script>
-<h3 style="color: #bc8f8f;">{{ $message }}</h3>
+<h3 style="color: #bc2834;">{{ $message }}</h3>
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 <h2>Jednoduchý výdavok</h2>
 {{ Form::open('spendings/savespending?update=1', 'POST', array('class' => 'side-by-side')); }}
-<input type="hidden" name="hlavicka-id" id="hidden" value="{{ $vydavky[0]->id }}"/>
+<input type="hidden" name="hlavicka-id" id="idhidden" value="{{ $vydavky[0]->id }}"/>
 <div class="thumbnail">
     <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
     <div class="input-prepend" style="float:left;width:295px">
         <span class="add-on">D&aacute;tum: </span>
-        <input name="datum" class="span3" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">
+        <input name="datum" class="span3 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">
     </div>
 <div class="input-prepend" style="float:left;width:350px">
         <span class="add-on">Dodávateľ: </span>
@@ -43,7 +43,7 @@
     <th scope="col">Zľava</th>
   </tr>
     @foreach ($polozky_vydavku as $polozka_vydavku)
-    <input type="hidden" name="vydavok-id[]" id="hidden" value="{{ $polozka_vydavku->id }}"/>
+    <input type="hidden" name="vydavok-id[]" id="id-hidden" value="{{ $polozka_vydavku->id }}"/>
   <tr>
       <td><a class="btn" href="deletepolozka?pol={{ md5($polozka_vydavku->id).$secretword }}&vydavokid={{ $vydavky[0]->id }}"><i class="icon-remove"></i></a></td>
     <td>
@@ -97,11 +97,11 @@
 
 <div class="input-prepend">
      <span class="add-on">Celkov&aacute; suma: </span>
-     <input class="span3" type="text"  disabled="disabled" value="{{ number_format(round($celkova_suma,2),2) }}">
+     <input class="span3" type="text"  disabled="disabled" value="{{ number_format(round($vydavky[0]->suma_vydavku_po_celk_zlave,2),2) }}">
 </div>
 <div class="input-prepend">
      <span class="add-on">Celkov&aacute; z&lcaron;ava: </span>
-     <input class="span3" type="text" disabled="disabled">
+     <input class="span3" type="text" disabled="disabled" value="{{ number_format(round($vydavky[0]->celkova_zlava,2),2) }}">
 </div>
 <hr>
 <div>

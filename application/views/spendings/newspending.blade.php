@@ -1,6 +1,6 @@
 @include('head')
 <script>var js_polozky = {{ $dzejson }}</script>
-<h3 style="color: #bc8f8f;">{{ $message }}</h3>
+<h3 style="color: #bc4348;">{{ $message }}</h3>
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 <h2>Jednoduchý výdavok</h2>
@@ -10,7 +10,7 @@
     <h4>Syst&eacute;mov&eacute; spr&aacute;vy:</h4>
     <div class="input-prepend" style="float:left;width:295px">
         <span class="add-on">D&aacute;tum: </span>
-        <input name="datum" class="span3" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y') }}">
+        <input name="datum" class="span3 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y') }}">
     </div>
     <div class="input-prepend" style="float:left;width:350px">
         <span class="add-on">Dodávateľ: </span>
@@ -60,7 +60,7 @@
             </td>
             <td>
                 <div class="input-append">
-                    <input name="mnozstvo[]" class="span1" type="text" value="" />
+                    <input name="mnozstvo[]" class="span1" type="text" value="1" />
                     <span class="add-on">m.j.</span>
                 </div>
             </td>
