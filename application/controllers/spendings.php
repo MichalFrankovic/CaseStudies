@@ -192,7 +192,7 @@ class Spendings_Controller extends Base_Controller {
         $data_for_sql['id_obchodny_partner'] =  $data['dodavatel'];
         $data_for_sql['d_datum'] =  date('Y-m-d',strtotime($data['datum']));
         $data_for_sql['t_poznamka'] =  $data['poznamka'];
-        $data_for_sql['vl_zlava'] =  $data['celkova-zlava'];
+        $data_for_sql['vl_zlava'] =  intval($data['celkova-zlava']);
         $data_for_sql['fl_typ_zlavy'] =  $data['celkovy-typ-zlavy'];
         if (isset($data['update']))
         {
@@ -210,9 +210,9 @@ class Spendings_Controller extends Base_Controller {
             for ( $i = 0 ;$i < count($data['vydavok-id']);$i++)
             {
               $polozky_for_sql['id_kategoria_a_produkt'] = $data['polozka-id'][$i];
-              $polozky_for_sql['vl_jednotkova_cena'] =$data['cena'][$i];
-              $polozky_for_sql['num_mnozstvo'] = $data['mnozstvo'][$i];
-              $polozky_for_sql['vl_zlava'] = $data['zlava'][$i];
+              $polozky_for_sql['vl_jednotkova_cena'] = floatval(str_replace(',', '.',$data['cena'][$i]));
+              $polozky_for_sql['num_mnozstvo'] = intval($data['mnozstvo'][$i]);
+              $polozky_for_sql['vl_zlava'] = floatval($data['zlava'][$i]);
               $polozky_for_sql['fl_typ_zlavy'] = $data['typ-zlavy'][$i];
 
            //vydavok sa nerovna N bude sa updatovat
@@ -247,9 +247,9 @@ class Spendings_Controller extends Base_Controller {
                 for ( $i = 0 ;$i < count($data['vydavok-id']);$i++)
                     {
                         $polozky_for_sql['id_kategoria_a_produkt'] = $data['polozka-id'][$i];
-                        $polozky_for_sql['vl_jednotkova_cena'] =$data['cena'][$i];
-                        $polozky_for_sql['num_mnozstvo'] = $data['mnozstvo'][$i];
-                        $polozky_for_sql['vl_zlava'] = $data['zlava'][$i];
+                        $polozky_for_sql['vl_jednotkova_cena'] =floatval(str_replace(',', '.',$data['cena'][$i]));
+                        $polozky_for_sql['num_mnozstvo'] = intval($data['mnozstvo'][$i]);
+                        $polozky_for_sql['vl_zlava'] = floatval($data['zlava'][$i]);
                         $polozky_for_sql['fl_typ_zlavy'] = $data['typ-zlavy'][$i];
                         //echo "INSERT";
                         $polozky_for_sql['id_vydavok'] = $idvydavku;
