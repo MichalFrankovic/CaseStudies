@@ -48,7 +48,7 @@ class Spendings_Controller extends Base_Controller {
         {
             $id_osob[] = $osoba->id;
         }
-        $view->vydavky = Vydavok::where('fl_sablona', '=','N')->where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
+        $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
         //$p = Partner::all();
@@ -88,26 +88,15 @@ class Spendings_Controller extends Base_Controller {
 
     public function action_periodicalspending()
     {
-        $view = View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending');
+        $view = View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending')->with('secretword', md5(Auth::user()->t_heslo));
 
+        $view->message = Session::get('message');
+        
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         foreach ($view->osoby as $osoba)
         {
         	$id_osob[] = $osoba->id;
         }
-//         echo "select f.id,f.id_obchodny_partner,f.t_poznamka,f.fl_pravidelny,r.id_kategoria_a_produkt,r.vl_jednotkova_cena from F_VYDAVOK f, R_VYDAVOK_KATEGORIA_A_PRODUKT r where f.id = r.id_vydavok and f.fl_sablona = 'A' and f.id_osoba in (".implode(",", $id_osob).")";
-//         $s = "SELECT * FROM F_VYDAVOK WHERE id = 71";
-//         $q = mysql_query($s);
-//         $r = mysql_fetch_array($q);
-
-//          $data_for_sql['fl_sablona'] = 'A';
-        
-//          $aktualizacia = DB::table('F_VYDAVOK')
-//          ->where('id', '=', 73)
-//          ->update($data_for_sql);
-        
-        $x = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->where('id_vydavok', '=', 80)->get();
-        echo serialize($x);
 
         $view->datum = date("Y-m-d");
         
@@ -307,7 +296,7 @@ class Spendings_Controller extends Base_Controller {
     			$id_osob[] = $osoba->id;
     		}
     		
-    		$view->polozky = DB::query("select
+        	$view->polozky = DB::query("select
                                       a.id,
                                       concat(
                                     case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
@@ -326,9 +315,9 @@ class Spendings_Controller extends Base_Controller {
                                     from D_KATEGORIA_A_PRODUKT kategoria
                                     where kategoria.fl_typ = 'K'
                                     and kategoria.id_domacnost = ". Auth::user()->id ."
-  
+
                                     union all
-  
+
                                     select
                                     produkt.id id,
                                     produkt.id_kategoria_parent id_kategoria,
@@ -442,6 +431,16 @@ class Spendings_Controller extends Base_Controller {
     	}
     	
     }
+    
+    public function action_deletetemplatespending() {
+    	
+    	$secretword = md5(Auth::user()->t_heslo);
+    	$vydavok_id = Input::get('template');
+    	DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
+    	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
+    	return Redirect::to('spendings/periodicalspending')->with('message', 'Šablóna bola vymazaná!');
+    	
+    }
 
     public function action_savefromtemplate() {
     	
@@ -452,10 +451,13 @@ class Spendings_Controller extends Base_Controller {
     			"where v.id = vkp.id_vydavok and v.id = ".$data['sablona']);
     	
     	$data_for_sql['id_osoba'] = $data['osoba'];
-    	$data_for_sql['id_obchodny_partner'] =  $sablony[0]->id_obchodny_partner;
-    	$data_for_sql['d_datum'] =  date('Y-m-d',strtotime($data['datum']));
-    	$data_for_sql['t_poznamka'] =  $sablony[0]->t_poznamka;
-    	$data_for_sql['vl_zlava'] =  0;
+    	$data_for_sql['id_obchodny_partner'] = $sablony[0]->id_obchodny_partner;
+    	$data_for_sql['d_datum'] = date('Y-m-d',strtotime($data['datum']));
+    	$data_for_sql['t_poznamka'] = $sablony[0]->t_poznamka;
+    	$data_for_sql['fl_pravidelny'] = $sablony[0]->fl_pravidelny;
+    	$data_for_sql['vl_zlava'] = 0;
+    	$data_for_sql['fl_typ_zlavy'] = '0';
+    	$data_for_sql['fl_sablona'] = 'N';
     	
     	$idvydavku = DB::table('F_VYDAVOK')->insert_get_id($data_for_sql);
     	
@@ -463,11 +465,12 @@ class Spendings_Controller extends Base_Controller {
     	$polozky_for_sql['vl_jednotkova_cena'] = $sablony[0]->vl_jednotkova_cena;
     	$polozky_for_sql['num_mnozstvo'] = 1;
     	$polozky_for_sql['vl_zlava'] = 0;
+    	$polozky_for_sql['fl_typ_zlavy'] = '0';
     	$polozky_for_sql['id_vydavok'] = $idvydavku;
     	
-    	$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
-    	echo $idvydavku ." : ". $idvydavku2;
-    	//return Redirect::to('spendings/periodicalspending?r')->with('message', 'Výdavok bol úspešne pridaný!');
+    	DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
+    	
+    	return Redirect::to('spendings/periodicalspending?r')->with('message', 'Výdavok bol úspešne pridaný!');
     	
     }
 

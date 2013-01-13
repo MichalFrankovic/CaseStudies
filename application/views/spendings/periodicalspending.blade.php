@@ -1,4 +1,7 @@
 @include('head')
+@if (isset($message) )
+    <h3 style="color: #bc4348;">{{ $message }}</h3>
+@endif
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
 
@@ -7,11 +10,11 @@
 <div class="thumbnail">
     <h4>Systémové správy:</h4>
 {{ Form::open('spendings/savefromtemplate', 'POST', array('class' => '')); }}
-<table border="0">
+<table border="0" style="width: 100%;">
 <tr><td>
     <div class="input-prepend">
         <span class="add-on">Dátum:</span>
-        <input class="span3" type="date" name="datum" value="{{ $datum }}">
+        <input class="span3" type="date" name="datum" value="{{ $datum }}" />
     </div>
 </td>
 <td>
@@ -42,7 +45,7 @@
 </table>
 {{ Form::close() }}
 <hr>
-<h4 class="">Zoznam výdavkov</h4>
+<h4 class="">Zoznam šablón výdavkov</h4>
 <form id="form1" name="form1" method="post" action="">
     <table class="table table-bordered table-striped">
         <thead>
@@ -69,7 +72,7 @@
             <td>{{ $sablona->kategoria }}</td>
             <td>{{ $sablona->vl_jednotkova_cena }} €</td>
             <td><a class="btn" href="templatespending?id={{ $sablona->id }}">Upraviť</a>
-                <input type="button" class="btn" value="Vymazať" disabled="disabled" /></td>
+                <a class="btn" href="deletetemplatespending?template={{ md5($sablona->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
         </tr>
         @endforeach
         </tbody>
