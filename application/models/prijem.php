@@ -20,7 +20,7 @@ class Prijem extends Eloquent
 		}
     	return DB::table(static::$table.' as P')
     		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
-    		->where_in('z.id_osoba', $familyMembers)
+    		->where_in('Z.ID_OSOBA', $familyMembers)
     		->order_by('P.d_datum', 'DESC')
     		->get(array(
     			'P.id',
@@ -75,7 +75,7 @@ class Prijem extends Eloquent
 			return array();
 		}
 
-		$source = DB::table('d_zdroj_prijmu')
+		$source = DB::table('D_ZDROJ_PRIJMU')
 			->where_id_osoba($person_id)
 			->get();
 
