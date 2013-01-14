@@ -39,7 +39,7 @@ class Prijem extends Eloquent
      */
 	public static function get_person()
 	{
-		$person = DB::table('d_osoba')
+		$person = DB::table('D_OSOBA')
 			->where_id_domacnost(Auth::user()->id)
 			->where_fl_aktivna('A')
 			->where_fl_domacnost('N')
