@@ -7,6 +7,7 @@
 	<title>Vydavkovač</title>
 	<meta name="viewport" content="width=device-width">
 	{{ HTML::style('assets/css/bootstrap.min.css') }}
+	@yield('styles')
 	{{ HTML::style('assets/css/app.css') }}
 	{{ HTML::script('assets/js/jquery.js') }}
 	{{-- HTML::script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js') --}}
