@@ -3,6 +3,35 @@
 class Prijem extends Eloquent
 {
     public static $table = 'F_PRIJEM';
+    public static $timestamps = true;
+
+    /**
+     * Vyhladaj vsetky prijmy pre domacnost
+     * @author Andreyco
+     */
+    public static function get_incomes()
+    {
+    	$familyMembers = DB::table('D_OSOBA')
+			->where('id_domacnost', '=', Auth::user()->id)
+			->get(array('id'));
+		foreach($familyMembers as &$fM)
+		{
+			$fM = $fM->id;
+		}
+    	return DB::table(static::$table.' as P')
+    		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
+    		->where_in('z.id_osoba', $familyMembers)
+    		->order_by('P.d_datum', 'DESC')
+    		->get(array(
+    			'P.id',
+    			'P.vl_suma_prijmu',
+    			'P.d_datum',
+    			'P.t_poznamka',
+    			'Z.t_popis'
+			));
+    }
+
+
 
     /**
      * Vyhladaj vsetky aktivne osoby patriace do domacnosti
@@ -19,6 +48,8 @@ class Prijem extends Eloquent
 		return $person;
 	}
 
+
+
     /**
      * @author: Andreyco
      */
@@ -31,6 +62,8 @@ class Prijem extends Eloquent
 		endforeach;
 		return $person;
 	}
+
+
 
 	/**
 	 * Vyhladaj vsetky zdroje prijmov pre konkretnu osobu
@@ -46,13 +79,99 @@ class Prijem extends Eloquent
 			->where_id_osoba($person_id)
 			->get();
 
-		$source_html = count($source) > 1 ? '<option value="0">zvoľte zdroj príjmu</option>' : '';
-		$source_html =  '<option value="0">zvoľte zdroj príjmu</option>';
+		$source_html =  '<option value="">zvoľte zdroj príjmu</option>';
 		foreach($source as $s):
 			$source_html .= "<option value='{$s->id}' data-sum='{$s->vl_zakladna_suma}' data-type='{$s->fl_pravidelny}'>{$s->t_popis}</option>";
 		endforeach;
 
 		return $source_html;
+	}
+
+
+
+	/**
+	 * Vyhladaj partnerov pre pouzivatela
+	 * @author Andreyco
+	 */
+	public static function get_partners()
+	{
+		return DB::table('D_OBCHODNY_PARTNER')
+			->where('id_osoba', '=', Auth::user()->id)
+			->get();
+	}
+
+
+
+	/**
+	 * Vyhladaj vsetky zdroje prijmov pre prihlaseneho pouzivatela
+	 * a vsetkych clenov domacnosti
+	 * @author Andreyco
+	 */
+	public static function get_sources()
+	{
+		$familyMembers = DB::table('D_OSOBA')
+			->where('id_domacnost', '=', Auth::user()->id)
+			->get(array('id'));
+		foreach($familyMembers as &$fM)
+		{
+			$fM = $fM->id;
+		}
+
+		return DB::table('D_ZDROJ_PRIJMU as Z')
+			->left_join('D_OSOBA as O', 'O.id', '=', 'Z.id_osoba')
+			->left_join('D_OBCHODNY_PARTNER as P', 'Z.id_obchodny_partner', '=', 'P.id')
+			->where_in('Z.id_osoba', $familyMembers)
+			->get(array(
+				'Z.id',
+				'Z.t_popis',
+				'Z.vl_zakladna_suma',
+				'Z.fl_pravidelny',
+				'O.t_meno_osoby',
+				'O.t_priezvisko_osoby',
+				'P.t_nazov',
+			));
+	}
+
+
+
+	/**
+	 * Ajax ukladanie dat z tabulky
+	 * @author Andreyco
+	 */
+	public static function inline_save()
+	{
+		$query = DB::table('D_OBCHODNY_PARTNER');
+
+		// vloz novy zaznam a vrat ID noveho riadku
+		if(Input::get('pk') === 'new'){
+			$data = array(
+				Input::get('name')	=> Input::get('value'),
+				'id_osoba'	=> (int)Auth::user()->id
+			);
+			$id = $query->insert_get_id($data);
+			return array('id' => $id);
+
+		// aktualizuj existujuci zaznam
+		} else {
+			return $query->where('id', '=', Input::get('pk'))->update(array(
+				Input::get('name')	=> Input::get('value')
+			));
+		}
+	}
+
+
+	public static function ajaxsave($table, $data)
+	{
+		if($data['id'] == 'new')
+		{
+			unset($data['id']);
+			$id = DB::table($table)->insert_get_id($data);
+			return array('id' => $id);
+		} else {
+			return DB::table($table)
+				->where('id', '=', $data['id'])
+				->update($data);
+		}
 	}
 
 }
