@@ -11,26 +11,34 @@ class Incomes_Controller extends Base_Controller {
 
 		
 		$view = View::make('incomes.main')
-			->with('active', 'prijmy')->with('subactive', 'admin/settings');
+			->with('active', 'prijmy')->with('subactive', 'incomes/list')->with('secretword', md5(Auth::user()->t_heslo));
 		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 		$view->message = Session::get('message');
 		foreach ($view->osoby as $osoba)
-		{
+		{ 
 			$id_osob[] = $osoba->id;
 		}
+		$viewData = array(
+				'list_person'	=> Prijem::get_person_for_list(),
+				'partners'		=> Prijem::get_partners(),
+				'prijmy'		=> Prijem::get_incomes(),
+				'sources'		=> Prijem::get_sources(),
+				);
 		$view->prijmy = Prijem::where_in('id',$id_osob)->get();
-		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_osoba', $id_osob)
+															->where('fl_typ','=','P' )->get();
 		$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 		$view->do = '';
 		$view->od = '';
+		
 		return $view;
 	}
 		
 	public function action_filter()
 	{
-		//Auth::user()->id = 2;
+		
 		$view = View::make('incomes.main')
-		->with('active', 'prijmy')->with('subactive', 'admin/settings');
+			->with('active', 'prijmy')->with('subactive', 'incomes/list')->with('secretword', md5(Auth::user()->t_heslo));
 		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 		foreach ($view->osoby as $osoba)
 		{
@@ -41,16 +49,25 @@ class Incomes_Controller extends Base_Controller {
 	
 		$do = Input::get('do');
 		$do = ($do!='') ? $do : date('Y-m-d');
-	
+		$viewData = array(
+				'list_person'	=> Prijem::get_person_for_list(),
+				'partners'		=> Prijem::get_partners(),
+				'prijmy'		=> Prijem::get_incomes(),
+				'sources'		=> Prijem::get_sources(),
+		);
 		$vydajca = Input::get('vydajca');
-		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_osoba', $id_osob)
+															->where('fl_typ','=','P' )->get();
 		$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+		
 		$view->prijmy = Prijem::where_in('id',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do);
-		if ($vydajca != 'all') $view->prijmy->where("id_zdroj_prijmu",'=',$vydajca);
+		if ($vydajca != 'all') $view->prijmy->where("id_obchodny_partner",'=',$vydajca);
 		$view->do = $do;
 		$view->od = $od;
 		$view->prijmy = $view->prijmy->get();
-	
+		
+				
+		return View::make('incomes.form', $viewData);
 		return $view;
 	}
 

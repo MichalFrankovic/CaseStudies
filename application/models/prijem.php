@@ -4,7 +4,11 @@ class Prijem extends Eloquent
 {
     public static $table = 'F_PRIJEM';
     public static $timestamps = true;
-
+	
+    public function partner() {
+    
+    	return $this->belongs_to('Partner', 'id_zdroj_prijmu');
+    }
     /**
      * Vyhladaj vsetky prijmy pre domacnost
      * @author Andreyco
@@ -173,5 +177,7 @@ class Prijem extends Eloquent
 				->update($data);
 		}
 	}
+	
 
+	
 }
