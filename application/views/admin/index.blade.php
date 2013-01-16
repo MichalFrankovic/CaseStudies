@@ -1,5 +1,4 @@
 @include('head')
-@include('admin/submenu')
 
 <!--<pre>TODO:
 
