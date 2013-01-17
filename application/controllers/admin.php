@@ -32,7 +32,7 @@ class Admin_Controller extends Base_Controller {
         
         //--- EDITOVANIE UZIVATELA --- 
         public function action_editUser(){
-            $view = View::make('admin.eUser')->with('active', 'admin')->with('subactive', 'admin/users');
+            $view = View::make('admin.euser')->with('active', 'admin')->with('subactive', 'admin/users');
             $id = Input::get('id');
             $view->domacnosti = DB::table('D_DOMACNOST')->where('id', '=', $id)->get();
             
