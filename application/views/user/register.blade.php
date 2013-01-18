@@ -8,9 +8,10 @@
 	<div class="alert alert-error">{{ $error }}</div>
 @endif
 
-<div>
+<div {{ isset($errors->name) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('name', 'Názov domácnosti', array('class' => 'control-label')) }}
 	{{ Form::text('name', $name) }}
+	{{ isset($errors->name) ? '<span class="help-inline">'.$errors['name'].'</span>' : '' }}
 </div>
 
 <div {{ isset($errors->email) ? ' class="control-group error"' : '' }}>

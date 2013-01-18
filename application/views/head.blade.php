@@ -24,7 +24,7 @@
 				
 				<div class="user">
 @if (!Auth::guest())
-					Prihlásený ako: <b title="{{ Auth::user()->t_email_login }}">{{ Auth::user()->t_nazov_domacnosti }}</b> | {{ HTML::link('user/logout', 'Odhlásiť'); }}
+					Prihlásený ako: <b title="{{ Auth::user()->t_email_login }}">{{ Auth::user()->t_nazov_domacnosti }}</b> | {{ HTML::link('user/logout', 'Odhlásiť', array('onclick' => 'if(!confirm(\'Naozaj odhlásiť?\'))return false;')); }}
 @endif
 				</div>
 				
