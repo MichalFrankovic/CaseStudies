@@ -43,10 +43,9 @@
 	@if (Auth::user()->fl_admin == 'A')
 					    <li{{ isset($active) && $active=='admin' ? ' class="active"' : ''; }}>{{ HTML::link('admin', 'Administrácia'); }}</li>
 	@endif
-						<li{{ isset($active) && $active=='prijmy' ? ' class="active"' : ''; }}>{{ HTML::link('/incomes', 'Príjmy'); }}</li>
+						<li{{ isset($active) && $active=='prijmy' ? ' class="active"' : ''; }}>{{ HTML::link('/incomes/form', 'Príjmy'); }}</li>
 						<li{{ isset($active) && $active=='vydavky' ? ' class="active"' : ''; }}>{{ HTML::link('spendings', 'Výdavky'); }}</li>
-						<li{{ isset($active) && $active=='sporenie' ? ' class="active"' : ''; }}>{{ HTML::link('/savings', 'Sporenie'); }}</li>
-						<li{{ isset($active) && $active=='nastavenia' ? ' class="active"' : ''; }}>{{ HTML::link('/settings', 'Nastavenia'); }}</li>
+						
 @endif
 				    </ul>
 			    </div>

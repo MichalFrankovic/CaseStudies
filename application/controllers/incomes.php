@@ -6,12 +6,17 @@ class Incomes_Controller extends Base_Controller {
 	public $do = '';
 	public $od = '';
 
+	public function action_index()
+	{
+		return Redirect::to('incomes/form');
+	}
+	
 	public function get_index()
 	{
 
 		
 		$view = View::make('incomes.main')
-			->with('active', 'prijmy')->with('subactive', 'incomes/list')->with('secretword', md5(Auth::user()->t_heslo));
+			->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
 		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 		$view->message = Session::get('message');
 		foreach ($view->osoby as $osoba)
@@ -34,11 +39,30 @@ class Incomes_Controller extends Base_Controller {
 		return $view;
 	}
 		
+	
+
+	/**
+	 * Pridanie/editacia prijmu
+	 * @author Andreyco
+	 */
+	public function get_form()
+	{
+		$view = View::make('incomes.main')
+		->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
+		$viewData = array(
+			'list_person'	=> Prijem::get_person_for_list(),
+			'partners'		=> Prijem::get_partners(),
+			'incomes'		=> Prijem::get_incomes(),
+		);
+		// print_r($viewData['incomes']);
+		return View::make('incomes.form', $viewData);
+	}
+	
 	public function action_filter()
 	{
-		
-		$view = View::make('incomes.main')
-			->with('active', 'prijmy')->with('subactive', 'incomes/list')->with('secretword', md5(Auth::user()->t_heslo));
+	
+		//$view = View::make('incomes.main')
+		//->with('active', 'prijmy')->with('subactive', 'incomes/list')->with('secretword', md5(Auth::user()->t_heslo));
 		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 		foreach ($view->osoby as $osoba)
 		{
@@ -57,35 +81,19 @@ class Incomes_Controller extends Base_Controller {
 		);
 		$vydajca = Input::get('vydajca');
 		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_osoba', $id_osob)
-															->where('fl_typ','=','P' )->get();
+		->where('fl_typ','=','P' )->get();
 		$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-		
+	
 		$view->prijmy = Prijem::where_in('id',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do);
 		if ($vydajca != 'all') $view->prijmy->where("id_obchodny_partner",'=',$vydajca);
 		$view->do = $do;
 		$view->od = $od;
 		$view->prijmy = $view->prijmy->get();
-		
-				
+	
+	
 		return View::make('incomes.form', $viewData);
 		return $view;
 	}
-
-	/**
-	 * Pridanie/editacia prijmu
-	 * @author Andreyco
-	 */
-	public function get_form()
-	{
-		$viewData = array(
-			'list_person'	=> Prijem::get_person_for_list(),
-			'partners'		=> Prijem::get_partners(),
-			'incomes'		=> Prijem::get_incomes(),
-		);
-		// print_r($viewData['incomes']);
-		return View::make('incomes.form', $viewData);
-	}
-
 	/**
 	 * Ulozenie zmien v prijme
 	 * @author Andreyco
