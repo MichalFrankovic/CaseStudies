@@ -17,7 +17,21 @@ class User_Controller extends Base_Controller {
 		
 		$view->email = '';
 		
+		//count login attemps
+		{
+			if (!empty($_POST)) {
+				$attemps = Session::get('login_attemps') > 0 ? Session::get('login_attemps') : 0;
+				Session::put('login_attemps', $attemps+1);
+			}
+						
+			if (Session::get('login_attemps') >= 3) {	//too many login attemps (possible attack?), show captcha
+				$view->show_captcha = true;
+			}
+		}
+		
 		if (!empty($_POST)) {	//form submited
+			
+			//var_dump($view->show_captcha); exit;
 			
 			if (isset($view->show_captcha) && $view->show_captcha == true) {
 				if (mb_strtolower(Input::get('captcha')) != mb_strtolower(Session::get('user_captcha'))) {	//check captcha
@@ -56,19 +70,11 @@ class User_Controller extends Base_Controller {
 				
 			} else {	//auth failed, display error
 				
-				//count login attemps
-				$attemps = Session::get('login_attemps') > 0 ? Session::get('login_attemps') : 0;
-				Session::put('login_attemps', $attemps+1);
-				
 				$view->error = 'Nesprávna e-mailová adresa alebo heslo';
 				
 			}
 			
 		}	//end - form submited
-		
-		if (Session::get('login_attemps') >= 3) {	//too many login attemps (possible attack?), show captcha
-			$view->show_captcha = true;
-		}
 		
 		return $view;;
 		
@@ -118,6 +124,10 @@ class User_Controller extends Base_Controller {
 			
 			if (!preg_match('/(.*)@(.*)\.[a-z]+/', $view->email)) {	//check email format
 				$errors['email'] = 'Nesprávny formát e-mailovej adresy';
+			}
+			
+			if (empty($view->name)) {	//nazov domacnosti
+				$errors['name'] = 'Zadajte prosím názov domácnosti';
 			}
 			
 			//check email duplicity
