@@ -15,6 +15,7 @@ class Prijem extends Eloquent
      */
     public static function get_incomes()
     {
+    	
     	$familyMembers = DB::table('D_OSOBA')
 			->where('id_domacnost', '=', Auth::user()->id)
 			->get(array('id'));
@@ -34,8 +35,8 @@ class Prijem extends Eloquent
 		
 		if(Input::get('od') && Input::get('do'))
 		{
-			$query	->where('P.d_datum', '>=', Input::get('od'))
-					->where('P.d_datum', '<=', Input::get('do'))
+			$query	->where('P.d_datum', '>=', date('Y-m-d', strtotime(Input::get('od'))))
+					->where('P.d_datum', '<=', date('Y-m-d', strtotime(Input::get('od'))))
 					->order_by('d_datum', 'DESC');
 		}
 

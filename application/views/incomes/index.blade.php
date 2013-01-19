@@ -155,11 +155,11 @@
     <h4>Datum</h4>
     <div class="input-prepend" style="float:left;width:275px">
         <span class="add-on">Od: </span>
-        <input class="span3 datepicker" type="text" name="od" value="vloz datum" ">
+        <input class="span3 datepicker" type="text" name="od"  ">
     </div>
     <div class="input-prepend">
     <span class="add-on">Do: </span>
-    <input class="span3 datepicker" type="text" name="do" value="vloz datum"">
+    <input class="span3 datepicker" type="text" name="do" ">
 </div>
  <div class="input-prepend">
         <span class="add-on">Zdroj prijmu: </span>
