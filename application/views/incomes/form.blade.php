@@ -81,37 +81,6 @@
 			}
 		});
 	});
-
-	// Inline Editacia 
-	$(document).ready(function(){
-		$('.btn-danger').click(function(){
-			return confirm("Ste si istý, že chcete zmatať tento príjem?");
-		})
-		//editables 
-	    $('.editable-suma').editable({
-			url: base + '/ajaxsave/F_PRIJEM',
-			type: 'text',
-			name: 'vl_suma_prijmu',
-			title: 'Suma prijmu',
-	    });
-
-	    $('.editable-datum').editable({
-			url: base + '/ajaxsave/F_PRIJEM',
-			type: 'date',
-			name: 'd_datum',
-			title: 'Dátum',
-			viewformat: "dd.mm.yyyy"
-	    });
-
-	    $('.editable-poznamka').editable({
-			url: base + '/ajaxsave/F_PRIJEM',
-			type: 'text',
-			name: 't_poznamka',
-			title: 'Poznámka',
-	    });
-
-	 
-	});
 	</script>
 @endsection
 
