@@ -121,6 +121,8 @@
 			$url   = URL::to('incomes/'.$key);
 			if(URI::segment(2) === $key){
 				$class = 'class="active"';
+			} else if(!URI::segment(2) && $key === 'index'){
+				$class = 'class="active"';
 			}
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
