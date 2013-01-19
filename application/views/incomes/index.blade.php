@@ -150,7 +150,7 @@
 		</div>
 	@endif
 
-	{{ Form::open('/incomes', 'POST', array('class' => 'side-by-side')); }}
+	{{ Form::open('/incomes', 'get', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
     <h4>Datum</h4>
     <div class="input-prepend" style="float:left;width:275px">
