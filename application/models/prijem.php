@@ -36,7 +36,7 @@ class Prijem extends Eloquent
 		if(Input::get('od') && Input::get('do'))
 		{
 			$query	->where('P.d_datum', '>=', date('Y-m-d', strtotime(Input::get('od'))))
-					->where('P.d_datum', '<=', date('Y-m-d', strtotime(Input::get('od'))))
+					->where('P.d_datum', '<=', date('Y-m-d', strtotime(Input::get('do'))))
 					->order_by('d_datum', 'DESC');
 		}
 
