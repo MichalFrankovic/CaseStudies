@@ -131,6 +131,7 @@
 	<ul class="nav nav-tabs">
 		<?php
 		$tabs = array(
+			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
 			'sources'	=> 'Zdroje príjmov',
 			'partners'	=> 'Partneri',
