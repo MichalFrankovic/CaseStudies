@@ -149,6 +149,36 @@
 		</div>
 	@endif
 
+	{{ Form::open('/incomes', 'POST', array('class' => 'side-by-side')); }}
+<div class="thumbnail" >
+    <h4>Datum</h4>
+    <div class="input-prepend" style="float:left;width:275px">
+        <span class="add-on">Od: </span>
+        <input class="span3 datepicker" type="text" name="od" ">
+    </div>
+    <div class="input-prepend">
+    <span class="add-on">Do: </span>
+    <input class="span3 datepicker" type="text" name="do" ">
+</div>
+ <div class="input-prepend">
+        <span class="add-on">Zdroj prijmu: </span>
+    <select name="zdroj" class="span3">
+        <option value="all" selected="selected">VSETCI</option>
+        @foreach ($sources as $source)
+        <option value="{{ $source->id }}"> {{ $source->t_nazov }}</option>
+        @endforeach
+    </select>
+     </div>
+    <div class="input-prepend">
+
+        
+    <div class="submit">
+        {{ Form::submit('Zobraziť' , array('class' => 'btn')); }}
+    </div>
+    {{ Form::close() }}
+    </div>
+ </div>
+	
 	<table class="table table-bordered">
 		<thead>
 			<tr style="font-weight: bold;">
