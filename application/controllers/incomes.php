@@ -64,8 +64,6 @@ class Incomes_Controller extends Base_Controller {
 		->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
 		$viewData = array(
 			'list_person'	=> Prijem::get_person_for_list(),
-			// 'partners'		=> Prijem::get_partners(),
-			// 'incomes'		=> Prijem::get_incomes(),
 		);
 		return View::make('incomes.form', $viewData);
 	}
@@ -106,6 +104,9 @@ class Incomes_Controller extends Base_Controller {
 		return View::make('incomes.form', $viewData);
 		return $view;
 	}
+
+
+
 	/**
 	 * Ulozenie zmien v prijme
 	 * @author Andreyco
@@ -132,6 +133,12 @@ class Incomes_Controller extends Base_Controller {
 		}
 	}
 
+
+
+	/**
+	 * Zobraz zoznam partnerov
+	 * @author Andreyco
+	 */
 	public function get_partners()
 	{
 		$viewData = array(
@@ -156,6 +163,11 @@ class Incomes_Controller extends Base_Controller {
 	}
 
 
+
+	/**
+	 * Odstran prijem
+	 * @author Andreyco
+	 */
 	public function get_delete($id)
 	{
 		if(DB::table('F_PRIJEM')->where('id', '=', $id)->delete())
@@ -204,6 +216,12 @@ class Incomes_Controller extends Base_Controller {
 		}
 	}
 
+
+
+	/**
+	 * AJAX save
+	 * @author Andreyco
+	 */
 	public function post_ajaxsave($table)
 	{
 		$data = array(

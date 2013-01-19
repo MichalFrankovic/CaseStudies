@@ -166,7 +166,7 @@
     <select name="zdroj" class="span3">
         <option value="all" selected="selected">VSETCI</option>
         @foreach ($sources as $source)
-        <option value="{{ $source->id }}"> {{ $source->t_nazov }}</option>
+        <option value="{{ $source->id }}"> {{ $source->t_popis }}</option>
         @endforeach
     </select>
      </div>
