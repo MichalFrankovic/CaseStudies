@@ -31,6 +31,13 @@ class Prijem extends Eloquent
 		if(Input::get('zdroj') && Input::get('zdroj') !== 'all'){
 			$query->where('Z.id', '=', Input::get('zdroj'));
 		}
+		
+		if(Input::get('od') && Input::get('do'))
+		{
+			$query	->where('P.d_datum', '>=', Input::get('od'))
+					->where('P.d_datum', '<=', Input::get('do'))
+					->order_by('d_datum', 'DESC');
+		}
 
 		return $query->get(array(
     			'P.id',
