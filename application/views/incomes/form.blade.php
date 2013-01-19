@@ -1,7 +1,11 @@
 @layout('layouts.base')
 
 @section('styles')
-	
+	<style type="text/css">
+	.btn.btn-primary{
+		margin-left: 180px;
+	}
+	</style>
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
 	{{ HTML::style('assets/css/jquery.validity.css') }}
 	<style>
@@ -118,50 +122,49 @@
 		<div class="control-group">
 			{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
 		    <div class="controls">
-		      {{ Form::select('id_osoba', $list_person) }}
+		      {{ Form::select('id_osoba', $list_person, null, array('class' => ' input-xlarge')) }}
 		    </div>
 	  	</div>
-
-	  	<!-- <div class="control-group">
-	  		{{ Form::label(null, 'Typ príjmu', array('class'=>'control-label')) }}
-	  		<div class="controls">
-	  			{{ Form::select('typ', array(''=>'vyberte typ', 'A' => 'pravidelný', 'N' => 'nepravidelný')) }}
-	  		</div>
-	  	</div> -->
 
 	  	<div class="control-group">
 	  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
 	  		<div class="controls">
-	  			{{ Form::text('d_datum', date('m/d/Y'), array('class'=>'datepicker')) }}
+	  			<div class="input-prepend">
+				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
+				  	{{ Form::text('d_datum', date('m/d/Y'), array('class'=>'datepicker input-small')) }}
+				</div>
 	  		</div>
 	  	</div>
 		
 		<div class="control-group">
 			{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::text('vl_suma_prijmu', '') }}
+				<div class="input-prepend">
+				  	<span class="add-on">€</span>
+				  	{{ Form::text('vl_suma_prijmu', '', array('class' => 'input-small')) }}
+				</div>
+				
 			</div>
 		</div>
 		
 		<div class="control-group">
 			{{ Form::label(null, 'Zdroj príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::select('id_zdroj_prijmu', array('' => 'zvoľte zdroj príjmu')) }}
+				{{ Form::select('id_zdroj_prijmu', array('' => 'zvoľte zdroj príjmu'), null, array('class'=>'input-xlarge')) }}
 			</div>
 		</div>
 		
 		<div class="control-group">
 			{{ Form::label(null, 'Poznámka', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::textarea('t_poznamka', null, array('rows'=>5)) }}
+				{{ Form::textarea('t_poznamka', null, array('rows'=>3, 'class'=>'input-xxlarge')) }}
 			</div>
 		</div>
 		
-		<div class="control-group">
-			<div class="controls">
-				{{ Form::submit('Ulož príjem', array('class'=>'btn btn-primary')) }}
-			</div>
-		</div>
+		<button type="submit" class="btn btn-primary">
+			<i class="icon-ok icon-white"></i>
+			Ulož príjem
+		</button>
 
 	{{ Form::close() }}
 

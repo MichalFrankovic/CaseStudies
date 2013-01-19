@@ -1,7 +1,14 @@
 @layout('layouts.base')
 
 @section('styles')
-
+	<style type="text/css">
+	thead{
+		background: #ddd;
+	}
+	thead td{
+		border-color: #efefef !important;
+	}
+	</style>
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
 
 @endsection
@@ -127,7 +134,11 @@
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
 		?>
-		<li id="new-row" class="pull-right">Nový zdroj</li>
+		<li id="new-row" class="pull-right">
+			<button class="btn btn-info">
+				<i class="icon-plus icon-white"></i> Nový zdroj
+			</button>
+		</li>
 	</ul>
 
 	<table class="table table-bordered">

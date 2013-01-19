@@ -101,7 +101,11 @@
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
 		?>
-		<li id="new-row" class="pull-right">Nový partner</li>
+		<li id="new-row" class="pull-right">
+			<button class="btn btn-info">
+				<i class="icon-plus icon-white"></i> Nový partner
+			</button>
+		</li>
 	</ul>
 
 	<table class="table table-bordered">

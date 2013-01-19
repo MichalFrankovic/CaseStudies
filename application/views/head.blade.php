@@ -8,23 +8,24 @@
 	{{ HTML::style('assets/css/bootstrap.min.css') }}
     {{ HTML::style('assets/css/jquery-ui-1.9.2.custom.css') }}
 	{{ HTML::style('assets/css/app.css') }}
+	@yield('styles')
 	{{ HTML::script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js') }}
 	{{ HTML::script('assets/js/bootstrap.min.js') }}
+	{{ HTML::script('assets/js/jquery-ui-1.9.2.custom.js') }}
+	@yield('scripts')
 	{{ HTML::script('assets/js/app.js') }}
-    {{ HTML::script('assets/js/jquery-ui-1.9.2.custom.js') }}
 </head>
 <body>
 	<div class="wrapper">
 		<div id="head">
-			
 			<div class="head">
 				
 				<h1>{{ HTML::link('', 'Výdavkovač'); }}</h1>
 				<small>Systém na správu výdavkov pre jednotlivcov a rodiny</small>
 				
-				<div class="user">
-@if (!Auth::guest())
-					<div class="btn-group">
+				@if (!Auth::guest())
+					<div class="user btn-group">
+						dasd
 					    <button class="btn" title="{{ Auth::user()->t_email_login }}"><i class="icon-user"></i> {{ Auth::user()->t_nazov_domacnosti }}</button>
 					    <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 					    <ul class="dropdown-menu">
@@ -32,10 +33,10 @@
 					    	<li><a href="{{ URL::to('user/logout') }}" onclick="if(!confirm('Naozaj odhlásiť?'))return false;"><i class="icon-off"></i> Odhlásiť sa</a></li>
 					    </ul>
 				    </div>
-@endif
-				</div>
-				
+				@endif
 			</div>
+				
+		
 			
 			<div class="navbar">
 				<div class="navbar-inner">
