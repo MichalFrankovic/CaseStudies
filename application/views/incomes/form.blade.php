@@ -15,9 +15,6 @@
 		.information.error{
 			background: rgba(255, 0, 0, .3);
 		}
-		#income-create{
-			display: none;
-		}
 	</style>
 @endsection
 
@@ -66,13 +63,6 @@
 			// if($sum.val() == ''){
 				$sum.val( $source.attr('data-sum'));
 			// }
-		});
-	});
-
-	$(document).ready(function(){
-		$('#create').click(function(){
-
-			$('#income-create').toggle();
 		});
 	});
 
@@ -147,7 +137,6 @@
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
 		?>
-		<li id="create" class="pull-right">Nový príjem</li>
 	</ul>
 
 	@if(Session::get('status'))
@@ -156,7 +145,7 @@
 		</div>
 	@endif
 
-	{{ Form::open(URL::current(), 'POST', array('class'=>'form-horizontal', 'id'=>'income-create')) }}
+	{{ Form::open(URL::current(), 'POST', array('class'=>'form-horizontal well', 'id'=>'income-create')) }}
 		<div class="control-group">
 			{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
 		    <div class="controls">
@@ -207,50 +196,4 @@
 
 	{{ Form::close() }}
 
-
-	<table class="table table-bordered">
-		<thead>
-			<tr style="font-weight: bold;">
-				<td>#</td>
-				<td>Zdroj prijmu</td>
-				<td>Vlozena suma</td>
-				<td>Dátum</td>
-				<td>Poznámka</td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($incomes as $key => $income)
-			<tr>
-				<td>{{$key+1}}</td>
-
-				<td>
-					<span class="editable-popis" data-pk="{{$income->id}}" data-original-title="Zadajte popis">
-						{{ $income->t_popis }}
-					</span>
-				</td>
-				<td>
-					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">
-						{{ $income->vl_suma_prijmu }}
-					</span>
-				</td>
-				<td>
-					<span class="editable-datum" data-pk="{{$income->id}}" data-original-title="Zadajte dátum">
-						{{ date('d.m.Y', strtotime($income->d_datum)) }}
-					</span>
-				</td>
-
-				<td>
-					<span class="editable-poznamka" data-pk="{{$income->id}}" data-original-title="Zadajte poznámku">
-						{{ $income->t_poznamka }}
-					</span>
-				</td>
-				<td>
-					<a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}">Odstranit</a>
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-		
-	</table>
 @endsection

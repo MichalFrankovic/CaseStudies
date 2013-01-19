@@ -64,8 +64,8 @@ class Incomes_Controller extends Base_Controller {
 		->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
 		$viewData = array(
 			'list_person'	=> Prijem::get_person_for_list(),
-			'partners'		=> Prijem::get_partners(),
-			'incomes'		=> Prijem::get_incomes(),
+			// 'partners'		=> Prijem::get_partners(),
+			// 'incomes'		=> Prijem::get_incomes(),
 		);
 		return View::make('incomes.form', $viewData);
 	}
@@ -122,11 +122,11 @@ class Incomes_Controller extends Base_Controller {
 		$id = DB::table('F_PRIJEM')->insert_get_id($data);
 		if($id)
 		{
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Nový Príjem bol úspešne uložený')
 				->with('status_class', 'success');
 		} else {
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Pri ukladaní došlo k chybe')
 				->with('status_class', 'error');
 		}
