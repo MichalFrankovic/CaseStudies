@@ -22,11 +22,17 @@ class Prijem extends Eloquent
 		{
 			$fM = $fM->id;
 		}
-    	return DB::table(static::$table.' as P')
+
+		$query = DB::table(static::$table.' as P')
     		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
     		->where_in('Z.ID_OSOBA', $familyMembers)
-    		->order_by('P.d_datum', 'DESC')
-    		->get(array(
+    		->order_by('P.d_datum', 'DESC');
+
+		if(Input::get('zdroj') && Input::get('zdroj') !== 'all'){
+			$query->where('Z.id', '=', Input::get('zdroj'));
+		}
+
+		return $query->get(array(
     			'P.id',
     			'P.vl_suma_prijmu',
     			'P.d_datum',
