@@ -202,9 +202,7 @@
 					</span>
 				</td>
 				<td>
-					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">
-						{{ $income->vl_suma_prijmu }}
-					</span>
+					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">{{ $income->vl_suma_prijmu }}</span> €
 				</td>
 				<td>
 					<span class="editable-datum" data-pk="{{$income->id}}" data-original-title="Zadajte dátum">
@@ -218,7 +216,7 @@
 					</span>
 				</td>
 				<td>
-					<a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}">Odstranit</a>
+					<a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}"><i class="icon-remove icon-white"></i></a>
 				</td>
 			</tr>
 			@endforeach
