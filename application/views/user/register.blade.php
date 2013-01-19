@@ -8,28 +8,28 @@
 	<div class="alert alert-error">{{ $error }}</div>
 @endif
 
-<div {{ isset($errors->name) || isset($errors['name']) ? ' class="control-group error"' : '' }}>
+<div {{ isset($errors->name) || (is_array($errors) && isset($errors['name'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('name', 'Názov domácnosti', array('class' => 'control-label')) }}
 	{{ Form::text('name', $name) }}
-	{{ isset($errors->name) || isset($errors['name']) ? '<span class="help-inline">'.$errors['name'].'</span>' : '' }}
+	{{ isset($errors->name) || (is_array($errors) && isset($errors['name'])) ? '<span class="help-inline">'.$errors['name'].'</span>' : '' }}
 </div>
 
-<div {{ isset($errors->email) || isset($errors['email']) ? ' class="control-group error"' : '' }}>
+<div {{ isset($errors->email) || (is_array($errors) && isset($errors['email'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('email', 'E-mailová adresa', array('class' => 'control-label')) }}
 	{{ Form::text('email', $email) }}
-	{{ isset($errors->email) || isset($errors['email']) ? '<span class="help-inline">'.$errors['email'].'</span>' : '' }}
+	{{ isset($errors->email) || (is_array($errors) && isset($errors['email'])) ? '<span class="help-inline">'.$errors['email'].'</span>' : '' }}
 </div>
 
-<div {{ isset($errors->password) || isset($errors['password']) ? ' class="control-group error"' : '' }}>
+<div {{ isset($errors->password) || (is_array($errors) && isset($errors['password'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('password', 'Heslo', array('class' => 'control-label')) }}
 	{{ Form::password('password') }}
-	{{ isset($errors->password) || isset($errors['password']) ? '<span class="help-inline">'.$errors['password'].'</span>' : '' }}
+	{{ isset($errors->password) || (is_array($errors) && isset($errors['password'])) ? '<span class="help-inline">'.$errors['password'].'</span>' : '' }}
 </div>
 
-<div {{ isset($errors->password_repeat) || isset($errors['password_repeat']) ? ' class="control-group error"' : '' }}>
+<div {{ isset($errors->password_repeat) || (is_array($errors) && isset($errors['password_repeat'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('password_repeat', 'Potvrď heslo', array('class' => 'control-label')) }}
 	{{ Form::password('password_repeat') }}
-	{{ isset($errors->password_repeat) || isset($errors['password_repeat']) ? '<span class="help-inline">'.$errors['password_repeat'].'</span>' : '' }}
+	{{ isset($errors->password_repeat) || (is_array($errors) && isset($errors['password_repeat'])) ? '<span class="help-inline">'.$errors['password_repeat'].'</span>' : '' }}
 </div>
 
 @if (isset($hide_captcha) && $hide_captcha == true)

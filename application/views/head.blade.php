@@ -24,7 +24,14 @@
 				
 				<div class="user">
 @if (!Auth::guest())
-					Prihlásený ako: <b title="{{ Auth::user()->t_email_login }}">{{ Auth::user()->t_nazov_domacnosti }}</b> | {{ HTML::link('user/logout', 'Odhlásiť', array('onclick' => 'if(!confirm(\'Naozaj odhlásiť?\'))return false;')); }}
+					<div class="btn-group">
+					    <button class="btn" title="{{ Auth::user()->t_email_login }}"><i class="icon-user"></i> {{ Auth::user()->t_nazov_domacnosti }}</button>
+					    <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+					    <ul class="dropdown-menu">
+					    	<li><a href="{{ URL::to('user/password') }}"><i class="icon-edit"></i> Zmeniť heslo</a></li>
+					    	<li><a href="{{ URL::to('user/logout') }}" onclick="if(!confirm('Naozaj odhlásiť?'))return false;"><i class="icon-off"></i> Odhlásiť sa</a></li>
+					    </ul>
+				    </div>
 @endif
 				</div>
 				

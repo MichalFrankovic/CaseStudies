@@ -39,6 +39,7 @@
 
 <div class="submit">
 	{{ Form::submit('Prihlásiť') }}
+	{{ Form::reset('Zrušiť', array('onclick' => 'document.location.href=\'' . URL::home() . '\';')); }}
 </div>
 
 

@@ -162,6 +162,24 @@ class User_Controller extends Base_Controller {
 				$user->save();
 			}
 			
+			
+			mail($user->t_email_login, 'Výdavkovač - nová registrácia', "Dobrý deň " . $user->t_nazov_domacnosti . ",
+			
+gratulujeme Vám k registrácii v systéme Výdavkovač.
+
+Prihlásiť sa môžete na nasledovnej adrese:
+" . Laravel\URL::to('user/login') . "
+
+Pre prihlásenie použite prosím Vášu e-mailovú adresu " . $user->t_email_login . " a heslo zadaná pri registrácii.
+			
+V prípade zabudnutého hesla si ho môžte obnoviť tu:
+" . Laravel\URL::to('user/recovery') . "
+			
+--
+S pozdravom
+Tím Výdavkovač
+");
+			
 			Session::flush('captcha_correct');
 			Session::flash('msg', 'Registrácia úspešná, môžete sa prihlásiť');
 			
@@ -194,13 +212,13 @@ class User_Controller extends Base_Controller {
 		
 		if (isset($_GET['sent'])) {	//display success message
 			
-			$view->sent = 'Na Vašu e-mailovú adresu sme odoslali ďalšie pokyny pre zmenu Vášho zabudnutého hesla';
+			$view->sent = 'Na Vašu e-mailovú adresu sme odoslali ďalšie pokyny pre zmenu Vášho zabudnutého hesla. Skontrolujte si prosím aj priečinok s nevyžiadanou poštou (spam).';
 			
 		} elseif (!empty($_POST)) {	//submited form
 				
 			$view->email = Input::get('email');
 			
-			if (Input::get('captcha') != Session::get('user_captcha')) {	//check captcha
+			if (mb_strtolower(Input::get('captcha')) != mb_strtolower(Session::get('user_captcha'))) {	//check captcha
 				$view->error = 'Nesprávne zadaná CAPTCHA';
 				return $view;
 			}
@@ -208,7 +226,7 @@ class User_Controller extends Base_Controller {
 			//find email
 			$user = Domacnost::where('t_email_login', '=', $view->email)->first();
 			if (empty($user)) {
-				$view->error = 'Zadaná e-mailová adresa nie je zaregistrovaná.' . Laravel\Html::link('user/register?email='.$view->email, 'Vytvorte si nový účet');
+				$view->error = 'Zadaná e-mailová adresa nie je zaregistrovaná. ' . Laravel\Html::link('user/register?email='.$view->email, 'Vytvorte si nový účet');
 				return $view;
 			}
 				
@@ -221,7 +239,7 @@ class User_Controller extends Base_Controller {
 
 na základe Vašej žiadosti o zmenu zabudnutého hesla do webovej aplikácie Výdavkovač Vám posielame odkaz na ktorom si môžete zmeniť Vaše heslo:
 
-" . Laravel\Html::link('user/password?hash='.substr($user->t_recovery_hash, 7)) . "
+" . Laravel\URL::to('user/password?hash='.substr($user->t_recovery_hash, 7)) . "
 
 Ak ste nežiadali o zmenu hesla, ignorujte prosím túto správu.
 
@@ -245,27 +263,39 @@ Tím Výdavkovač
 	
 	public function action_password() {
 	
-		if (!Auth::guest()) {
+		/*if (!Auth::guest()) {
 			if (Auth::user()->fl_admin == 'A') {	//admin account
 				return Redirect::to('admin');
 			} else {	//ordinary account
 				return Redirect::to('spendings');
 			}
+		}*/
+		
+		if (Auth::guest()) {
+			
+			$hash = isset($_GET['hash']) ? $_GET['hash'] : '';
+			$user = Domacnost::where('t_recovery_hash', 'LIKE', '%'.$hash)->first();
+			$recovery = true;
+			
+		} else {
+			
+			$hash = true;
+			$user = Domacnost::where('id', '=', Auth::user()->id)->first();
+			$recovery = false;
+			
 		}
 		
-		$hash = isset($_GET['hash']) ? $_GET['hash'] : '';
-		$user = Domacnost::where('t_recovery_hash', 'LIKE', '%'.$hash)->first();
-		
-		if (empty($user)) {
+		if (empty($hash) || empty($user)) {
 			
 			return View::make('error')
 			->with('title', 'Chyba')
-			->with('message', 'Neplatná adresa, ' . Laravel\Html::link('user/recovery', 'vygenrujte si nový odkaz'));
+			->with('message', 'Neplatná adresa, ' . Laravel\Html::link('user/recovery', 'vygenrujte si nový odkaz na zmenu hesla'));
 			
 		} else {
 			
 			$view = View::make('user.password')
-			->with('active', false);
+			->with('active', false)
+			->with('recovery', $recovery);
 		
 			$errors = array();
 		

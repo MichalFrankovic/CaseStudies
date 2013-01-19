@@ -1,6 +1,10 @@
 @include('head')
 
+@if ($recovery)
 <h2>Zabudnuté heslo</h2>
+@else
+<h2>Zmeniť heslo</h2>
+@endif
 
 
 {{ Form::open(null, 'POST', array('class' => 'side-by-side')); }}
