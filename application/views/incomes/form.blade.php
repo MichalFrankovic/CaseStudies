@@ -49,7 +49,7 @@
 
 			$.ajax({
 				type:	'GET',
-				url:	'incomes/ajaxload/incomesources/' + $(this).val(),
+				url:	'ajaxload/incomesources/' + $(this).val(),
 				success:	function(response){
 					$('[name=id_zdroj_prijmu]').html( response );
 				}

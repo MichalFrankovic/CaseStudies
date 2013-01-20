@@ -198,11 +198,12 @@
 
 				<td>
 					<span class="editable-popis" data-pk="{{$income->id}}" data-original-title="Zadajte popis">
-						{{ $income->t_popis }}
+						{{ htmlspecialchars($income->t_popis) }}
 					</span>
 				</td>
 				<td>
-					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">{{ $income->vl_suma_prijmu }}</span> €
+					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">
+						{{ htmlspecialchars($income->vl_suma_prijmu) }}</span> €
 				</td>
 				<td>
 					<span class="editable-datum" data-pk="{{$income->id}}" data-original-title="Zadajte dátum">
@@ -212,7 +213,7 @@
 
 				<td>
 					<span class="editable-poznamka" data-pk="{{$income->id}}" data-original-title="Zadajte poznámku">
-						{{ $income->t_poznamka }}
+						{{ htmlspecialchars($income->t_poznamka) }}
 					</span>
 				</td>
 				<td>

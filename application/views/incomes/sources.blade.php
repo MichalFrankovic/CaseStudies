@@ -159,26 +159,25 @@
 
 				<td>
 					<span class="editable-person" data-pk="{{$source->id}}" data-original-title="Vyberte osobu">
-						{{ $source->t_meno_osoby}} {{ $source->t_priezvisko_osoby }}
+						{{ htmlspecialchars($source->t_meno_osoby.' '.$source->t_priezvisko_osoby)}}
 					</span>
 				</td>
 
 				<td>
 					<span class="editable-partner" data-pk="{{$source->id}}" data-original-title="Zadajte nazov">
-						{{$source->t_nazov}}
+						{{ htmlspecialchars($source->t_nazov) }}
 					</span>	
 				</td>
 
 				<td>
 					<span class="editable-popis" data-pk="{{$source->id}}" data-original-title="Zadajte popis">
-						{{$source->t_popis}}
+						{{ htmlspecialchars($source->t_popis) }}
 					</span>	
 				</td>
 
 				<td>
 					<span class="editable-amount" data-pk="{{$source->id}}" data-original-title="Zadajte popis">
-						{{$source->vl_zakladna_suma}}
-					</span>	
+						{{ htmlspecialchars($source->vl_zakladna_suma) }}</span> €
 				</td>
 
 				<td>

@@ -186,6 +186,9 @@ class Prijem extends Eloquent
 			$id = DB::table($table)->insert_get_id($data);
 			return array('id' => $id);
 		} else {
+			if($data['vl_zakladna_suma']){
+				$data['vl_zakladna_suma'] = preg_replace('/\s+/', '', $data['vl_zakladna_suma']);
+			}
 			return DB::table($table)
 				->where('id', '=', $data['id'])
 				->update($data);

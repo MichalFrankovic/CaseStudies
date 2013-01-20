@@ -172,11 +172,11 @@ class Incomes_Controller extends Base_Controller {
 	{
 		if(DB::table('F_PRIJEM')->where('id', '=', $id)->delete())
 		{
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Príjem bol odstránený')
 				->with('status_class', 'success');
 		} else {
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Pri vykonávaní operácie došlo k chybe')
 				->with('status_class', 'error');
 		}

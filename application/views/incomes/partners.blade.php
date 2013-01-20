@@ -123,13 +123,13 @@
 
 				<td>
 					<span class="editable-username" data-pk="{{$partner->id}}" data-original-title="Zadajte nazov">
-						{{$partner->t_nazov}}
+						{{ htmlspecialchars($partner->t_nazov) }}
 					</span>
 				</td>
 
 				<td>
 					<span class="editable-address" data-pk="{{$partner->id}}" data-original-title="Zadajte adresu">
-						{{$partner->t_adresa}}
+						{{ htmlspecialchars($partner->t_adresa) }}
 					</span>
 				</td>
 			</tr>
