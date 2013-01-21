@@ -285,7 +285,7 @@ Tím Výdavkovač
 			
 		}
 		
-		if (empty($hash) || empty($user)) {
+		if (empty($_POST) && (empty($hash) || empty($user))) {
 			
 			return View::make('error')
 			->with('title', 'Chyba')
@@ -324,6 +324,8 @@ Tím Výdavkovač
 					$user->t_recovery_hash = '';
 					$user->t_heslo = Hash::make( $password );
 					$user->save();
+					
+					Session::flash('msg', 'Vaše heslo bolo úspešne zmenené. Môžete sa prihlásiť s novým heslom.');
 		
 					return Redirect::to('user/login');
 				}
