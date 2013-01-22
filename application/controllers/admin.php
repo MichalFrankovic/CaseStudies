@@ -89,21 +89,8 @@ class Admin_Controller extends Base_Controller {
             return $view;		
 	}
         
-        public function action_editUserDone(){
-//            $id = Input::get('id');
-//            $view = View::make('admin.euser')->with('active', 'admin')->with('subactive', 'admin/euser');
-//            $view->domacnosti = DB::table('D_DOMACNOST')->where('id', '=', $id)->get();
-            
-//            if (count($_POST['checkbox'])){
-//                foreach($_POST['checkbox'] AS $id){
-//                    DB::query("UPDATE D_DOMACNOST SET t_nazov_domacnosti = '$domacnost', t_email_login = '$email', fl_aktivna = '$status', fl_admin = '$uroven' WHERE id = " . $id);
-//                }
-//            }
-            
-                                    
-            $errors = array();
-            
-            
+        public function action_editUserDone(){                                   
+            $errors = array();          
             
             if (!empty($_POST)) {
                 
@@ -212,50 +199,58 @@ class Admin_Controller extends Base_Controller {
         }
         
         //--- HROMADNY EDIT ---
-        public function action_editMore(){
+        public function action_editMore(){            
             //MAZANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Zmaž'){
                 $id = array();
-                $id = $_POST['polozka'];
+                if(!empty ($_POST['polozka'])){
+                    $id = $_POST['polozka'];
             
-                if (count($id) > 0){
-                    foreach ($id as $polozka){
-                        try{
-                            DB::query('DELETE FROM D_DOMACNOST WHERE id = "' . $polozka  . '"');
-                        }
-                        catch (Exception $e){
-                            $e->getMessage();
+                    if (count($id) > 0){
+                        foreach ($id as $polozka){
+                            try{
+                                DB::query('DELETE FROM D_DOMACNOST WHERE id = "' . $polozka  . '"');
+                            }
+                            catch (Exception $e){
+                                $e->getMessage();
                 
-                            return Redirect::to('admin')->with('message', 'Dané domácnosti nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
-                        }
+                                return Redirect::to('admin')->with('message', 'Dané domácnosti nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+                            }
+                        }    
                     }
-                
-                }
-                return Redirect::to('admin')->with('message', 'Domácnosti boli vymazané');
-            }
+                    return Redirect::to('admin')->with('message', 'Domácnosti vymazané');
+                    }
+                return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
+            }            
             //AKTIVOVANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Aktivuj'){
                 $id = array();
-                $id = $_POST['polozka'];
+                if(!empty ($_POST['polozka'])){
+                    $id = $_POST['polozka'];
             
-                if (count($id) > 0){
-                    foreach ($id as $polozka){
-                        DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $polozka);
+                    if (count($id) > 0){
+                        foreach ($id as $polozka){
+                            DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $polozka);
+                        }
                     }
+                    return Redirect::to('admin')->with('message', 'Domácnosti aktivované');
                 }
-                return Redirect::to('admin')->with('message', 'Domácnosti aktivované');
-            }
+                return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
+            }            
             //DEAKTIVOVANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Deaktivuj'){
                 $id = array();
-                $id = $_POST['polozka'];
+                if(!empty ($_POST['polozka'])){
+                    $id = $_POST['polozka'];
             
-                if (count($id) > 0){
-                    foreach ($id as $polozka){
-                        DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $polozka);
+                    if (count($id) > 0){
+                        foreach ($id as $polozka){
+                            DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $polozka);
+                        }
                     }
+                    return Redirect::to('admin')->with('message', 'Domácnosti deaktivované');
                 }
-                return Redirect::to('admin')->with('message', 'Domácnosti deaktivované');
+                return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
             }
         }
 }

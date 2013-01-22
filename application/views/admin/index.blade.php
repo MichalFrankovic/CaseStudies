@@ -24,56 +24,12 @@ function checkedAll (form1) {
       }
 </script>
 
-<!--PRIDAVANIE UZIVATELOV-->
-<!--<a class="btn" href="admin/addUser">Pridaj používateľa</a>-->
-<!--<h2>Pridanie užívateľa (domácnosti)</h2>
-<form id="form1" name="form1" method="post" action="admin/addUser">
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Názov domácnosti*</th>
-            <th>E-mail*</th>
-            <th>Heslo*</th>
-            <th>Zopakovať heslo*</th>
-            <th>Úroveň účtu*</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>            
-            <td><div class="input-append">
-                <input name="name" class="span2" type="text" value="" placeholder="Novákovci" />
-            </div></td>
-            
-            <td><div class="input-append">
-                <input name="email" class="span2" type="text" value="" placeholder="novak@mail.com"/>
-            </div></td>
-            
-            <td><div class="input-append">
-                <input name="password" class="span2" type="password" value="" placeholder="**********"/>
-            </div></td>
-            
-            <td><div class="input-append">
-                <input name="password-repeat" class="span2" type="password" value="" placeholder="**********"/>
-            </div></td>
-            
-            <td><div class="input-append">
-                <input name="status" class="span2" type="text" value="" placeholder="A/N"/>
-            </div></td>
-            
-            <td><input type="submit" name="Submit" value="Pridaj používateľa"/></td>
-            
-        </tr>
-        </tbody>
-    </table>
-</form>-->
-
 <!--LISTING A NASTAVENIE UZIVATELOV-->
 <form id="form1" name="form1" method="post" action="admin/editMore">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th><input type='checkbox' name='checkall' onclick='checkedAll(form1);'></th>
+            <th><input type='checkbox' name='checkall' onclick="checkedAll(form1)"/></th>
             <th>Názov domácnosti</th>
             <th>E-mail</th>
             <th>Admin práva</th>
@@ -84,7 +40,7 @@ function checkedAll (form1) {
         <tbody>
         @foreach ($domacnosti as $domacnost)
         <tr>
-            <td><input type="checkbox" name="polozka[]" value="{{ $domacnost->id }}" /></td>
+            <td><input type="checkbox" name="polozka[]" value="{{ $domacnost->id }}"/></td>
             <td>{{ $domacnost->t_nazov_domacnosti }}</td>
             <td>{{ $domacnost->t_email_login }}</td>
             <td>{{ $domacnost->fl_admin }}</td>
@@ -98,8 +54,9 @@ function checkedAll (form1) {
         
         </tbody>
         <tr>
-            <td><input type="Submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')"></td>
-            <td><input type="Submit" name="Submit" value="Aktivuj"> <input type="Submit" name="Submit" value="Deaktivuj"></td>
+            <td><input type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
+            <td><input type="submit" name="Submit" value="Aktivuj" /> 
+                <input type="submit" name="Submit" value="Deaktivuj" /></td>
             <td></td>
             <td></td>
             <td></td>
