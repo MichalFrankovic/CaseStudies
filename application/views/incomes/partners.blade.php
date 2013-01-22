@@ -85,6 +85,7 @@
 	<ul class="nav nav-tabs">
 		<?php
 		$tabs = array(
+			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
 			'sources'	=> 'Zdroje príjmov',
 			'partners'	=> 'Partneri',
@@ -94,11 +95,17 @@
 			$url   = URL::to('incomes/'.$key);
 			if(URI::segment(2) === $key){
 				$class = 'class="active"';
+			} else if(!URI::segment(2) && $key === 'index'){
+				$class = 'class="active"';
 			}
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
 		?>
-		<li id="new-row" class="pull-right">Nový partner</li>
+		<li id="new-row" class="pull-right">
+			<button class="btn btn-info">
+				<i class="icon-plus icon-white"></i> Nový partner
+			</button>
+		</li>
 	</ul>
 
 	<table class="table table-bordered">
@@ -116,13 +123,13 @@
 
 				<td>
 					<span class="editable-username" data-pk="{{$partner->id}}" data-original-title="Zadajte nazov">
-						{{$partner->t_nazov}}
+						{{ htmlspecialchars($partner->t_nazov) }}
 					</span>
 				</td>
 
 				<td>
 					<span class="editable-address" data-pk="{{$partner->id}}" data-original-title="Zadajte adresu">
-						{{$partner->t_adresa}}
+						{{ htmlspecialchars($partner->t_adresa) }}
 					</span>
 				</td>
 			</tr>

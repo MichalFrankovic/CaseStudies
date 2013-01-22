@@ -15,6 +15,7 @@ class Prijem extends Eloquent
      */
     public static function get_incomes()
     {
+    	
     	$familyMembers = DB::table('D_OSOBA')
 			->where('id_domacnost', '=', Auth::user()->id)
 			->get(array('id'));
@@ -22,11 +23,24 @@ class Prijem extends Eloquent
 		{
 			$fM = $fM->id;
 		}
-    	return DB::table(static::$table.' as P')
+
+		$query = DB::table(static::$table.' as P')
     		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
     		->where_in('Z.ID_OSOBA', $familyMembers)
-    		->order_by('P.d_datum', 'DESC')
-    		->get(array(
+    		->order_by('P.d_datum', 'DESC');
+
+		if(Input::get('zdroj') && Input::get('zdroj') !== 'all'){
+			$query->where('Z.id', '=', Input::get('zdroj'));
+		}
+		
+		if(Input::get('od') && Input::get('do'))
+		{
+			$query	->where('P.d_datum', '>=', date('Y-m-d', strtotime(Input::get('od'))))
+					->where('P.d_datum', '<=', date('Y-m-d', strtotime(Input::get('do'))))
+					->order_by('d_datum', 'DESC');
+		}
+
+		return $query->get(array(
     			'P.id',
     			'P.vl_suma_prijmu',
     			'P.d_datum',
@@ -172,6 +186,9 @@ class Prijem extends Eloquent
 			$id = DB::table($table)->insert_get_id($data);
 			return array('id' => $id);
 		} else {
+			if($data['vl_zakladna_suma']){
+				$data['vl_zakladna_suma'] = preg_replace('/\s+/', '', $data['vl_zakladna_suma']);
+			}
 			return DB::table($table)
 				->where('id', '=', $data['id'])
 				->update($data);

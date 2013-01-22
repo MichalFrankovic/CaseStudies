@@ -6,43 +6,56 @@ class Incomes_Controller extends Base_Controller {
 	public $do = '';
 	public $od = '';
 
-	public function action_index()
+	public function __construct()
 	{
-		return Redirect::to('incomes/form');
+		View::share('active', 'incomes');
 	}
-	
+
+	/**
+	 * Zobrazenie prijmov a ich inline editacia.
+	 * @author Andreyco (zobrazenie prijmov a inline editacia)
+	 */
 	public function get_index()
 	{
+		$viewData = array(
+			'incomes'		=> Prijem::get_incomes(),
+			'sources'		=> Prijem::get_sources(),
+		);
+		return View::make('incomes.index', $viewData);
+	}
+	
+	// public function get_index()
+	// {
 
 		
-		$view = View::make('incomes.main')
-			->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
-		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-		$view->message = Session::get('message');
-		foreach ($view->osoby as $osoba)
-		{ 
-			$id_osob[] = $osoba->id;
-		}
-		$viewData = array(
-				'list_person'	=> Prijem::get_person_for_list(),
-				'partners'		=> Prijem::get_partners(),
-				'prijmy'		=> Prijem::get_incomes(),
-				'sources'		=> Prijem::get_sources(),
-				);
-		$view->prijmy = Prijem::where_in('id',$id_osob)->get();
-		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_osoba', $id_osob)
-															->where('fl_typ','=','P' )->get();
-		$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-		$view->do = '';
-		$view->od = '';
+	// 	$view = View::make('incomes.main')
+	// 		->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
+	// 	$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+	// 	$view->message = Session::get('message');
+	// 	foreach ($view->osoby as $osoba)
+	// 	{ 
+	// 		$id_osob[] = $osoba->id;
+	// 	}
+	// 	$viewData = array(
+	// 			'list_person'	=> Prijem::get_person_for_list(),
+	// 			'partners'		=> Prijem::get_partners(),
+	// 			'prijmy'		=> Prijem::get_incomes(),
+	// 			'sources'		=> Prijem::get_sources(),
+	// 			);
+	// 	$view->prijmy = Prijem::where_in('id',$id_osob)->get();
+	// 	$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_osoba', $id_osob)
+	// 														->where('fl_typ','=','P' )->get();
+	// 	$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+	// 	$view->do = '';
+	// 	$view->od = '';
 		
-		return $view;
-	}
+	// 	return $view;
+	// }
 		
 	
 
 	/**
-	 * Pridanie/editacia prijmu
+	 * Pridanie prijmu
 	 * @author Andreyco
 	 */
 	public function get_form()
@@ -51,10 +64,7 @@ class Incomes_Controller extends Base_Controller {
 		->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
 		$viewData = array(
 			'list_person'	=> Prijem::get_person_for_list(),
-			'partners'		=> Prijem::get_partners(),
-			'incomes'		=> Prijem::get_incomes(),
 		);
-		// print_r($viewData['incomes']);
 		return View::make('incomes.form', $viewData);
 	}
 	
@@ -94,6 +104,9 @@ class Incomes_Controller extends Base_Controller {
 		return View::make('incomes.form', $viewData);
 		return $view;
 	}
+
+
+
 	/**
 	 * Ulozenie zmien v prijme
 	 * @author Andreyco
@@ -110,16 +123,22 @@ class Incomes_Controller extends Base_Controller {
 		$id = DB::table('F_PRIJEM')->insert_get_id($data);
 		if($id)
 		{
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Nový Príjem bol úspešne uložený')
 				->with('status_class', 'success');
 		} else {
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Pri ukladaní došlo k chybe')
 				->with('status_class', 'error');
 		}
 	}
 
+
+
+	/**
+	 * Zobraz zoznam partnerov
+	 * @author Andreyco
+	 */
 	public function get_partners()
 	{
 		$viewData = array(
@@ -144,15 +163,20 @@ class Incomes_Controller extends Base_Controller {
 	}
 
 
+
+	/**
+	 * Odstran prijem
+	 * @author Andreyco
+	 */
 	public function get_delete($id)
 	{
 		if(DB::table('F_PRIJEM')->where('id', '=', $id)->delete())
 		{
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Príjem bol odstránený')
 				->with('status_class', 'success');
 		} else {
-			return Redirect::to('incomes/form')
+			return Redirect::to('incomes')
 				->with('status', 'Pri vykonávaní operácie došlo k chybe')
 				->with('status_class', 'error');
 		}
@@ -192,6 +216,12 @@ class Incomes_Controller extends Base_Controller {
 		}
 	}
 
+
+
+	/**
+	 * AJAX save
+	 * @author Andreyco
+	 */
 	public function post_ajaxsave($table)
 	{
 		$data = array(

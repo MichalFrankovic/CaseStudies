@@ -1,7 +1,14 @@
 @layout('layouts.base')
 
 @section('styles')
-
+	<style type="text/css">
+	thead{
+		background: #ddd;
+	}
+	thead td{
+		border-color: #efefef !important;
+	}
+	</style>
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
 
 @endsection
@@ -111,6 +118,7 @@
 	<ul class="nav nav-tabs">
 		<?php
 		$tabs = array(
+			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
 			'sources'	=> 'Zdroje príjmov',
 			'partners'	=> 'Partneri',
@@ -120,11 +128,17 @@
 			$url   = URL::to('incomes/'.$key);
 			if(URI::segment(2) === $key){
 				$class = 'class="active"';
+			} else if(!URI::segment(2) && $key === 'index'){
+				$class = 'class="active"';
 			}
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
 		?>
-		<li id="new-row" class="pull-right">Nový zdroj</li>
+		<li id="new-row" class="pull-right">
+			<button class="btn btn-info">
+				<i class="icon-plus icon-white"></i> Nový zdroj
+			</button>
+		</li>
 	</ul>
 
 	<table class="table table-bordered">
@@ -145,26 +159,25 @@
 
 				<td>
 					<span class="editable-person" data-pk="{{$source->id}}" data-original-title="Vyberte osobu">
-						{{ $source->t_meno_osoby}} {{ $source->t_priezvisko_osoby }}
+						{{ htmlspecialchars($source->t_meno_osoby.' '.$source->t_priezvisko_osoby)}}
 					</span>
 				</td>
 
 				<td>
 					<span class="editable-partner" data-pk="{{$source->id}}" data-original-title="Zadajte nazov">
-						{{$source->t_nazov}}
+						{{ htmlspecialchars($source->t_nazov) }}
 					</span>	
 				</td>
 
 				<td>
 					<span class="editable-popis" data-pk="{{$source->id}}" data-original-title="Zadajte popis">
-						{{$source->t_popis}}
+						{{ htmlspecialchars($source->t_popis) }}
 					</span>	
 				</td>
 
 				<td>
 					<span class="editable-amount" data-pk="{{$source->id}}" data-original-title="Zadajte popis">
-						{{$source->vl_zakladna_suma}}
-					</span>	
+						{{ htmlspecialchars($source->vl_zakladna_suma) }}</span> €
 				</td>
 
 				<td>

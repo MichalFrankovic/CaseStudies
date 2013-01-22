@@ -1,7 +1,11 @@
 @layout('layouts.base')
 
 @section('styles')
-	
+	<style type="text/css">
+	.btn.btn-primary{
+		margin-left: 180px;
+	}
+	</style>
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
 	{{ HTML::style('assets/css/jquery.validity.css') }}
 	<style>
@@ -14,9 +18,6 @@
 		}
 		.information.error{
 			background: rgba(255, 0, 0, .3);
-		}
-		#income-create{
-			display: none;
 		}
 	</style>
 @endsection
@@ -48,7 +49,7 @@
 
 			$.ajax({
 				type:	'GET',
-				url:	'incomes/ajaxload/incomesources/' + $(this).val(),
+				url:	'ajaxload/incomesources/' + $(this).val(),
 				success:	function(response){
 					$('[name=id_zdroj_prijmu]').html( response );
 				}
@@ -69,13 +70,6 @@
 		});
 	});
 
-	$(document).ready(function(){
-		$('#create').click(function(){
-
-			$('#income-create').toggle();
-		});
-	});
-
 	// Validacia
 	$(document).ready(function(){
 		$("#income-create").submit(function(evt) {
@@ -91,37 +85,6 @@
 			}
 		});
 	});
-
-	// Inline Editacia 
-	$(document).ready(function(){
-		$('.btn-danger').click(function(){
-			return confirm("Ste si istý, že chcete zmatať tento príjem?");
-		})
-		//editables 
-	    $('.editable-suma').editable({
-			url: base + '/ajaxsave/F_PRIJEM',
-			type: 'text',
-			name: 'vl_suma_prijmu',
-			title: 'Suma prijmu',
-	    });
-
-	    $('.editable-datum').editable({
-			url: base + '/ajaxsave/F_PRIJEM',
-			type: 'date',
-			name: 'd_datum',
-			title: 'Dátum',
-			viewformat: "dd.mm.yyyy"
-	    });
-
-	    $('.editable-poznamka').editable({
-			url: base + '/ajaxsave/F_PRIJEM',
-			type: 'text',
-			name: 't_poznamka',
-			title: 'Poznámka',
-	    });
-
-	 
-	});
 	</script>
 @endsection
 
@@ -131,6 +94,7 @@
 	<ul class="nav nav-tabs">
 		<?php
 		$tabs = array(
+			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
 			'sources'	=> 'Zdroje príjmov',
 			'partners'	=> 'Partneri',
@@ -140,12 +104,12 @@
 			$url   = URL::to('incomes/'.$key);
 			if(URI::segment(2) === $key){
 				$class = 'class="active"';
-				$url = '';
+			} else if(!URI::segment(2) && $key === 'index'){
+				$class = 'class="active"';
 			}
 			echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
 		}
 		?>
-		<li id="create" class="pull-right">Nový príjem</li>
 	</ul>
 
 	@if(Session::get('status'))
@@ -154,101 +118,54 @@
 		</div>
 	@endif
 
-	{{ Form::open(URL::current(), 'POST', array('class'=>'form-horizontal', 'id'=>'income-create')) }}
+	{{ Form::open(URL::current(), 'POST', array('class'=>'form-horizontal well', 'id'=>'income-create')) }}
 		<div class="control-group">
 			{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
 		    <div class="controls">
-		      {{ Form::select('id_osoba', $list_person) }}
+		      {{ Form::select('id_osoba', $list_person, null, array('class' => ' input-xlarge')) }}
 		    </div>
 	  	</div>
-
-	  	<!-- <div class="control-group">
-	  		{{ Form::label(null, 'Typ príjmu', array('class'=>'control-label')) }}
-	  		<div class="controls">
-	  			{{ Form::select('typ', array(''=>'vyberte typ', 'A' => 'pravidelný', 'N' => 'nepravidelný')) }}
-	  		</div>
-	  	</div> -->
 
 	  	<div class="control-group">
 	  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
 	  		<div class="controls">
-	  			{{ Form::text('d_datum', date('m/d/Y'), array('class'=>'datepicker')) }}
+	  			<div class="input-prepend">
+				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
+				  	{{ Form::text('d_datum', date('m/d/Y'), array('class'=>'datepicker input-small')) }}
+				</div>
 	  		</div>
 	  	</div>
 		
 		<div class="control-group">
 			{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::text('vl_suma_prijmu', '') }}
+				<div class="input-prepend">
+				  	<span class="add-on">€</span>
+				  	{{ Form::text('vl_suma_prijmu', '', array('class' => 'input-small')) }}
+				</div>
+				
 			</div>
 		</div>
 		
 		<div class="control-group">
 			{{ Form::label(null, 'Zdroj príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::select('id_zdroj_prijmu', array('' => 'zvoľte zdroj príjmu')) }}
+				{{ Form::select('id_zdroj_prijmu', array('' => 'zvoľte zdroj príjmu'), null, array('class'=>'input-xlarge')) }}
 			</div>
 		</div>
 		
 		<div class="control-group">
 			{{ Form::label(null, 'Poznámka', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::textarea('t_poznamka', null, array('rows'=>5)) }}
+				{{ Form::textarea('t_poznamka', null, array('rows'=>3, 'class'=>'input-xxlarge')) }}
 			</div>
 		</div>
 		
-		<div class="control-group">
-			<div class="controls">
-				{{ Form::submit('Ulož príjem', array('class'=>'btn btn-primary')) }}
-			</div>
-		</div>
+		<button type="submit" class="btn btn-primary">
+			<i class="icon-ok icon-white"></i>
+			Ulož príjem
+		</button>
 
 	{{ Form::close() }}
 
-
-	<table class="table table-bordered">
-		<thead>
-			<tr style="font-weight: bold;">
-				<td>#</td>
-				<td>Zdroj prijmu</td>
-				<td>Vlozena suma</td>
-				<td>Dátum</td>
-				<td>Poznámka</td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($incomes as $key => $income)
-			<tr>
-				<td>{{$key+1}}</td>
-
-				<td>
-					<span class="editable-popis" data-pk="{{$income->id}}" data-original-title="Zadajte popis">
-						{{ $income->t_popis }}
-					</span>
-				</td>
-				<td>
-					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">
-						{{ $income->vl_suma_prijmu }}
-					</span>
-				</td>
-				<td>
-					<span class="editable-datum" data-pk="{{$income->id}}" data-original-title="Zadajte dátum">
-						{{ date('d.m.Y', strtotime($income->d_datum)) }}
-					</span>
-				</td>
-
-				<td>
-					<span class="editable-poznamka" data-pk="{{$income->id}}" data-original-title="Zadajte poznámku">
-						{{ $income->t_poznamka }}
-					</span>
-				</td>
-				<td>
-					<a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}">Odstranit</a>
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-		
-	</table>
 @endsection
