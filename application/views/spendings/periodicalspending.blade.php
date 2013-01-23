@@ -45,15 +45,30 @@
 </table>
 {{ Form::close() }}
 <hr>
+
+<script type="text/javascript">
+function multiCheck()
+{
+	var valChecked = $('#multicheck').val();
+	if(valChecked == 0)
+	{
+		$('.spendcheck').prop('checked', true);
+		$('#multicheck').val(1);
+	}
+	else
+	{
+		$('.spendcheck').prop('checked', false);
+		$('#multicheck').val(0);
+	}
+}
+</script>
+
 <h4 class="">Zoznam šablón výdavkov</h4>
-<form id="form1" name="form1" method="post" action="">
+<form id="form1" name="form1" method="post" action="multideletetemplatespending">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th>
-                <input type="checkbox" name="checkbox" id="checkbox" />
-                <label for="checkbox"></label>
-            </th>
+            <th><input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /></th>
             <th>Názov</th>
             <th>Príjemca platby</th>
             <th>Pravidelnosť</th>
@@ -65,7 +80,7 @@
         <tbody>
         @foreach ($sablony as $sablona)
         <tr>
-            <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
+            <td><input type="checkbox" name="template[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
             <td>{{ $sablona->t_poznamka }}</td>
             <td>{{ $sablona->prijemca }}</td>
             <td>{{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }}</td>
@@ -77,6 +92,7 @@
         @endforeach
         </tbody>
     </table>
+    <a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"><i class="icon-remove"></i>Vymazať zvolené</a>
 </form>
 
 @include('foot');
