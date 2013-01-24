@@ -36,12 +36,12 @@
 
             </div></td>
             <td><div class="input-append">
-                <input name="status" class="span2" type="text" value="{{ $domacnost->fl_aktivna }}" />
+                <input name="status" class="span2" type="checkbox" value="{{ $domacnost->fl_aktivna }}" <?php if ($domacnost->fl_aktivna == 'A') { echo 'checked'; }?>/>
                 <span class="help-inline">'.$errors['name'].'</span>
 
             </div></td>
             <td><div class="input-append">
-                <input name="uroven" class="span2" type="text" value="{{ $domacnost->fl_admin }}" />
+                <input name="uroven" class="span2" type="checkbox" value="{{ $domacnost->fl_admin }}" <?php if ($domacnost->fl_admin == 'A') { echo 'checked'; }?>/>
                 <span class="help-inline">'.$errors['name'].'</span>
 
             </div></td>
