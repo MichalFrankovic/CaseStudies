@@ -28,6 +28,11 @@ function checkedAll (form1) {
 <form id="form1" name="form1" method="post" action="admin/editMore">
     <table class="table table-bordered table-striped">
         <thead>
+	    <tr>
+		<td><input type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
+		<td><input type="submit" name="Submit" value="Aktivuj" /> 
+		<input type="submit" name="Submit" value="Deaktivuj" /></td>
+	    </tr>
         <tr>
             <th><input type='checkbox' name='checkall' onclick="checkedAll(form1)"/></th>
             <th>Názov domácnosti</th>
