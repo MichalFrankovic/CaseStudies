@@ -23,7 +23,48 @@ function checkedAll (form1) {
 	}
       }
 </script>
+<!--FILTER DOMACNOSTI-->
+<!--<h2>Filter domacnosti</h2>
+<form id="filter" name="filter" metho="post" action="admin/filter">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Názov domácnosti</th>
+            <th>E-mail</th>
+            <th>Aktívna</th>
+            <th>Admin práva</th>
+            <th></th>
+        </tr>
+        </thead>
+	<tbody>
+        <tr>
+            <td><div class="input-append">
+                <input name="domacnost" class="span2" type="text" />
+                <span class="help-inline">'.$errors['name'].'</span>
 
+            </div></td>
+            <td><div class="input-append">
+                <input name="email" class="span2" type="text" />
+                <span class="help-inline">'.$errors['email'].'</span>
+
+            </div></td>
+            <td><div class="input-append">
+                <input name="status" class="span2" type="checkbox" />
+                <span class="help-inline">'.$errors['name'].'</span>
+
+            </div></td>
+            <td><div class="input-append">
+                <input name="uroven" class="span2" type="checkbox" />
+                <span class="help-inline">'.$errors['name'].'</span>
+
+            </div></td>
+            
+            <td><input type="submit" name="Submit" value="Vyhhladať"/></td>
+	    <td><input type="submit" name="Submit" value="Reset"/></td>
+        </tr>
+        </tbody>
+    
+</form>-->
 <!--LISTING A NASTAVENIE UZIVATELOV-->
 <form id="form1" name="form1" method="post" action="admin/editMore">
     <table class="table table-bordered table-striped">
@@ -50,8 +91,9 @@ function checkedAll (form1) {
             <td>{{ $domacnost->t_email_login }}</td>
             <td>{{ $domacnost->fl_admin }}</td>
             <td>{{ $domacnost->fl_aktivna }}</td>
-            <td><a class="btn" href="admin/editUser?id={{ $domacnost->id }}">Edit</a>
-                <a class="btn" href="admin/disableUser?id={{ $domacnost->id }}">Aktivuj/Deaktivuj</a>
+            <td>
+		<a class="btn" href="admin/editUser?id={{ $domacnost->id }}">Edit</a>
+                <a class="btn" href="admin/disableUser?id={{ $domacnost->id }}">Aktivuj | Deaktivuj</a>
                 <a class="btn" href="admin/deleteUser?id={{ $domacnost->id }}" onclick="return confirm('Určite chcete zmazať tento záznam?')">Zmaž</a>
             </td>
         </tr>
@@ -62,9 +104,6 @@ function checkedAll (form1) {
             <td><input type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
             <td><input type="submit" name="Submit" value="Aktivuj" /> 
                 <input type="submit" name="Submit" value="Deaktivuj" /></td>
-            <td></td>
-            <td></td>
-            <td></td>
         </tr>
     </table>
 </form>
