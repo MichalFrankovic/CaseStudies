@@ -10,8 +10,6 @@
             <th></th>
             <th>Názov domácnosti</th>
             <th>E-mail</th>
-<!--            <th>Heslo</th>
-            <th>Zopakovať heslo</th>-->
             <th>Aktívna</th>
             <th>Admin práva</th>
             <th></th>
