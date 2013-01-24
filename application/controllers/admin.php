@@ -48,15 +48,11 @@ class Admin_Controller extends Base_Controller {
 		if ($password != $password_repeat) {
 			$errors['password_repeat'] = 'Heslá sa nezhodujú';
 		}
-                
-                if ($status != 'A'){
-                    
-                    if ($status != 'N') {
-                        $errors['status'] = 'Zlá hodnota úrovne domácnosti, spravna hodnota je "A" alebo "N"';
-                    }
-		}
-                    
-                
+		
+                if (isset($_POST['status'])){
+		    $stav = 'A';
+		} else 
+		    $stav='N';    
 			
 		if (!empty($errors)) {
 			$view->error = 'Opravte chyby vo formulári';
@@ -71,7 +67,7 @@ class Admin_Controller extends Base_Controller {
 			$user->t_email_login = $view->email;
 			$user->t_heslo = Hash::make($password);
 			$user->fl_aktivna = 'A';
-			$user->fl_admin = $status;
+			$user->fl_admin = $stav;
 			$user->save();
 		}
                 $view->errors = $errors;
@@ -97,8 +93,8 @@ class Admin_Controller extends Base_Controller {
                 $id = ($_POST['id']); 
                 $domacnost = ($_POST['domacnost']);
                 $email = ($_POST['email']);
-                $status = ($_POST['status']);
-                $uroven = ($_POST['uroven']);
+//                $status = ($_POST['status']);
+//                $uroven = ($_POST['uroven']);
 			
                 if (empty($domacnost)) {	//nazov domacnosti
 			$errors['name'] = 'Zadajte prosím názov domácnosti';
@@ -112,20 +108,29 @@ class Admin_Controller extends Base_Controller {
 		if (!empty($duplicate)) {
 			$errors['email'] = 'Táto e-mailová adresa už je zaregistrovaná. ';
 		}
+		
+		if (isset($_POST['status'])){
+		    $stav = 'A';
+		} else 
+		    $stav='N';
                 
-                if ($status != 'A'){
-                    
-                    if ($status != 'N') {
-                        $errors['status'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
-                    }
-		}
+//                if ($status != 'A'){
+//                    
+//                    if ($status != 'N') {
+//                        $errors['status'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
+//                    }
+//		}
+		if (isset($_POST['uroven'])){
+		    $admin = 'A';
+		} else 
+		    $admin='N';
                 
-                if ($uroven != 'A'){
-                    
-                    if ($uroven != 'N') {
-                        $errors['uroven'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
-                    }
-		} 
+//                if ($uroven != 'A'){
+//                    
+//                    if ($uroven != 'N') {
+//                        $errors['uroven'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
+//                    }
+//		} 
                 
 			
 //		if (!empty($errors)) {
@@ -136,34 +141,10 @@ class Admin_Controller extends Base_Controller {
 			
 		//DB save 
 		{
-                    DB::query("UPDATE D_DOMACNOST SET t_nazov_domacnosti = '$domacnost', t_email_login = '$email', fl_aktivna = '$status', fl_admin = '$uroven' WHERE id = " . $id);
-//			$user = new Domacnost;
-//			$user->t_nazov_domacnosti = $view->name;
-//			$user->t_email_login = $view->email;
-//			$user->t_heslo = Hash::make($password);
-//			$user->fl_aktivna = 'A';
-//			$user->fl_admin = $status;
-//			$user->save();
-                }
-                
-                return Redirect::to('admin')->with('message', 'Úpravy uložené');
+                    DB::query("UPDATE D_DOMACNOST SET t_nazov_domacnosti = '$domacnost', t_email_login = '$email', fl_aktivna = '$stav', fl_admin = '$admin' WHERE id = " . $id);
+                }                
+                return Redirect::to('admin')->with('message', 'Zmeny boli uložené');
             }
-            
-//            $id = ($_POST['id']); 
-//            $domacnost = ($_POST['domacnost']);
-//            $email = ($_POST['email']);
-//            $stav = ($_POST['stav']);
-//            $uroven = ($_POST['uroven']);
-//            
-//            if($domacnost == '' || $email == '' || $stav== '' || $uroven == '') {
-//                
-//                return Redirect::to('admin')->with('message', 'Našli sa chyby vo vstupe!');                 
-//            }
-////            $Hheslo = Hash::make($heslo);
-//            DB::query("UPDATE D_DOMACNOST SET t_nazov_domacnosti = '$domacnost', t_email_login = '$email', fl_aktivna = '$stav', fl_admin = '$uroven' WHERE id = " . $id);            
-//           
-//            return Redirect::to('admin')->with('message', 'Úpravy boli uložené');
-//            return $view;
 	}
         
         //--- ZMENA STAVU UZIVATELA (A/N) --- 
@@ -218,7 +199,7 @@ class Admin_Controller extends Base_Controller {
                             }
                         }    
                     }
-                    return Redirect::to('admin')->with('message', 'Domácnosti vymazané');
+                    return Redirect::to('admin')->with('message', 'Domácnosti boli vymazané');
                     }
                 return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
             }            
@@ -233,7 +214,7 @@ class Admin_Controller extends Base_Controller {
                             DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $polozka);
                         }
                     }
-                    return Redirect::to('admin')->with('message', 'Domácnosti aktivované');
+                    return Redirect::to('admin')->with('message', 'Domácnosti boli aktivované');
                 }
                 return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
             }            
@@ -248,7 +229,7 @@ class Admin_Controller extends Base_Controller {
                             DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $polozka);
                         }
                     }
-                    return Redirect::to('admin')->with('message', 'Domácnosti deaktivované');
+                    return Redirect::to('admin')->with('message', 'Domácnosti boli deaktivované');
                 }
                 return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
             }
