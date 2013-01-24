@@ -41,25 +41,40 @@
     </div>
  </div>
 
+<script type="text/javascript">
+function multiCheck()
+{
+	var valChecked = $('#multicheck').val();
+	if(valChecked == 0)
+	{
+		$('.spendcheck').prop('checked', true);
+		$('#multicheck').val(1);
+	}
+	else
+	{
+		$('.spendcheck').prop('checked', false);
+		$('#multicheck').val(0);
+	}
+}
+</script>
 
 <h2 class="">Zoznam výdavkov</h2>
-<form id="form1" name="form1" method="post" action="">
+<form id="form1" name="form1" method="post" action="multideletespending">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th>
-            </th>
+            <th><input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /></th>
             <th>Dátum</th>
             <th>Príjemca platby</th>
             <th>Názov</th>
             <th>Suma v €</th>
-            <th>Výbe akcie</th>
+            <th>Výber akcie</th>
         </tr>
         </thead>
         <tbody>
         @foreach ($vydavky as $vydavok)
         <tr>
-            <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
+            <td><input type="checkbox" name="vydavok[]" id="checkbox2" class="spendcheck" value="{{ md5($vydavok->id). $secretword}}" /></td>
             <td>{{ date('d.m.Y',strtotime($vydavok->d_datum)) }}</td>
             <td>{{ $vydavok->partner->t_nazov }}</td>
             <td>{{ $vydavok->t_poznamka }}</td>
@@ -70,8 +85,7 @@
         @endforeach
         </tbody>
     </table>
+    <a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"><i class="icon-remove"></i>Vymazať zvolené</a>
 </form>
-<pre>
 
-  </pre>
 @include('foot');

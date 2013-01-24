@@ -280,6 +280,21 @@ class Spendings_Controller extends Base_Controller {
         return Redirect::to('spendings/list')->with('message', 'Výdavok bol vymazaný!');
     }
     
+    public function action_multideletespending()
+    {
+    	$secretword = md5(Auth::user()->t_heslo);
+    	$vydavok_ids = Input::get('vydavok');
+    	if (is_array($vydavok_ids))
+    	{
+    		foreach ($vydavok_ids as $vydavok_id)
+    		{
+    			DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
+    			DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
+    		}
+    	}
+    	return Redirect::to('spendings/list')->with('message', 'Výdavky boli vymazané!');
+    }
+    
     public function action_templatespending() {
     	
     	$id = Input::get('id');
@@ -439,6 +454,22 @@ class Spendings_Controller extends Base_Controller {
     	DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
     	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
     	return Redirect::to('spendings/periodicalspending')->with('message', 'Šablóna bola vymazaná!');
+    	
+    }
+    
+    public function action_multideletetemplatespending() {
+    	
+    	$secretword = md5(Auth::user()->t_heslo);
+    	$vydavok_ids = Input::get('template');
+    	if (is_array($vydavok_ids))
+    	{
+    		foreach ($vydavok_ids as $vydavok_id)
+    		{
+		    	DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
+		    	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
+    		}
+    	}
+    	return Redirect::to('spendings/periodicalspending')->with('message', 'Šablóny boli vymazané!');
     	
     }
 
