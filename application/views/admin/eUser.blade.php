@@ -12,7 +12,7 @@
             <th>E-mail</th>
 <!--            <th>Heslo</th>
             <th>Zopakovať heslo</th>-->
-            <th>Stav účtu</th>
+            <th>Aktívna</th>
             <th>Admin práva</th>
             <th></th>
         </tr>
