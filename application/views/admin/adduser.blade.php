@@ -33,7 +33,7 @@
 
 <div {{ isset($errors->status) || (is_array($errors) && isset($errors['status'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('status', 'Admin práva', array('class' => 'control-label')) }}
-	{{ Form::text('status') }}
+	{{ Form::checkbox('status') }}
 	{{ isset($errors->status) || (is_array($errors) && isset($errors['status'])) ? '<span class="help-inline">'.$errors['status'].'</span>' : '' }}
 </div>
 

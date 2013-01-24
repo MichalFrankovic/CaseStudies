@@ -1,7 +1,6 @@
 @include('head')
 @include('admin/submenu')
 
-
 <h2>Editovanie užívateľa (domácnosti)</h2>
 <form id="form1" name="form1" method="post" action="editUserDone">
     <table class="table table-bordered table-striped">
@@ -12,7 +11,7 @@
             <th>E-mail</th>
 <!--            <th>Heslo</th>
             <th>Zopakovať heslo</th>-->
-            <th>Stav účtu</th>
+            <th>Aktívna</th>
             <th>Admin práva</th>
             <th></th>
         </tr>
@@ -36,12 +35,14 @@
 
             </div></td>
             <td><div class="input-append">
-                <input name="status" class="span2" type="text" value="{{ $domacnost->fl_aktivna }}" />
+		    <input name="status" class="span2" type="checkbox" value="{{ $domacnost->fl_aktivna }}" <?php if ($domacnost->fl_aktivna == 'A') { echo 'checked'; }?>/>
+<!--                <input name="status" class="span2" type="checkbox" value="{{ $domacnost->fl_aktivna }}" />-->
                 <span class="help-inline">'.$errors['name'].'</span>
 
             </div></td>
             <td><div class="input-append">
-                <input name="uroven" class="span2" type="text" value="{{ $domacnost->fl_admin }}" />
+		<input name="uroven" class="span2" type="checkbox" value="{{ $domacnost->fl_admin }}" <?php if ($domacnost->fl_admin == 'A') { echo 'checked'; }?>/>
+<!--                <input name="uroven" class="span2" type="checkbox" value="{{ $domacnost->fl_admin }}" />-->
                 <span class="help-inline">'.$errors['name'].'</span>
 
             </div></td>

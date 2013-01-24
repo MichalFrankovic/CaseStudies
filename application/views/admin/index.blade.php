@@ -4,7 +4,7 @@
     <h2 style="color: #bc8f8f;">{{ $message }}</h2>
 @endif
 
-<!--CHECK ALL CHECKBOX SKRIPT-->
+<!--CHECK ALL javaSKRIPT-->
 <script type="text/javascript">
 checked=false;
 function checkedAll (form1) {
