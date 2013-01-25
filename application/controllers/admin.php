@@ -13,22 +13,21 @@ class Admin_Controller extends Base_Controller {
 	// --- FILTER ---
 	public function action_filter(){
 	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
-	    $view->message = Session::get('message');
 		
 		$vyraz = Input::get('vyraz');
 		
-//		if($vyraz != '') {
-		    
-		    if (preg_match('/(.*)@(.*)\.[a-z]+/', $vyraz)) {
-			$view->domacnosti = DB::table('D_DOMACNOST')->where('t_email_login', '=', $vyraz);
-			$view->domacnosti = $view->domacnosti->get();
+		    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
+//			$view->domacnosti = $view->domacnosti->get();
 			return $view;
-		    } else
-		    $view->domacnosti = DB::table('D_DOMACNOST')->where('t_nazov_domacnosti', '=', $vyraz);
-		    $view->domacnosti = $view->domacnosti->get();
-		    return $view;
-//		}
-//		return Redirect::to('admin')->with('message', 'Nezadali ste hľadaný výraz');
+		    
+//		    if (preg_match('/(.*)@(.*)\.[a-z]+/', $vyraz)) {
+//			$view->domacnosti = DB::table('D_DOMACNOST')->where('t_email_login', 'like', $vyraz);
+//			$view->domacnosti = $view->domacnosti->get();
+//			return $view;
+//		    } else
+//		    $view->domacnosti = DB::table('D_DOMACNOST')->where('t_nazov_domacnosti', 'like', $vyraz);
+//		    $view->domacnosti = $view->domacnosti->get();
+//		    return $view;
 	}
         
         //--- PRIDANIE UZIVATELA ---        
@@ -60,6 +59,9 @@ class Admin_Controller extends Base_Controller {
 			$errors['email'] = 'Táto e-mailová adresa už je zaregistrovaná. ';
 		}
 		
+		if (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $password)){
+		    $errors['password'] = 'Heslo musí obsahovať písmena aj čísla';
+		} 
 		if (mb_strlen($password) < 8) {
 			$errors['password'] = 'Heslo musí byť dlhé aspoň 8 znakov';
 		}
