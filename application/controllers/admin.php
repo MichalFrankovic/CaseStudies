@@ -4,12 +4,31 @@ class Admin_Controller extends Base_Controller {
     
         //--- LISTING ---
 	public function action_index() {
-		$view = View::make('admin.index')
-                ->with('active', 'admin')->with('subactive', 'admin/users');
-                $view->domacnosti = DB::table('D_DOMACNOST')->get();
-                $view->message = Session::get('message');
+	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+	    $view->domacnosti = DB::table('D_DOMACNOST')->get();
+	    $view->message = Session::get('message');
                 
                 return $view;			
+	}
+	// --- FILTER ---
+	public function action_filter(){
+	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+	    $view->message = Session::get('message');
+		
+		$vyraz = Input::get('vyraz');
+		
+//		if($vyraz != '') {
+		    
+		    if (preg_match('/(.*)@(.*)\.[a-z]+/', $vyraz)) {
+			$view->domacnosti = DB::table('D_DOMACNOST')->where('t_email_login', '=', $vyraz);
+			$view->domacnosti = $view->domacnosti->get();
+			return $view;
+		    } else
+		    $view->domacnosti = DB::table('D_DOMACNOST')->where('t_nazov_domacnosti', '=', $vyraz);
+		    $view->domacnosti = $view->domacnosti->get();
+		    return $view;
+//		}
+//		return Redirect::to('admin')->with('message', 'Nezadali ste hľadaný výraz');
 	}
         
         //--- PRIDANIE UZIVATELA ---        
@@ -26,7 +45,7 @@ class Admin_Controller extends Base_Controller {
 		$view->email = Input::get('email');			
 		$password = Input::get('password');
 		$password_repeat = Input::get('password_repeat');
-                $status = Input::Get('status');
+//                $status = Input::Get('status');
                 
                 if (empty($view->name)) {	//nazov domacnosti
 			$errors['name'] = 'Zadajte prosím názov domácnosti';
@@ -113,25 +132,11 @@ class Admin_Controller extends Base_Controller {
 		    $stav = 'A';
 		} else 
 		    $stav='N';
-                
-//                if ($status != 'A'){
-//                    
-//                    if ($status != 'N') {
-//                        $errors['status'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
-//                    }
-//		}
+
 		if (isset($_POST['uroven'])){
 		    $admin = 'A';
 		} else 
-		    $admin='N';
-                
-//                if ($uroven != 'A'){
-//                    
-//                    if ($uroven != 'N') {
-//                        $errors['uroven'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
-//                    }
-//		} 
-                
+		    $admin='N';                
 			
 //		if (!empty($errors)) {
 //			$view->error = 'Opravte chyby vo formulári';
