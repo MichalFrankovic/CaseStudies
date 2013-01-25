@@ -24,47 +24,24 @@ function checkedAll (form1) {
       }
 </script>
 <!--FILTER DOMACNOSTI-->
-<!--<h2>Filter domacnosti</h2>
-<form id="filter" name="filter" metho="post" action="admin/filter">
+<h2>Filter</h2>
+<form id="filter" name="filter" method="post" action="admin/filter">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th>Názov domácnosti</th>
-            <th>E-mail</th>
-            <th>Aktívna</th>
-            <th>Admin práva</th>
-            <th></th>
+            <th>Hľadaný výraz</th>
         </tr>
         </thead>
 	<tbody>
         <tr>
             <td><div class="input-append">
-                <input name="domacnost" class="span2" type="text" />
+                <input name="vyraz" class="span2" type="text" required/>
                 <span class="help-inline">'.$errors['name'].'</span>
-
-            </div></td>
-            <td><div class="input-append">
-                <input name="email" class="span2" type="text" />
-                <span class="help-inline">'.$errors['email'].'</span>
-
-            </div></td>
-            <td><div class="input-append">
-                <input name="status" class="span2" type="checkbox" />
-                <span class="help-inline">'.$errors['name'].'</span>
-
-            </div></td>
-            <td><div class="input-append">
-                <input name="uroven" class="span2" type="checkbox" />
-                <span class="help-inline">'.$errors['name'].'</span>
-
-            </div></td>
-            
-            <td><input type="submit" name="Submit" value="Vyhhladať"/></td>
-	    <td><input type="submit" name="Submit" value="Reset"/></td>
+		<input type="submit" name="Submit" value="Vyhhladať"/>
+            </div></td>            
         </tr>
-        </tbody>
-    
-</form>-->
+        </tbody>    
+</form>
 <!--LISTING A NASTAVENIE UZIVATELOV-->
 <form id="form1" name="form1" method="post" action="admin/editMore">
     <table class="table table-bordered table-striped">
