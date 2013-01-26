@@ -518,9 +518,12 @@ class Spendings_Controller extends Base_Controller {
         $view = View::make('spendings.addstuff')
             ->with('active', 'vydavky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->message = Session::get('message');
         return $view;
 
     }
+
     public function action_pridajprodukt()
     {
         $data_for_sql['id_domacnost'] = Auth::user()->id;
@@ -532,6 +535,28 @@ class Spendings_Controller extends Base_Controller {
         DB::table('D_KATEGORIA_A_PRODUKT')
             ->insert_get_id($data_for_sql);
         return Redirect::to('spendings/pridanie')->with('message', 'Produkt bol pridaný!');
+
+    }
+
+    public function action_pridajkategoriu()
+    {
+        $id_domacnost = Auth::user()->id;
+        $t_nazov = Input::get('nazov');
+        $vl_zakladna_cena = floatval(Input::get('cena')) ;
+        $id_kategoria_parent = Input::get('category-id');
+        //echo "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)";
+        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)");
+        return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
+    }
+
+    public function action_pridajdodavatela()
+    {
+        $data_for_sql['id_osoba'] = Input::get('osoba');
+        $data_for_sql['t_nazov'] = Input::get('nazov-partnera');
+        $data_for_sql['t_adresa'] = Input::get('adresa');
+        DB::table('D_OBCHODNY_PARTNER')
+            ->insert_get_id($data_for_sql);
+        return Redirect::to('spendings/pridanie')->with('message', 'Partner bol pridaný!');
 
     }
 }
