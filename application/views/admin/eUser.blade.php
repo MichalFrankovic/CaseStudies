@@ -9,8 +9,6 @@
             <th></th>
             <th>Názov domácnosti</th>
             <th>E-mail</th>
-<!--            <th>Heslo</th>
-            <th>Zopakovať heslo</th>-->
             <th>Aktívna</th>
             <th>Admin práva</th>
             <th></th>
@@ -25,12 +23,12 @@
 
             </div></td>
             <td><div class="input-append">
-                <input name="domacnost" class="span2" type="text" value= "{{ $domacnost->t_nazov_domacnosti }}" />
+                <input name="domacnost" class="span2" type="text" value= "{{ $domacnost->t_nazov_domacnosti }}" required/>
                 <span class="help-inline">'.$errors['name'].'</span>
 
             </div></td>
             <td><div class="input-append">
-                <input name="email" class="span2" type="text" value="{{ $domacnost->t_email_login }}" />
+                <input name="email" class="span2" type="email" value="{{ $domacnost->t_email_login }}" required/>
                 <span class="help-inline">'.$errors['name'].'</span>
 
             </div></td>

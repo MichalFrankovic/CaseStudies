@@ -4,12 +4,30 @@ class Admin_Controller extends Base_Controller {
     
         //--- LISTING ---
 	public function action_index() {
-		$view = View::make('admin.index')
-                ->with('active', 'admin')->with('subactive', 'admin/users');
-                $view->domacnosti = DB::table('D_DOMACNOST')->get();
-                $view->message = Session::get('message');
+	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+	    $view->domacnosti = DB::table('D_DOMACNOST')->get();
+	    $view->message = Session::get('message');
                 
                 return $view;			
+	}
+	// --- FILTER ---
+	public function action_filter(){
+	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+		
+		$vyraz = Input::get('vyraz');
+		
+		    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
+//			$view->domacnosti = $view->domacnosti->get();
+			return $view;
+		    
+//		    if (preg_match('/(.*)@(.*)\.[a-z]+/', $vyraz)) {
+//			$view->domacnosti = DB::table('D_DOMACNOST')->where('t_email_login', 'like', $vyraz);
+//			$view->domacnosti = $view->domacnosti->get();
+//			return $view;
+//		    } else
+//		    $view->domacnosti = DB::table('D_DOMACNOST')->where('t_nazov_domacnosti', 'like', $vyraz);
+//		    $view->domacnosti = $view->domacnosti->get();
+//		    return $view;
 	}
         
         //--- PRIDANIE UZIVATELA ---        
@@ -26,7 +44,7 @@ class Admin_Controller extends Base_Controller {
 		$view->email = Input::get('email');			
 		$password = Input::get('password');
 		$password_repeat = Input::get('password_repeat');
-                $status = Input::Get('status');
+//                $status = Input::Get('status');
                 
                 if (empty($view->name)) {	//nazov domacnosti
 			$errors['name'] = 'Zadajte prosím názov domácnosti';
@@ -41,6 +59,9 @@ class Admin_Controller extends Base_Controller {
 			$errors['email'] = 'Táto e-mailová adresa už je zaregistrovaná. ';
 		}
 		
+		if (!preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $password)){
+		    $errors['password'] = 'Heslo musí obsahovať písmena aj čísla';
+		} 
 		if (mb_strlen($password) < 8) {
 			$errors['password'] = 'Heslo musí byť dlhé aspoň 8 znakov';
 		}
@@ -78,7 +99,7 @@ class Admin_Controller extends Base_Controller {
         
         //--- EDITOVANIE UZIVATELA --- 
         public function action_editUser(){
-            $view = View::make('admin.euser')->with('active', 'admin')->with('subactive', 'admin/eUser');
+            $view = View::make('admin.eUser')->with('active', 'admin')->with('subactive', 'admin/eUser');
             $id = Input::get('id');
             $view->domacnosti = DB::table('D_DOMACNOST')->where('id', '=', $id)->get();
             
@@ -113,25 +134,11 @@ class Admin_Controller extends Base_Controller {
 		    $stav = 'A';
 		} else 
 		    $stav='N';
-                
-//                if ($status != 'A'){
-//                    
-//                    if ($status != 'N') {
-//                        $errors['status'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
-//                    }
-//		}
+
 		if (isset($_POST['uroven'])){
 		    $admin = 'A';
 		} else 
-		    $admin='N';
-                
-//                if ($uroven != 'A'){
-//                    
-//                    if ($uroven != 'N') {
-//                        $errors['uroven'] = 'Nesprávna hodnota, spravna hodnota je "A" alebo "N"';
-//                    }
-//		} 
-                
+		    $admin='N';                
 			
 //		if (!empty($errors)) {
 //			$view->error = 'Opravte chyby vo formulári';

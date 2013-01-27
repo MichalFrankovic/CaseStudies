@@ -39,7 +39,7 @@
 
 <div class="submit">
 	{{ Form::submit('Pridať') }}
-	{{ Form::reset('Návrat', array('onclick' => 'document.location.href=\'' . URL::home() . '\';')); }}
+<!--	{{ Form::reset('Návrat', array('onclick' => 'document.location.href=\'' . URL::home() . '\';')); }}-->
 </div>
 
 {{ Form::close() }}
