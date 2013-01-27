@@ -544,9 +544,9 @@ class Spendings_Controller extends Base_Controller {
         $t_nazov = Input::get('nazov');
         $vl_zakladna_cena = floatval(Input::get('cena')) ;
         $id_kategoria_parent = Input::get('category-id');
-        //echo "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)";
-        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)");
-        return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
+        echo "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)";
+        //DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)");
+        //return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
     }
 
     public function action_pridajdodavatela()
