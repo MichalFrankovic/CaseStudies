@@ -149,24 +149,26 @@
 			{{ Session::get('status') }}
 		</div>
 	@endif
-
-	{{ Form::open('/incomes', 'get', array('class' => 'side-by-side')); }}
+	
+	
+		
+	{{ Form::open('incomes/index', 'get', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
     <h4>Datum</h4>
     <div class="input-prepend" style="float:left;width:275px">
         <span class="add-on">Od: </span>
-        <input class="span3 datepicker" type="text" name="od"  ">
+        <input class="span3 datepicker" type="text" name="od" value="{{ $od }}" >
     </div>
     <div class="input-prepend">
     <span class="add-on">Do: </span>
-    <input class="span3 datepicker" type="text" name="do" ">
+    <input class="span3 datepicker" type="text" name="do" value="{{ $do }}">
 </div>
  <div class="input-prepend">
         <span class="add-on">Zdroj prijmu: </span>
-    <select name="zdroj" class="span3">
+    <select name="zdroj"  class="span3">
         <option value="all" selected="selected">VSETCI</option>
         @foreach ($sources as $source)
-        <option value="{{ $source->id }}"> {{ $source->t_popis }}</option>
+        <option value="{{ $source->id }}" > {{ $source->t_popis }}</option>
         @endforeach
     </select>
      </div>
@@ -198,12 +200,11 @@
 
 				<td>
 					<span class="editable-popis" data-pk="{{$income->id}}" data-original-title="Zadajte popis">
-						{{ htmlspecialchars($income->t_popis) }}
+						{{ $income->t_popis }}
 					</span>
 				</td>
 				<td>
-					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">
-						{{ htmlspecialchars($income->vl_suma_prijmu) }}</span> €
+					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">{{ $income->vl_suma_prijmu }}</span> €
 				</td>
 				<td>
 					<span class="editable-datum" data-pk="{{$income->id}}" data-original-title="Zadajte dátum">
@@ -213,7 +214,7 @@
 
 				<td>
 					<span class="editable-poznamka" data-pk="{{$income->id}}" data-original-title="Zadajte poznámku">
-						{{ htmlspecialchars($income->t_poznamka) }}
+						{{ $income->t_poznamka }}
 					</span>
 				</td>
 				<td>
