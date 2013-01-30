@@ -535,7 +535,7 @@ class Spendings_Controller extends Base_Controller {
         $t_nazov = Input::get('nazov');
         $cena = floatval(str_replace(',', '.',Input::get('cena')));
         $id_kategoria_parent = Input::get('category-id');
-        //echo "call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')";
+        //xxecho "call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')";
         DB::query("call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')");
         return Redirect::to('spendings/pridanie')->with('message', 'Produkt bol pridaný!');
 
@@ -546,7 +546,7 @@ class Spendings_Controller extends Base_Controller {
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
         $id_kategoria_parent = Input::get('category-id');
-       //echo "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
+       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
        return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
     }
