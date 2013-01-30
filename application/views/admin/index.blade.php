@@ -25,7 +25,7 @@ function checkedAll (form1) {
 </script>
 <!--FILTER DOMACNOSTI-->
 <h2>Filter</h2>
-<form id="filter" name="filter" method="get" action="admin/filter">
+<form id="filter" name="filter" method="post" action="admin/index">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
