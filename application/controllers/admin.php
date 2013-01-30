@@ -1,24 +1,31 @@
 <?php
 
 class Admin_Controller extends Base_Controller {
-	
+
         //--- LISTING ---
 	public function action_index() {
 	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
 	    $view->domacnosti = DB::table('D_DOMACNOST')->get();
 	    $view->message = Session::get('message');
-                
+            
+	    if (isset($_POST['vyraz'])){
+		$view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+		$vyraz = $_POST['vyraz'];
+		$view->domacnosti = DB::table('D_DOMACNOST')->get();
+		$view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
+		return $view;
+	    }
             return $view;			
 	}
 	// --- FILTER ---
-	public function action_filter(){
-	    $view = View::make('admin.index')->with('subactive', 'admin/users');
-	    
-	    $vyraz = Input::get('vyraz');
-	    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
-	    
-	    return $view;
-	}
+//	public function action_filter(){
+//	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+//	    
+//	    $vyraz = Input::get('vyraz');
+//	    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
+//	    
+//	    return $view;
+//	}
         
         //--- PRIDANIE UZIVATELA ---        
 	public function action_adduser(){
