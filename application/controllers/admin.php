@@ -2,30 +2,28 @@
 
 class Admin_Controller extends Base_Controller {
 
-        //--- LISTING ---
-	public function action_index() {
+        
+	public function action_index(){
+        return Redirect::to('admin/list');
+	}
+	
+	//--- LISTING ---
+	public function action_list() {
 	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
 	    $view->domacnosti = DB::table('D_DOMACNOST')->get();
 	    $view->message = Session::get('message');
-            
-	    if (isset($_POST['vyraz'])){
-		$view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
-		$vyraz = $_POST['vyraz'];
-		$view->domacnosti = DB::table('D_DOMACNOST')->get();
-		$view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
-		return $view;
-	    }
+	    
             return $view;			
 	}
 	// --- FILTER ---
-//	public function action_filter(){
-//	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
-//	    
-//	    $vyraz = Input::get('vyraz');
-//	    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
-//	    
-//	    return $view;
-//	}
+	public function action_filter(){
+	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
+	    
+	    $vyraz = Input::get('vyraz');
+	    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
+	    
+	    return $view;
+	}
         
         //--- PRIDANIE UZIVATELA ---        
 	public function action_adduser(){
@@ -89,7 +87,7 @@ class Admin_Controller extends Base_Controller {
 			$user->save();
 		}
                 $view->errors = $errors;
-                return Redirect::to('admin')->with('message', 'Domácnosť pridaná');
+                return Redirect::to('admin/list')->with('message', 'Domácnosť pridaná');
             }
             return $view;
         }
@@ -147,7 +145,7 @@ class Admin_Controller extends Base_Controller {
 		{
                     DB::query("UPDATE D_DOMACNOST SET t_nazov_domacnosti = '$domacnost', t_email_login = '$email', fl_aktivna = '$stav', fl_admin = '$admin' WHERE id = " . $id);
                 }                
-                return Redirect::to('admin')->with('message', 'Zmeny boli uložené');
+                return Redirect::to('admin/list')->with('message', 'Zmeny boli uložené');
             }
 	}
         
@@ -158,12 +156,12 @@ class Admin_Controller extends Base_Controller {
            
             if ($objekt->fl_aktivna == 'A'){
                 DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $id);
-                return Redirect::to('admin')->with('message', 'Užívateľ deaktivovaný');
+                return Redirect::to('admin/list')->with('message', 'Užívateľ deaktivovaný');
             }
             else{
                 DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $id);
                 
-                return Redirect::to('admin')->with('message', 'Užívateľ aktivovaný');
+                return Redirect::to('admin/list')->with('message', 'Užívateľ aktivovaný');
             }
             
         }
@@ -173,12 +171,12 @@ class Admin_Controller extends Base_Controller {
             $id = Input::get('id');
             try {
                 DB::query('DELETE FROM D_DOMACNOST WHERE id = "' . $id  . '"');
-                return Redirect::to('admin')->with('message', 'Domácnosť bola vymazaná');
+                return Redirect::to('admin/list')->with('message', 'Domácnosť bola vymazaná');
             }
             catch (Exception $e){
                 $e->getMessage();
                 
-                return Redirect::to('admin')->with('message', 'Danú domácnosť nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+                return Redirect::to('admin/list')->with('message', 'Danú domácnosť nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
             }
             
         }
@@ -199,13 +197,13 @@ class Admin_Controller extends Base_Controller {
                             catch (Exception $e){
                                 $e->getMessage();
                 
-                                return Redirect::to('admin')->with('message', 'Dané domácnosti nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+                                return Redirect::to('admin/list')->with('message', 'Dané domácnosti nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
                             }
                         }    
                     }
-                    return Redirect::to('admin')->with('message', 'Domácnosti boli vymazané');
+                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli vymazané');
                     }
-                return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
+                return Redirect::to('admin/list')->with('message', 'Nebola zvolená ziadna domácnosť');
             }            
             //AKTIVOVANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Aktivuj'){
@@ -218,9 +216,9 @@ class Admin_Controller extends Base_Controller {
                             DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $polozka);
                         }
                     }
-                    return Redirect::to('admin')->with('message', 'Domácnosti boli aktivované');
+                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli aktivované');
                 }
-                return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
+                return Redirect::to('admin/list')->with('message', 'Nebola zvolená ziadna domácnosť');
             }            
             //DEAKTIVOVANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Deaktivuj'){
@@ -233,9 +231,9 @@ class Admin_Controller extends Base_Controller {
                             DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $polozka);
                         }
                     }
-                    return Redirect::to('admin')->with('message', 'Domácnosti boli deaktivované');
+                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli deaktivované');
                 }
-                return Redirect::to('admin')->with('message', 'Nebola zvolená ziadna domácnosť');
+                return Redirect::to('admin/list')->with('message', 'Nebola zvolená ziadna domácnosť');
             }
         }
 }
