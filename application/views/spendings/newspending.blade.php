@@ -38,7 +38,7 @@
         <tr>
             <th scope="col"></th>
             <th scope="col">Položka</th>
-            <th scope="col">Cena / ks (bez zľavy)</th>
+            <th scope="col">Cena /ks (bez zľavy)</th>
             <th scope="col">Počet</th>
             <th scope="col">Zľava</th>
         </tr>

@@ -42,8 +42,16 @@ class Spendings_Controller extends Base_Controller {
 
         $view = View::make('spendings.main')
             ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
+        $view->do = '';
+        $view->od = '';
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         $view->message = Session::get('message');
+        if (empty($view->osoby)) {
+            $view = View::make('spendings.message')
+                ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
+            $view->message = "Nebola vytvorená žiadna osoba";
+            return $view;
+        }
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
@@ -51,12 +59,9 @@ class Spendings_Controller extends Base_Controller {
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-        //$p = Partner::all();
-        //print_r($view->kategorie);
-        //$view->p = Vydavok::where('id_obchodny_partner' ,'=', '4')->join('phone', 'users.id', '=', 'phone.user_id') ;
-        $view->do = '';
-        $view->od = '';
+
         return $view;
+
     }
 
     public function action_filter()
@@ -526,14 +531,12 @@ class Spendings_Controller extends Base_Controller {
 
     public function action_pridajprodukt()
     {
-        $data_for_sql['id_domacnost'] = Auth::user()->id;
-        $data_for_sql['t_nazov'] = Input::get('nazov');
-        $data_for_sql['t_merna_jednotka'] = 'ks';
-        $data_for_sql['vl_zakladna_cena'] = Input::get('cena');
-        $data_for_sql['fl_typ'] = 'P';
-        $data_for_sql['id_kategoria_parent'] = Input::get('category');
-        DB::table('D_KATEGORIA_A_PRODUKT')
-            ->insert_get_id($data_for_sql);
+        $id_domacnost = Auth::user()->id;
+        $t_nazov = Input::get('nazov');
+        $cena = floatval(str_replace(',', '.',Input::get('cena')));
+        $id_kategoria_parent = Input::get('category-id');
+        //xxecho "call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')";
+        DB::query("call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')");
         return Redirect::to('spendings/pridanie')->with('message', 'Produkt bol pridaný!');
 
     }
@@ -542,11 +545,10 @@ class Spendings_Controller extends Base_Controller {
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
-        $vl_zakladna_cena = floatval(Input::get('cena')) ;
         $id_kategoria_parent = Input::get('category-id');
-        //echo "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)";
-        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov', $vl_zakladna_cena)");
-        return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
+       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
+       DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
+       return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
     }
 
     public function action_pridajdodavatela()

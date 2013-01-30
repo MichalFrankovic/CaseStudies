@@ -1,5 +1,7 @@
 <?php
 
+use Laravel\Input;
+
 class Incomes_Controller extends Base_Controller {
 
 	public $restful = true;
@@ -8,6 +10,7 @@ class Incomes_Controller extends Base_Controller {
 
 	public function __construct()
 	{
+		
 		View::share('active', 'incomes');
 	}
 
@@ -16,12 +19,19 @@ class Incomes_Controller extends Base_Controller {
 	 * @author Andreyco (zobrazenie prijmov a inline editacia)
 	 */
 	public function get_index()
-	{
+	{	
+	
+		
 		$viewData = array(
 			'incomes'		=> Prijem::get_incomes(),
 			'sources'		=> Prijem::get_sources(),
 		);
-		return View::make('incomes.index', $viewData);
+		
+		return View::make('incomes.index', $viewData)
+						->with('od', Input::get('od'))
+						->with('do', Input::get('do'))
+						->with('source->id', Input::get('zdroj'));
+		
 	}
 	
 	// public function get_index()
@@ -59,9 +69,12 @@ class Incomes_Controller extends Base_Controller {
 	 * @author Andreyco
 	 */
 	public function get_form()
-	{
+	{	
+		
+		
+		
 		$view = View::make('incomes.main')
-		->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
+						->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
 		$viewData = array(
 			'list_person'	=> Prijem::get_person_for_list(),
 		);
@@ -112,7 +125,8 @@ class Incomes_Controller extends Base_Controller {
 	 * @author Andreyco
 	 */
 	public function post_form()
-	{
+	{	
+		
 		$data = array(
 			'id_zdroj_prijmu'	=> Input::get('id_zdroj_prijmu'),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
@@ -172,11 +186,11 @@ class Incomes_Controller extends Base_Controller {
 	{
 		if(DB::table('F_PRIJEM')->where('id', '=', $id)->delete())
 		{
-			return Redirect::to('incomes')
+			return Redirect::to('incomes/form')
 				->with('status', 'Príjem bol odstránený')
 				->with('status_class', 'success');
 		} else {
-			return Redirect::to('incomes')
+			return Redirect::to('incomes/form')
 				->with('status', 'Pri vykonávaní operácie došlo k chybe')
 				->with('status_class', 'error');
 		}

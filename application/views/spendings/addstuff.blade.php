@@ -7,6 +7,7 @@
 <h2>Pridaj Produkt</h2>
 
 <div class="thumbnail" >
+    @if ( isset($kategorie) )
     {{ Form::open('spendings/pridajprodukt', 'POST', array('class' => 'side-by-side')); }}
     <div class="input-prepend" style="float:left;width:275px">
         <span class="add-on">Názov: </span>
@@ -18,13 +19,14 @@
     </div>
     <div class="input-prepend">
         <span class="add-on">Kategória: </span>
-        <select name="category" class="span3">
-            <option value="" selected="selected">ŽIADNA</option>
+
+        <select name="category-id" class="span3">
             @foreach ($kategorie as $kat)
             <option value="{{ $kat->id }}">{{ $kat->t_nazov }}</option>
             @endforeach
         </select>
     </div>
+    @endif
 
         <div class="submit">
             {{ Form::submit('Uložiť' , array('class' => 'btn')); }}
@@ -38,10 +40,6 @@
     <div class="input-prepend" style="float:left;width:275px">
         <span class="add-on">Názov kategorie: </span>
         <input class="span3" type="text" name="nazov" value="">
-    </div>
-    <div class="input-prepend">
-        <span class="add-on">Základná cena:</span>
-        <input class="span3" type="text" name="cena" value="">
     </div>
     <div class="input-prepend">
         <span class="add-on">Pod-kategória: </span>
