@@ -25,7 +25,7 @@ function checkedAll (form1) {
 </script>
 <!--FILTER DOMACNOSTI-->
 <h2>Filter</h2>
-<form id="filter" name="filter" method="post" action="admin/index">
+<form id="filter" name="filter" method="post" action="filter">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -38,13 +38,13 @@ function checkedAll (form1) {
                 <input name="vyraz" class="span2" type="text"/>
                 <span class="help-inline">'.$errors['name'].'</span>
 		<input type="submit" name="Submit" value="Vyhhladať"/>
-		<input type="reset" name="reset" value="Reset"/>
+<!--		<input type="reset" name="reset" value="Reset"/>-->
             </div></td>            
         </tr>
         </tbody>    
 </form>
 <!--LISTING A NASTAVENIE UZIVATELOV-->
-<form id="form1" name="form1" method="post" action="admin/editMore">
+<form id="form1" name="form1" method="post" action="editMore">
     <table class="table table-bordered table-striped">
         <thead>
 	    <tr>
@@ -70,9 +70,9 @@ function checkedAll (form1) {
             <td>{{ $domacnost->fl_admin }}</td>
             <td>{{ $domacnost->fl_aktivna }}</td>
             <td>
-		<a class="btn" href="admin/editUser?id={{ $domacnost->id }}">Edit</a>
-                <a class="btn" href="admin/disableUser?id={{ $domacnost->id }}">Aktivuj | Deaktivuj</a>
-                <a class="btn" href="admin/deleteUser?id={{ $domacnost->id }}" onclick="return confirm('Určite chcete zmazať tento záznam?')">Zmaž</a>
+		<a class="btn" href="editUser?id={{ $domacnost->id }}">Edit</a>
+                <a class="btn" href="disableUser?id={{ $domacnost->id }}">Aktivuj | Deaktivuj</a>
+                <a class="btn" href="deleteUser?id={{ $domacnost->id }}" onclick="return confirm('Určite chcete zmazať tento záznam?')">Zmaž</a>
             </td>
         </tr>
         @endforeach
