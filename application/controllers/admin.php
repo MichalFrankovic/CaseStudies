@@ -13,21 +13,10 @@ class Admin_Controller extends Base_Controller {
 	// --- FILTER ---
 	public function action_filter(){
 	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
-		
-		$vyraz = Input::get('vyraz');
-		
-		    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
-//			$view->domacnosti = $view->domacnosti->get();
-			return $view;
-		    
-//		    if (preg_match('/(.*)@(.*)\.[a-z]+/', $vyraz)) {
-//			$view->domacnosti = DB::table('D_DOMACNOST')->where('t_email_login', 'like', $vyraz);
-//			$view->domacnosti = $view->domacnosti->get();
-//			return $view;
-//		    } else
-//		    $view->domacnosti = DB::table('D_DOMACNOST')->where('t_nazov_domacnosti', 'like', $vyraz);
-//		    $view->domacnosti = $view->domacnosti->get();
-//		    return $view;
+	    $vyraz = Input::get('vyraz');
+	    $view->domacnosti = DB::query('SELECT * FROM D_DOMACNOST WHERE t_email_login LIKE "%' . $vyraz . '%" OR t_nazov_domacnosti LIKE "%' . $vyraz . '%"');
+//	    $view->domacnosti = $view->domacnosti->get();
+	    return $view;
 	}
         
         //--- PRIDANIE UZIVATELA ---        
