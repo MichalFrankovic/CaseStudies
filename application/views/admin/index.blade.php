@@ -35,9 +35,10 @@ function checkedAll (form1) {
 	<tbody>
         <tr>
             <td><div class="input-append">
-                <input name="vyraz" class="span2" type="text" required/>
+                <input name="vyraz" class="span2" type="text"/>
                 <span class="help-inline">'.$errors['name'].'</span>
 		<input type="submit" name="Submit" value="Vyhhladať"/>
+		<input type="reset" name="reset" value="Reset"/>
             </div></td>            
         </tr>
         </tbody>    
