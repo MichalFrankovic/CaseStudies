@@ -1,7 +1,7 @@
 @include('head')
 @include('admin/submenu')
 @if (isset($message) )
-    <h2 style="color: #bc8f8f;">{{ $message }}</h2>
+    <h4 style="color: #bc8f8f;">{{ $message }}</h4>
 @endif
 
 <!--CHECK ALL javaSKRIPT-->
@@ -25,7 +25,7 @@ function checkedAll (form1) {
 </script>
 <!--FILTER DOMACNOSTI-->
 <h2>Filter</h2>
-<form id="filter" name="filter" method="post" action="admin/filter">
+<form id="filter" name="filter" method="get" action="admin/filter">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
