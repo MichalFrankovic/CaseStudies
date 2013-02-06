@@ -14,6 +14,18 @@
 	{{ isset($errors->name) || (is_array($errors) && isset($errors['name'])) ? '<span class="help-inline">'.$errors['name'].'</span>' : '' }}
 </div>
 
+<div {{ isset($errors->person_name) || (is_array($errors) && isset($errors['person_name'])) ? ' class="control-group error"' : '' }}>
+	{{ Form::label('person_name', 'Meno', array('class' => 'control-label')) }}
+	{{ Form::text('person_name', $person_name) }}
+	{{ isset($errors->person_name) || (is_array($errors) && isset($errors['person_name'])) ? '<span class="help-inline">'.$errors['person_name'].'</span>' : '' }}
+</div>
+
+<div {{ isset($errors->person_surname) || (is_array($errors) && isset($errors['person_surname'])) ? ' class="control-group error"' : '' }}>
+	{{ Form::label('person_surname', 'Priezvisko', array('class' => 'control-label')) }}
+	{{ Form::text('person_surname', $person_surname) }}
+	{{ isset($errors->person_surname) || (is_array($errors) && isset($errors['person_surname'])) ? '<span class="help-inline">'.$errors['person_surname'].'</span>' : '' }}
+</div>
+
 <div {{ isset($errors->email) || (is_array($errors) && isset($errors['email'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('email', 'E-mailová adresa', array('class' => 'control-label')) }}
 	{{ Form::text('email', $email) }}

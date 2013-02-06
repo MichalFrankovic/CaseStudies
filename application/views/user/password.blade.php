@@ -13,6 +13,8 @@
 	<div class="alert alert-error">{{ $error }}</div>
 @endif
 
+{{ Form::hidden('hash', $hash) }}
+
 <div {{ isset($errors->password) || (is_array($errors) && isset($errors['password'])) ? ' class="control-group error"' : '' }}>
 	{{ Form::label('password', 'Nové heslo', array('class' => 'control-label')) }}
 	{{ Form::password('password') }}

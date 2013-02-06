@@ -104,12 +104,16 @@ class User_Controller extends Base_Controller {
 		
 		$view->email = isset($_GET['email']) ? $_GET['email'] : '';
 		$view->name = '';
+		$view->person_name = '';
+		$view->person_surname = '';
 		$errors = array();
 		
 		if (!empty($_POST)) {
 			
 			$view->email = Input::get('email');
 			$view->name = Input::get('name');
+			$view->person_name = Input::get('person_name');
+			$view->person_surname = Input::get('person_surname');
 			$password = Input::get('password');
 			$password_repeat = Input::get('password_repeat');
 			
@@ -128,6 +132,14 @@ class User_Controller extends Base_Controller {
 			
 			if (empty($view->name)) {	//nazov domacnosti
 				$errors['name'] = 'Zadajte prosím názov domácnosti';
+			}
+			
+			if (empty($view->person_name)) {	//nazov domacnosti
+				$errors['person_name'] = 'Zadajte prosím Vaše meno';
+			}
+			
+			if (empty($view->person_surname)) {	//nazov domacnosti
+				$errors['person_surname'] = 'Zadajte prosím Vaše priezvisko';
 			}
 			
 			//check email duplicity
@@ -160,10 +172,19 @@ class User_Controller extends Base_Controller {
 				$user->fl_aktivna = 'A';
 				$user->fl_admin = 'N';
 				$user->save();
+				
+				$person = new Osoba;
+				$person->id_domacnost = $user->id;
+				$person->t_meno_osoby = $view->person_name;
+				$person->t_priezvisko_osoby = $view->person_surname;
+				$person->fl_aktivna = 'A';
+				$person->fl_domacnost = 'A';
+				$person->save();
+				
 			}
 			
 			
-			mail($user->t_email_login, 'Výdavkovač - nová registrácia', "Dobrý deň " . $user->t_nazov_domacnosti . ",
+			$this->send_mail($user->t_email_login, 'Výdavkovač - nová registrácia', "Dobrý deň " . $user->t_nazov_domacnosti . ",
 			
 gratulujeme Vám k registrácii v systéme Výdavkovač.
 
@@ -235,7 +256,8 @@ Tím Výdavkovač
 				$user->t_recovery_hash = Hash::make( $user->email . microtime() . uniqid() );
 				$user->save();
 				
-				$sent = mail($user->t_email_login, 'Výdavkovač - zabudnuté heslo', "Dobrý deň " . $user->t_nazov_domacnosti . ",
+				
+				$sent = $this->send_mail($user->t_email_login, 'Výdavkovač - zabudnuté heslo', "Dobrý deň " . $user->t_nazov_domacnosti . ",
 
 na základe Vašej žiadosti o zmenu zabudnutého hesla do webovej aplikácie Výdavkovač Vám posielame odkaz na ktorom si môžete zmeniť Vaše heslo:
 
@@ -271,11 +293,14 @@ Tím Výdavkovač
 			}
 		}*/
 		
+		$hash = isset($_GET['hash']) ? $_GET['hash'] : ( isset($_POST['hash']) ? $_POST['hash'] : '' );
+		
 		if (Auth::guest()) {
 			
-			$hash = isset($_GET['hash']) ? $_GET['hash'] : '';
-			$user = Domacnost::where('t_recovery_hash', 'LIKE', '%'.$hash)->first();
-			$recovery = true;
+			if (!empty($hash)) {
+				$user = Domacnost::where('t_recovery_hash', 'LIKE', '%'.$hash)->first();
+				$recovery = true;
+			}
 			
 		} else {
 			
@@ -285,7 +310,7 @@ Tím Výdavkovač
 			
 		}
 		
-		if (empty($_POST) && (empty($hash) || empty($user))) {
+		if (!isset($user) || empty($user)) {
 			
 			return View::make('error')
 			->with('title', 'Chyba')
@@ -295,7 +320,8 @@ Tím Výdavkovač
 			
 			$view = View::make('user.password')
 			->with('active', false)
-			->with('recovery', $recovery);
+			->with('recovery', $recovery)
+			->with('hash', $hash);
 		
 			$errors = array();
 		
@@ -325,9 +351,14 @@ Tím Výdavkovač
 					$user->t_heslo = Hash::make( $password );
 					$user->save();
 					
-					Session::flash('msg', 'Vaše heslo bolo úspešne zmenené. Môžete sa prihlásiť s novým heslom.');
 		
-					return Redirect::to('user/login');
+					if (Auth::guest()) {
+						Session::flash('msg', 'Vaše heslo bolo úspešne zmenené. Môžete sa prihlásiť s novým heslom.');
+						return Redirect::to('user/login');
+					} else {
+						Session::flash('msg', 'Vaše heslo bolo úspešne zmenené.');
+						return Redirect::to('/');
+					}
 				}
 		
 			}
@@ -397,6 +428,16 @@ Tím Výdavkovač
 		));
 		
 		return $response;
+		
+	}
+	
+	private function send_mail($to, $body) {
+		
+		$headers = 	"MIME-Version: 1.0\r\n".
+					"Content-Type: text/plain; charset=utf-8\r\n".
+					"Content-Transfer-Encoding: 8bit\r\n";
+		
+		return mail($to, $body, $headers);
 		
 	}
 
