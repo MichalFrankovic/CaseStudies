@@ -431,13 +431,13 @@ Tím Výdavkovač
 		
 	}
 	
-	private function send_mail($to, $body) {
+	private function send_mail($to, $subject, $body) {
 		
 		$headers = 	"MIME-Version: 1.0\r\n".
 					"Content-Type: text/plain; charset=utf-8\r\n".
 					"Content-Transfer-Encoding: 8bit\r\n";
 		
-		return mail($to, $body, $headers);
+		return mail($to, $subject, $body, $headers);
 		
 	}
 
