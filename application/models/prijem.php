@@ -26,7 +26,7 @@ class Prijem extends Eloquent
 
 		$query = DB::table(static::$table.' as P')
     		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
-    		->where_in('Z.ID_OSOBA', $familyMembers)
+    		->where_in('P.id_osoba', $familyMembers)
     		->order_by('P.d_datum', 'DESC');
 
 		if(Input::get('zdroj') && Input::get('zdroj') !== 'all'){
@@ -136,9 +136,9 @@ class Prijem extends Eloquent
 		}
 
 		return DB::table('D_ZDROJ_PRIJMU as Z')
-			->left_join('D_OSOBA as O', 'O.id', '=', 'Z.id_osoba')
+			->left_join('D_OSOBA as O', 'O.id', '=', 'Z.id')
 			->left_join('D_OBCHODNY_PARTNER as P', 'Z.id_obchodny_partner', '=', 'P.id')
-			->where_in('Z.id_osoba', $familyMembers)
+			->where_in('Z.id', $familyMembers)
 			->get(array(
 				'Z.id',
 				'Z.t_popis',
