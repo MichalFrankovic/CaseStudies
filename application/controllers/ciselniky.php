@@ -2,83 +2,130 @@
 
 class Ciselniky_Controller extends Base_Controller {
 
-/*	public function action_index(){
-       
-	return View::make('ciselniky.index')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov');
-      //  return Redirect::to('ciselniky');
- 
-        
-	}*/
+// ZAčIATOK --- VYTVORENIE PODSTRÁNOK: ---
 
 	public function action_index()
 	{
-        return Redirect::to('ciselniky/sprava_produktov')->with('subactive', 'x');;
+        $active='ciselniky';
+        echo $active;
+        return Redirect::to('ciselniky/sprava_partnerov')->with('active', 'ciselniky')->with('subactive', 'x');;
 	}
 
 
-
-	public function action_sprava_produktov()
+  public function action_sprava_partnerov()
     {
-       $view = View::make('ciselniky.sprava-produktov')->with('subactive', 'ciselniky/sprava-produktov');
-       return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+       $view = View::make('ciselniky.sprava-partnerov')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_partnerov');
+       return $view;   
+    }
 
 
-
-
-    public function action_sprava_prijemcu_platby()
+  public function action_sprava_kategorii()
     {
-       $view = View::make('ciselniky.sprava-prijemcu-platby')->with('subactive', 'x');
-       return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+       $subactive = 'ciselniky/sprava_kategorii';
+
+        $view = View::make('ciselniky.sprava-kategorii')
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->message = Session::get('message');
+        return $view;
+    }
 
 
-
-
-	 public function action_sprava_kategorii()
+  public function action_sprava_typu_prijmu()
     {
-       $view = View::make('ciselniky.sprava-kategorii')->with('subactive', 'x');
+       $view = View::make('ciselniky.sprava-typu-prijmu')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_typu_prijmu');
        return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+    }
 
 
-
-         public function action_sprava_typu_prijmu()
+   public function action_sprava_typu_vydavku()
     {
-       $view = View::make('ciselniky.sprava-typu-prijmu')->with('subactive', 'x');
-       return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+       $view = View::make('ciselniky.sprava-typu-vydavku')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_typu_vydavku');
+       return $view; 
+    }
 
 
-         public function action_sprava_zdroju_prijmu()
+    public function action_sprava_osob()
     {
-       $view = View::make('ciselniky.sprava-zdroju-prijmu')->with('subactive', 'x');
+       $view = View::make('ciselniky.sprava-osob')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_osob');
        return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+    }
 
 
-
-         public function action_sprava_poplatkov()
+    public function action_sprava_produktov()
     {
-       $view = View::make('ciselniky.sprava-poplatkov')->with('subactive', 'x');
-       return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+        $subactive = 'ciselniky/sprava_produktov';
+
+        $view = View::make('ciselniky.sprava-produktov')
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->message = Session::get('message');
+        return $view;
+    }
+
+// KONIEC --- VYTVORENIE PODSTRÁNOK ---
 
 
-         public function action_sprava_setriacich_uctov()
+
+// TU ZAČÍNAJÚ FUNKCIE PRE PRÁCU NA PODSTRÁNKACH:
+
+
+// ********************************** ZAČIATOK: FUNKCIE PRE SPRÁVU KATEGÓRIÍ *****************************************
+
+        public function action_pridajkategoriu()
     {
-       $view = View::make('ciselniky.sprava-setriacich-uctov')->with('subactive', 'x');
-       return $view;
-          //  ->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo));
-        }
+        $id_domacnost = Auth::user()->id;
+        $t_nazov = Input::get('nazov');
+        $id_kategoria_parent = Input::get('category-id');
+       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
+       
+       DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
+
+       return Redirect::to('ciselniky/pridanie')->with('message', 'Kategória bola pridaná!');
+    }
 
 
+
+    public function action_pridanie()
+    {
+        $subactive = 'ciselniky/sprava-kategorii';
+
+        $view = View::make('ciselniky.sprava-kategorii')
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+
+        $view->message = Session::get('message');
+
+        return $view;
+
+    }
+
+
+// ********************************** KONIEC: FUNKCIE PRE SPRÁVU KATEGÓRIÍ *****************************************
+
+
+// ********************************** ZAČIATOK: FUNKCIE PRE SPRÁVU PRODUKTOV *****************************************
+
+public function action_pridajprodukt()
+    {
+        $id_domacnost = Auth::user()->id;
+        $t_nazov = Input::get('nazov');
+        $cena = floatval(str_replace(',', '.',Input::get('cena')));
+        $id_kategoria_parent = Input::get('category-id');
+        //xxecho "call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')";
+
+        DB::query("call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')");
+        
+        return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkt bol pridaný!');
+
+    }
+
+// ********************************** KONIEC: FUNKCIE PRE SPRÁVU PRODUKTOV *****************************************
 
 
 }

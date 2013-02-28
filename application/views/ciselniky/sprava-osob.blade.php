@@ -7,7 +7,7 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
-Toto je správa typu príjmu
+Toto je správa osôb
 
 
 

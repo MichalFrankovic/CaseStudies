@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Vydavkovač</title>
+	<title>Výdavkovač</title>
 	<meta name="viewport" content="width=device-width">
 	{{ HTML::style('assets/css/bootstrap.min.css') }}
     {{ HTML::style('assets/css/jquery-ui-1.9.2.custom.css') }}

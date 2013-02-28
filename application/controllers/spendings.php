@@ -513,7 +513,6 @@ class Spendings_Controller extends Base_Controller {
     public function  getVydavok($id){
         return null;
 
-
     }
 
     public function action_pridanie()
@@ -528,28 +527,7 @@ class Spendings_Controller extends Base_Controller {
         return $view;
 
     }
-
-    public function action_pridajprodukt()
-    {
-        $id_domacnost = Auth::user()->id;
-        $t_nazov = Input::get('nazov');
-        $cena = floatval(str_replace(',', '.',Input::get('cena')));
-        $id_kategoria_parent = Input::get('category-id');
-        //xxecho "call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')";
-        DB::query("call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')");
-        return Redirect::to('spendings/pridanie')->with('message', 'Produkt bol pridaný!');
-
-    }
-
-    public function action_pridajkategoriu()
-    {
-        $id_domacnost = Auth::user()->id;
-        $t_nazov = Input::get('nazov');
-        $id_kategoria_parent = Input::get('category-id');
-       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
-       DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
-       return Redirect::to('spendings/pridanie')->with('message', 'Kategória bola pridaná!');
-    }
+   
 
     public function action_pridajdodavatela()
     {
