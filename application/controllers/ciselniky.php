@@ -14,14 +14,14 @@ class Ciselniky_Controller extends Base_Controller {
 
   public function action_sprava_partnerov()
     {
-       $view = View::make('ciselniky.sprava-partnerov')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_partnerov');
+       $view = View::make('ciselniky.sprava-partnerov')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-partnerov');
        return $view;   
     }
 
 
   public function action_sprava_kategorii()
     {
-       $subactive = 'ciselniky/sprava_kategorii';
+       $subactive = 'podmenu-sprava-kategorii';
 
         $view = View::make('ciselniky.sprava-kategorii')
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
@@ -34,28 +34,28 @@ class Ciselniky_Controller extends Base_Controller {
 
   public function action_sprava_typu_prijmu()
     {
-       $view = View::make('ciselniky.sprava-typu-prijmu')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_typu_prijmu');
+       $view = View::make('ciselniky.sprava-typu-prijmu')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-typu-prijmu');
        return $view;
     }
 
 
    public function action_sprava_typu_vydavku()
     {
-       $view = View::make('ciselniky.sprava-typu-vydavku')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_typu_vydavku');
+       $view = View::make('ciselniky.sprava-typu-vydavku')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-typu-vydavku');
        return $view; 
     }
 
 
     public function action_sprava_osob()
     {
-       $view = View::make('ciselniky.sprava-osob')->with('active', 'ciselniky')->with('subactive', 'ciselniky/sprava_osob');
+       $view = View::make('ciselniky.sprava-osob')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-osob');
        return $view;
     }
 
 
     public function action_sprava_produktov()
     {
-        $subactive = 'ciselniky/sprava_produktov';
+        $subactive = 'podmenu-sprava-produktov';
 
         $view = View::make('ciselniky.sprava-produktov')
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);

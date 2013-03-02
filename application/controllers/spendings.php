@@ -57,7 +57,7 @@ class Spendings_Controller extends Base_Controller {
             $id_osob[] = $osoba->id;
         }
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
         return $view;
@@ -81,7 +81,7 @@ class Spendings_Controller extends Base_Controller {
         $do = ($do!='') ? date('Y-m-d',strtotime($do)) : date('Y-m-d');
 
         $prijemca = Input::get('prijemca');
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do)->order_by('d_datum', 'DESC');
         if ($prijemca != 'all') $view->vydavky->where("id_obchodny_partner",'=',$prijemca);
@@ -184,7 +184,7 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
         $view->dzejson = Response::json($view->polozky);
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
         $view->message = Session::get('message');
         return $view;
 
@@ -350,7 +350,7 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
     		 
-    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
     		
     		$view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
     				"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
@@ -405,7 +405,7 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
     		 
-    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_osoba', $id_osob)->get();
+    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
     		 
     		return $view;
     		
