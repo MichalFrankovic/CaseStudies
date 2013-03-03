@@ -69,7 +69,7 @@ return array(
 
 		'mysql' => array(
 			'driver'   => 'mysql',
-			'host'     => 'smarthosting.sk',
+			'host'     => '92.240.248.250',
 			'database' => 'web',
 			'username' => 'root',
 			'password' => 'pripadove2012',
