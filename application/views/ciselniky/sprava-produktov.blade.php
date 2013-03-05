@@ -7,7 +7,7 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
-Toto je správa produktov
+
 
 <h2>    Pridaj produkt  </h2>
 <div class="thumbnail" >
@@ -33,11 +33,9 @@ Toto je správa produktov
         </select>
     </div>
     
-
-        <div class="submit">
-            {{ Form::submit('Uložiť' , array('class' => 'btn')); }}
-        </div>
-        {{ Form::close() }}
+{{ Form::submit('Uložiť' , array('class' => 'btn')); }}
+       
+{{ Form::close() }}
     </div>
 </div>
 
@@ -66,7 +64,7 @@ Toto je správa produktov
             <td>    {{ $produkt->id }}                           </td>
             <td>    {{ $produkt->t_nazov }}                      </td>
             <td>    {{ $produkt->t_merna_jednotka }}             </td>
-            <td>    {{ round($produkt->t_vl_zakladna_cena,2) }}  </td>
+            <td>    {{ $produkt->vl_zakladna_cena }}             </td>
             <td>    {{ $produkt->id_kategoria_parent }}          </td>
             <td> <a class="btn" href="upravitprodukt?id={{ $produkt->id }}"> Upraviť </a>
                  <a class="btn" href="zmazatprodukt?produkt={{ md5($produkt->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
@@ -76,7 +74,6 @@ Toto je správa produktov
   </table>
 <a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"> <i class="icon-remove"> </i> Vymazať zvolené </a>
 </form>
-
 
 
 @include('foot')

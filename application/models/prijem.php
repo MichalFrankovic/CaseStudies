@@ -114,7 +114,7 @@ class Prijem extends Eloquent
 	public static function get_partners()
 	{
 		return DB::table('D_OBCHODNY_PARTNER')
-			->where('id_osoba', '=', Auth::user()->id)
+			->where('id_domacnost', '=', Auth::user()->id)
 			->get();
 	}
 

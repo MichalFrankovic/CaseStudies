@@ -103,7 +103,7 @@ class Incomes_Controller extends Base_Controller {
 				'sources'		=> Prijem::get_sources(),
 		);
 		$vydajca = Input::get('vydajca');
-		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_osoba', $id_osob)
+		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_domacnost', $id_osob)
 		->where('fl_typ','=','P' )->get();
 		$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 	
