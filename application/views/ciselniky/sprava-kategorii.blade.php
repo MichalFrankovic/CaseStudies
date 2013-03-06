@@ -7,8 +7,6 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
-Toto je správa kategórií
-
 
 <h2>Pridaj kategóriu</h2>
 <div class="thumbnail" >
@@ -32,12 +30,38 @@ Toto je správa kategórií
         </select>
   </div>
 
-  	<div class="submit">
+    <div class="submit">
         {{ Form::submit('Uložiť' , array('class' => 'btn')); }}
     </div>
-    	{{ Form::close() }}
+        {{ Form::close() }}
 </div>
 
+
+
+<h2 class="">   Zoznam kategórií    </h2>
+<form id="form1" name="form1" method="post" action="multizmazanie">
+  <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
+            <th>    Názov kategórie      </th>
+            <th>    Názov podkategórie   </th>
+            <th>    Výber akcie          </th>
+        </tr>
+    </thead>
+        <tbody>
+        @foreach ($kategorie as $kat)
+        <tr>
+            <td> <input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" /> </td>
+            <td>    {{ $kat->t_nazov }}         </td>
+            <td>    {{ $kat->id }}              </td>
+            <td> <a class="btn" href="upravitprodukt?id={{ $kat->id }}"> Upraviť </a>     </td>
+        </tr>
+        @endforeach
+    </tbody>
+  </table>
+<a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+</form>
 
 
 

@@ -25,8 +25,11 @@ class Ciselniky_Controller extends Base_Controller {
 
         $view = View::make('ciselniky.sprava-kategorii')
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+
         $view->message = Session::get('message');
         return $view;
     }
