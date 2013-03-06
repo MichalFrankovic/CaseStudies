@@ -84,8 +84,7 @@ function multiCheck()
         <tr>
             <td><input type="checkbox" name="vydavok[]" id="checkbox2" class="spendcheck" value="{{ md5($vydavok->id). $secretword}}" /></td>
             <td>{{ date('d.m.Y',strtotime($vydavok->d_datum)) }}</td>
-            <?php /* <td>{{ $vydavok->partner->t_nazov }}</td> */ ?>
-            <td> XXX  </td>
+            <td>{{ $vydavok->partner->t_nazov }}</td> 
             <td>{{ $vydavok->t_poznamka }}</td>
             <td>{{ round($vydavok->suma_vydavku_po_celk_zlave,2) }} EUR</td>
             <td><a class="btn" href="simplespending?id={{ $vydavok->id }}">Upraviť</a>
@@ -96,15 +95,6 @@ function multiCheck()
     </table>
     <a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"><i class="icon-remove"></i>Vymazať zvolené</a>
 </form>
-*/?>
-
-
-<pre>
-    <?php
-print_r($vydavok->partner);
-?>
-</pre>
-
 
 
 

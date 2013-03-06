@@ -12,6 +12,6 @@ class Vydavok extends Eloquent
 
     public function partner() {
 
-        return $this->belongs_to('Partner', 'id_obchodny_partner');
+        return $this->belongs_to('Partner', 'id'); //Nastala zmena lebo id_obchodny_partner bol zmazany
     }
 }
