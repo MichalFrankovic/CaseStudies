@@ -108,4 +108,4 @@
      <input type="submit" class="btn" value="Aktualizova&tcaron; produkt" />
 </div>
     {{ Form::close() }}
-@include('foot');
+@include('foot')

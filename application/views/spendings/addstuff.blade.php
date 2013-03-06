@@ -32,5 +32,6 @@
     {{ Form::close() }}
 </div>
 </div>
-@include('foot');
+
+@include('foot')
 

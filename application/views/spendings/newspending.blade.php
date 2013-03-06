@@ -104,4 +104,5 @@
         <input type="submit" class="btn" value="Vytvori&tcaron; produkt" />
     </div>
     {{ Form::close() }}
-    @include('foot');
+    
+    @include('foot')

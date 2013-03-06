@@ -95,4 +95,6 @@ function multiCheck()
     <a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"><i class="icon-remove"></i>Vymazať zvolené</a>
 </form>
 
-@include('foot');
+</div>
+
+@include('foot')

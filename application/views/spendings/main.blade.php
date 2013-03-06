@@ -98,5 +98,5 @@ function multiCheck()
 
 
 
-@include('foot');
+@include('foot')
 

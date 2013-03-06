@@ -41,4 +41,5 @@
 <a class="btn" href="periodicalspending">Návrat</a>
 <input type="submit" class="btn" value="Uložiť" />
 {{ Form::close() }}
-@include('foot');
+
+@include('foot')

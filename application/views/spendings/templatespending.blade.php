@@ -40,4 +40,5 @@
 <input type="reset" class="btn" value="Návrat" />
 <input type="submit" class="btn" value="Uložiť" />
 {{ Form::close() }}
-@include('foot');
+
+@include('foot')
