@@ -1,14 +1,7 @@
 @layout('layouts.base')
 
 @section('styles')
-	<style type="text/css">
-	thead{
-		background: #ddd;
-	}
-	thead td{
-		border-color: #efefef !important;
-	}
-	</style>
+	
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
 
 @endsection

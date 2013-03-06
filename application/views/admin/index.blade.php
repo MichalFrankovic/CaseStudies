@@ -27,31 +27,26 @@ function checkedAll (form1) {
 <h2>Filter</h2>
 <form id="filter" name="filter" method="post" action="filter">
     <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Hľadaný výraz</th>
-        </tr>
-        </thead>
+      
+            <h4>    Hľadaný výraz   </h4>
+          
 	<tbody>
         <tr>
             <td><div class="input-append">
                 <input name="vyraz" class="span2" type="text"/>
                 <span class="help-inline">'.$errors['name'].'</span>
-		<input type="submit" name="Submit" value="Vyhhladať"/>
+		<input type="submit" name="Submit" value="Vyhľadať"/>
 <!--		<input type="reset" name="reset" value="Reset"/>-->
             </div></td>            
         </tr>
         </tbody>    
 </form>
+
 <!--LISTING A NASTAVENIE UZIVATELOV-->
 <form id="form1" name="form1" method="post" action="editMore">
     <table class="table table-bordered table-striped">
         <thead>
-	    <tr>
-		<td><input type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
-		<td><input type="submit" name="Submit" value="Aktivuj" /> 
-		<input type="submit" name="Submit" value="Deaktivuj" /></td>
-	    </tr>
+	   
         <tr>
             <th><input type='checkbox' name='checkall' onclick="checkedAll(form1)"/></th>
             <th>Názov domácnosti</th>

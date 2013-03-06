@@ -4,7 +4,10 @@
 @endif
 <h2>Výdavky</h2>
 @include('spendings/sp-submenu')
+
 <h2>Filter výdavkov</h2>
+
+
 {{ Form::open('spendings/filter', 'POST', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
     <h4>Dátum</h4>
@@ -41,6 +44,7 @@
     </div>
  </div>
 
+
 <script type="text/javascript">
 function multiCheck()
 {
@@ -58,6 +62,8 @@ function multiCheck()
 }
 </script>
 
+
+
 <h2 class="">Zoznam výdavkov</h2>
 <form id="form1" name="form1" method="post" action="multideletespending">
     <table class="table table-bordered table-striped">
@@ -72,11 +78,14 @@ function multiCheck()
         </tr>
         </thead>
         <tbody>
+
+         
         @foreach ($vydavky as $vydavok)
         <tr>
             <td><input type="checkbox" name="vydavok[]" id="checkbox2" class="spendcheck" value="{{ md5($vydavok->id). $secretword}}" /></td>
             <td>{{ date('d.m.Y',strtotime($vydavok->d_datum)) }}</td>
-            <td>{{ $vydavok->partner->t_nazov }}</td>
+            <?php /* <td>{{ $vydavok->partner->t_nazov }}</td> */ ?>
+            <td> XXX  </td>
             <td>{{ $vydavok->t_poznamka }}</td>
             <td>{{ round($vydavok->suma_vydavku_po_celk_zlave,2) }} EUR</td>
             <td><a class="btn" href="simplespending?id={{ $vydavok->id }}">Upraviť</a>
@@ -87,5 +96,17 @@ function multiCheck()
     </table>
     <a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"><i class="icon-remove"></i>Vymazať zvolené</a>
 </form>
+*/?>
+
+
+<pre>
+    <?php
+print_r($vydavok->partner);
+?>
+</pre>
+
+
+
 
 @include('foot');
+

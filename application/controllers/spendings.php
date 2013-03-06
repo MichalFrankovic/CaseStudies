@@ -46,18 +46,26 @@ class Spendings_Controller extends Base_Controller {
         $view->od = '';
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         $view->message = Session::get('message');
+
         if (empty($view->osoby)) {
             $view = View::make('spendings.message')
                 ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
             $view->message = "Nebola vytvorená žiadna osoba";
             return $view;
         }
+
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
+            $id_domov[] = $osoba->id_domacnost;     // ZMENA
         }
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
+
+        $view->partneri = DB::table('D_OBCHODNY_PARTNER')
+        ->where_in('id_domacnost', $id_domov)       // ZMENA
+        ->get();
+
+
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
         return $view;
