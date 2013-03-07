@@ -33,7 +33,7 @@
             <th width="20"> Označit </th>
             <th> ID 				</th>
             <th> Názov 				</th>
-            <th width="170" > Výber akcie </th>
+            <th> Výber akcie </th>
         </tr>
     </thead>
     <tbody>
