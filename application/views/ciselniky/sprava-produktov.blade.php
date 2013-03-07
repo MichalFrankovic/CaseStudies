@@ -6,24 +6,6 @@
 
 @include('ciselniky/ciselniky-podmenu')
 
-<script type="text/javascript">
-function multiCheck()
-{
-    var valChecked = $('#multicheck').val();
-    if(valChecked == 0)
-    {
-        $('.spendcheck').prop('checked', true);
-        $('#multicheck').val(1);
-    }
-    else
-    {
-        $('.spendcheck').prop('checked', false);
-        $('#multicheck').val(0);
-    }
-}
-</script>
-
-
 
 <div class="thumbnail" >
     <h2>    Pridaj produkt  </h2>
@@ -57,7 +39,6 @@ function multiCheck()
 {{ Form::close() }}
    
 </div>
-
 
 
 

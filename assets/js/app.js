@@ -40,3 +40,19 @@ function pridaj_riadok_do_vydavkov()
 </select>\
 </td></tr>');
 }
+
+
+function multiCheck()
+{
+    var valChecked = $('#multicheck').val();
+    if(valChecked == 0)
+    {
+        $('.spendcheck').prop('checked', true);
+        $('#multicheck').val(1);
+    }
+    else
+    {
+        $('.spendcheck').prop('checked', false);
+        $('#multicheck').val(0);
+    }
+}
