@@ -101,139 +101,7 @@ class Ciselniky_Controller extends Base_Controller {
 
 // TU ZAČÍNAJÚ FUNKCIE PRE PRÁCU NA PODSTRÁNKACH:
 
-
-// *********** --- PODSEKCIA 1 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
-  //@Juraj Zbojan
-
-
-// *********** --- PODSEKCIA 1 (KONIEC) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
-
-
-
-// *********** --- PODSEKCIA 2 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
-    //@Veronika Študencová
-
-public function action_pridajkategoriu()
-    {
-        $id_domacnost = Auth::user()->id;
-        $t_nazov = Input::get('nazov');
-        $id_kategoria_parent = Input::get('category-id');
-       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
-       
-       DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
-
-       return Redirect::to('ciselniky/pridanie')->with('message', 'Kategória bola pridaná!');
-    }
-
-
-    public function action_pridanie()
-    {
-        $subactive = 'ciselniky/sprava-kategorii';
-
-        $view = View::make('ciselniky.sprava-kategorii')
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-
-        $view->message = Session::get('message');
-
-        return $view;
-
-    }
-
-// *********** --- PODSEKCIA 2 (KONIEC) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
-
-
-
-// *********** --- PODSEKCIA 3 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
-   //@Ankhbayar Sukhee
-public function action_pridajtypprijmu()
-    {
-        $id_domacnost = Auth::user()->id;
-        $t_nazov_typu = Input::get('nazov_typu');
-        
-       DB::query("INSERT INTO `web`.`D_TYP_PRIJMU` (`t_nazov_typu`, `id_domacnost`) VALUES('$t_nazov_typu', '$id_domacnost');");
-
-       return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol pridaný!');
-    }
-
-    public function action_zmazattypprijmu()
-    {
-        $secretword = md5(Auth::user()->t_heslo);
-        $typ_id = Input::get('typ');
-
-        DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie hlavicky
-        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol vymazaný!');
-    }
-
-    public function action_multitypzmazat()
-    {
-      $secretword = md5(Auth::user()->t_heslo);
-      $typ_ids = Input::get('typ');
-
-      if (is_array($typ_ids))
-      {
-        foreach ($typ_ids as $typ_id)
-        {
-          DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie poloziek
-        }
-      }
-
-      return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typy prijmu boli vymazané!');
-    }
-
-// *********** --- PODSEKCIA 3 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
-
-
-
-// *********** --- PODSEKCIA 4 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
-    //@Alisher Bek
-
-public function action_pridajtypvydavku()
-    {
-        $id_domacnost = Auth::user()->id;
-        $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
-        
-       
-       
-      DB::query("INSERT INTO  `web`.`D_TYP_VYDAVKU` (`t_nazov_typu_vydavku`, `id_domacnost`)
-                   VALUES ('$t_nazov_typu_vydavku' , '$id_domacnost');");
-        
-       return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku bol pridaný!');
-    }
-  
-public function action_zmazattypvydavku()
-    {
-        $secretword = md5(Auth::user()->t_heslo);
-    $typvydavku_id = Input::get('typvydavku');
-
-        DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
-        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku is deleted!'); 
-    }
-  
-  public function action_multizmazattypy()
-    {
-      $secretword = md5(Auth::user()->t_heslo);
-      $typvydavku_ids = Input::get('typvydavku');
-
-      if (is_array($typvydavku_ids))
-      {
-        foreach ($typvydavku_ids as $typvydavku_id)
-        {
-          DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
-        }
-      }
-
-      return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku is deleted!');
-    }
-  
-// *********** --- PODSEKCIA 4 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
-
-
-
-// *********** --- PODSEKCIA 5 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU OSOB ********************************
+// *********** --- PODSEKCIA 1 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU OSOB ********************************
     //@Adriána Gogoľáková
 
 public function action_pridajosobu()
@@ -309,11 +177,55 @@ public function action_multizmazanieosob()
                 return Redirect::to('ciselniky/sprava_osob')->with('message', 'Zmeny boli uložené');
             }
 
-// *********** --- PODSEKCIA 5 (KONIEC) --- FUNKCIE PRE SPRÁVU OSOB ********************************
+// *********** --- PODSEKCIA 1 (KONIEC) --- FUNKCIE PRE SPRÁVU OSOB ********************************
 
 
 
-// *********** --- PODSEKCIA 6 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************
+// *********** --- PODSEKCIA 2 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
+  //@Juraj Zbojan
+
+
+// *********** --- PODSEKCIA 2 (KONIEC) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
+
+
+
+// *********** --- PODSEKCIA 3 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
+    //@Veronika Študencová
+
+public function action_pridajkategoriu()
+    {
+        $id_domacnost = Auth::user()->id;
+        $t_nazov = Input::get('nazov');
+        $id_kategoria_parent = Input::get('category-id');
+       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
+       
+       DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
+
+       return Redirect::to('ciselniky/pridanie')->with('message', 'Kategória bola pridaná!');
+    }
+
+
+    public function action_pridanie()
+    {
+        $subactive = 'ciselniky/sprava-kategorii';
+
+        $view = View::make('ciselniky.sprava-kategorii')
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+
+        $view->message = Session::get('message');
+
+        return $view;
+
+    }
+
+// *********** --- PODSEKCIA 3 (KONIEC) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
+
+
+// *********** --- PODSEKCIA 4 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************
     //@Michal Frankovič
 
 public function action_pridajprodukt()
@@ -355,7 +267,92 @@ public function action_multizmazanie()
       return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkty boli vymazané!');
     }
 
-// *********** --- PODSEKCIA 6 (KONIEC) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************
+// *********** --- PODSEKCIA 4 (KONIEC) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************
+
+
+// *********** --- PODSEKCIA 5 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
+   //@Ankhbayar Sukhee
+public function action_pridajtypprijmu()
+    {
+        $id_domacnost = Auth::user()->id;
+        $t_nazov_typu = Input::get('nazov_typu');
+        
+       DB::query("INSERT INTO `web`.`D_TYP_PRIJMU` (`t_nazov_typu`, `id_domacnost`) VALUES('$t_nazov_typu', '$id_domacnost');");
+
+       return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol pridaný!');
+    }
+
+    public function action_zmazattypprijmu()
+    {
+        $secretword = md5(Auth::user()->t_heslo);
+        $typ_id = Input::get('typ');
+
+        DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie hlavicky
+        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol vymazaný!');
+    }
+
+    public function action_multitypzmazat()
+    {
+      $secretword = md5(Auth::user()->t_heslo);
+      $typ_ids = Input::get('typ');
+
+      if (is_array($typ_ids))
+      {
+        foreach ($typ_ids as $typ_id)
+        {
+          DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie poloziek
+        }
+      }
+
+      return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typy prijmu boli vymazané!');
+    }
+
+// *********** --- PODSEKCIA 5 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
+
+
+
+// *********** --- PODSEKCIA 6 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
+    //@Alisher Bek
+
+public function action_pridajtypvydavku()
+    {
+        $id_domacnost = Auth::user()->id;
+        $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
+        
+       
+       
+      DB::query("INSERT INTO  `web`.`D_TYP_VYDAVKU` (`t_nazov_typu_vydavku`, `id_domacnost`)
+                   VALUES ('$t_nazov_typu_vydavku' , '$id_domacnost');");
+        
+       return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku bol pridaný!');
+    }
+  
+public function action_zmazattypvydavku()
+    {
+        $secretword = md5(Auth::user()->t_heslo);
+    $typvydavku_id = Input::get('typvydavku');
+
+        DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
+        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku is deleted!'); 
+    }
+  
+  public function action_multizmazattypy()
+    {
+      $secretword = md5(Auth::user()->t_heslo);
+      $typvydavku_ids = Input::get('typvydavku');
+
+      if (is_array($typvydavku_ids))
+      {
+        foreach ($typvydavku_ids as $typvydavku_id)
+        {
+          DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
+        }
+      }
+
+      return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku is deleted!');
+    }
+  
+// *********** --- PODSEKCIA 6 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
 
 
 
