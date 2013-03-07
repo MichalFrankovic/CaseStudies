@@ -11,13 +11,18 @@
 <div class="thumbnail" >
   <h2>Pridajte typ výdavku</h2>
 
-{{ Form::open('ciselniky/pridajtypvydavku', 'POST', array('class' => 'side-by-side')); }}
+{{ Form::open('ciselniky/pridajtypvydavku', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
 
     <div class="input-prepend">
         <label class="control-label">    Názov typu výdavku:          </label>  
         <input class="span3" type="text" name="nazov_typu_vydavku" value="">
     </div>
 
+ <button onclick="formReset()" type="button" class="btn btn-primary">
+        <i class="icon-remove icon-white"></i>
+            Cancel
+    </button>
+    
 <button type="submit" class="btn btn-primary">
     <i class="icon-ok icon-white"></i>
             Pridaj

@@ -10,7 +10,7 @@
 <div class="thumbnail" >
     <h2>Pridaj kategóriu</h2>
 
-    {{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side')); }}
+    {{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
 
     <div class="input-prepend" style="float:left;width:275px">
          <label class="control-label">   Názov kategórie:          </label>
@@ -28,6 +28,11 @@
             @endforeach
         </select>
     </div>
+
+    <button onclick="formReset()" type="button" class="btn btn-primary">
+        <i class="icon-remove icon-white"></i>
+            Cancel
+    </button>
 
     <button type="submit" class="btn btn-primary">
         <i class="icon-ok icon-white"></i>

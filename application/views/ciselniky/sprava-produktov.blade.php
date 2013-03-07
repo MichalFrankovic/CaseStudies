@@ -9,7 +9,7 @@
 
 <div class="thumbnail" >
     <h2>    Pridaj produkt  </h2>
-{{ Form::open('ciselniky/pridajprodukt', 'POST', array('class' => 'side-by-side')); }}
+{{ Form::open('ciselniky/pridajprodukt', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
 
     <div class="input-prepend">
         <label class="control-label">    Názov:          </label>
@@ -30,11 +30,18 @@
         </select>
     </div>
    
+    <button onclick="formReset()" type="button" class="btn btn-primary">
+        <i class="icon-remove icon-white"></i>
+            Cancel
+    </button>
+
 
     <button type="submit" class="btn btn-primary">
         <i class="icon-ok icon-white"></i>
             Pridaj
     </button>
+
+   
 
 {{ Form::close() }}
    
@@ -65,7 +72,8 @@
             <td>    {{ $produkt->vl_zakladna_cena }}             </td>
             <td>    {{ $produkt->id_kategoria_parent }}          </td>
             <td> <a class="btn" href="upravitprodukt?id={{ $produkt->id }}"> Upraviť </a>
-                 <a class="btn" href="zmazatprodukt?produkt={{ md5($produkt->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
+                 <a class="btn" href="zmazatprodukt?produkt={{ md5($produkt->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
+                    <i class="icon-remove"> </i>Vymazať</a>      </td>
         </tr>
         @endforeach
     </tbody>

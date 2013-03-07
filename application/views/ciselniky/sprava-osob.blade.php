@@ -10,7 +10,7 @@
 <div class="thumbnail" >
     <h2>Pridaj osobu</h2>
 
-{{ Form::open('ciselniky/pridajosobu', 'POST', array('class' => 'side-by-side')); }}
+{{ Form::open('ciselniky/pridajosobu', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
 
     <div class="input-prepend">
         <label class="control-label">    Meno:          </label>
@@ -27,6 +27,11 @@
         <input class="span3" type="Checkbox" name="aktivna" value="A">
     </div>
         
+     <button onclick="formReset()" type="button" class="btn btn-primary">
+        <i class="icon-remove icon-white"></i>
+            Cancel
+    </button>
+    
     <button type="submit" class="btn btn-primary">
         <i class="icon-ok icon-white"></i>
             Pridaj
