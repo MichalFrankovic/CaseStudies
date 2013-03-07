@@ -8,21 +8,25 @@
 
 
 
-<h2>Pridajte typ výdavku</h2>
 <div class="thumbnail" >
+  <h2>Pridajte typ výdavku</h2>
 
-    {{ Form::open('ciselniky/pridajtypvydavku', 'POST', array('class' => 'side-by-side')); }}
+{{ Form::open('ciselniky/pridajtypvydavku', 'POST', array('class' => 'side-by-side')); }}
 
-    <div class="input-prepend" style="float:inherit;width:275px; height:10px;">
-        <span class="add-on">Názov typu výdavku: </span>
-
+    <div class="input-prepend">
+        <label class="control-label">    Názov typu výdavku:          </label>  
         <input class="span3" type="text" name="nazov_typu_vydavku" value="">
-      <span style="padding:0px 4px;"> {{ Form::submit('Uložiť' , array('class' => 'btn')); }}</span>
+    </div>
 
-     {{ Form::close() }}
-     </div>
+<button type="submit" class="btn btn-primary">
+    <i class="icon-ok icon-white"></i>
+            Pridaj
+    </button>
+{{ Form::close() }}
+     
+
 </div>
-</div>
+
 <h2 class=""> Zoznam typov výdavkov </h2>
 
 
@@ -30,8 +34,7 @@
   <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th width="20"> Označit </th>
-            <th> ID 				</th>
+            <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
             <th> Názov 				</th>
             <th> Výber akcie </th>
         </tr>
@@ -40,7 +43,6 @@
         @foreach ($typy as $typ)
         <tr>
             <td><input type="checkbox" name="typvydavku[]" id="checkbox2" class="spendcheck" value="{{ md5($typ->id). $secretword}}" /></td>
-            <td> {{ $typ->id }} 				  </td>
             <td> {{ $typ->t_nazov_typu_vydavku }} </td>
            
             

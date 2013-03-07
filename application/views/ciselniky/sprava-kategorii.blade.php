@@ -7,20 +7,19 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
-
-<h2>Pridaj kategóriu</h2>
 <div class="thumbnail" >
+    <h2>Pridaj kategóriu</h2>
 
     {{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side')); }}
 
     <div class="input-prepend" style="float:left;width:275px">
-        <span class="add-on">Názov kategórie: </span>
+         <label class="control-label">   Názov kategórie:          </label>
 
         <input class="span3" type="text" name="nazov" value="">
     </div>
 
     <div class="input-prepend">
-        <span class="add-on">Pod-kategória: </span>
+      <label class="control-label">  Pod-kategória:          </label>
 
         <select name="category-id" class="span3">
             <option value="" selected="selected">ŽIADNA</option>
@@ -28,12 +27,15 @@
             <option value="{{ $kat->id }}">{{ $kat->t_nazov }}</option>
             @endforeach
         </select>
-  </div>
-
-    <div class="submit">
-        {{ Form::submit('Uložiť' , array('class' => 'btn')); }}
     </div>
-        {{ Form::close() }}
+
+    <button type="submit" class="btn btn-primary">
+        <i class="icon-ok icon-white"></i>
+            Pridaj
+    </button>
+
+{{ Form::close() }}
+
 </div>
 
 

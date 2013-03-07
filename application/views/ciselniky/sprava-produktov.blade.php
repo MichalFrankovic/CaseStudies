@@ -24,34 +24,38 @@ function multiCheck()
 </script>
 
 
-<h2>    Pridaj produkt  </h2>
+
 <div class="thumbnail" >
+    <h2>    Pridaj produkt  </h2>
 {{ Form::open('ciselniky/pridajprodukt', 'POST', array('class' => 'side-by-side')); }}
 
-    <div class="input-prepend" style="float:left;width:275px">
-        <span class="add-on">Názov: </span>
+    <div class="input-prepend">
+        <label class="control-label">    Názov:          </label>
         <input class="span3" type="text" name="nazov" value="">
     </div>
 
     <div class="input-prepend">
-        <span class="add-on">Základná cena:</span>
+        <label class="control-label">    Základná cena:  </label>
         <input class="span3" type="text" name="cena" value="">
     </div>
 
     <div class="input-prepend">
-        <span class="add-on">Kategória: </span>
-
+        <label class="control-label">    Kategória:      </label>
         <select name="category-id" class="span3">
             @foreach ($kategorie as $kat)
             <option value="{{ $kat->id }}">{{ $kat->t_nazov }}</option>
             @endforeach
         </select>
     </div>
-    
-{{ Form::submit('Uložiť' , array('class' => 'btn')); }}
-       
+   
+
+    <button type="submit" class="btn btn-primary">
+        <i class="icon-ok icon-white"></i>
+            Pridaj
+    </button>
+
 {{ Form::close() }}
-    </div>
+   
 </div>
 
 
@@ -63,7 +67,6 @@ function multiCheck()
     <thead>
         <tr>
             <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
-            <th>    ID              </th>
             <th>    Názov           </th>
             <th>    Merná jednotka  </th>
             <th>    Základná cena   </th>
@@ -76,7 +79,6 @@ function multiCheck()
         @foreach ($produkty as $produkt)
         <tr>
             <td><input type="checkbox" name="produkt[]" id="checkbox2" class="spendcheck" value="{{ md5($produkt->id). $secretword}}" /></td>
-            <td>    {{ $produkt->id }}                           </td>
             <td>    {{ $produkt->t_nazov }}                      </td>
             <td>    {{ $produkt->t_merna_jednotka }}             </td>
             <td>    {{ $produkt->vl_zakladna_cena }}             </td>

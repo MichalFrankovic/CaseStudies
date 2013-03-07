@@ -56,6 +56,8 @@ class Ciselniky_Controller extends Base_Controller {
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
         
         $view->typy = Typyvydavku::where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->message = Session::get('message');
         return $view;
     }
 

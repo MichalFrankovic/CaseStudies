@@ -7,35 +7,34 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
-
-<h2>Pridaj Osobu</h2>
-
 <div class="thumbnail" >
-    {{ Form::open('ciselniky/pridajosobu', 'POST', array('class' => 'side-by-side')); }}
+    <h2>Pridaj osobu</h2>
 
-    <div class="input-prepend" style="float:left;width:275px">
-        <span class="add-on">Meno: </span>
+{{ Form::open('ciselniky/pridajosobu', 'POST', array('class' => 'side-by-side')); }}
+
+    <div class="input-prepend">
+        <label class="control-label">    Meno:          </label>
         <input class="span3" type="text" name="meno" value="">
     </div>
 
-    <div class="input-prepend" style="float:left;width:275px">
-        <span class="add-on">Priezvisko: </span>
+    <div class="input-prepend">
+        <label class="control-label">    Priezvisko:    </label>     
         <input class="span3" type="text" name="priezvisko" value="">
     </div>
 
-    <div class="input-prepend" style="float:left;width:275px">
-        <span class="add-on">Aktívna: </span>
+    <div class="input-prepend">
+        <label class="control-label">    Aktívna:       </label>
         <input class="span3" type="Checkbox" name="aktivna" value="A">
     </div>
+        
+    <button type="submit" class="btn btn-primary">
+        <i class="icon-ok icon-white"></i>
+            Pridaj
+    </button>
+        
+{{ Form::close() }}
 
-
-        <div class="submit">
-            {{ Form::submit('Uložiť' , array('class' => 'btn')); }}
-        </div>
-        {{ Form::close() }}
-    </div>
 </div>
-
 
 
 
@@ -46,7 +45,6 @@
     <thead>
         <tr>
             <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
-            <th>    ID              </th>
             <th>    Meno            </th>
             <th>    Priezvisko      </th>
             <th>    Aktívna         </th>
@@ -58,7 +56,6 @@
         @foreach ($osoby as $osoba)
         <tr>
             <td><input type="checkbox" name="osoba[]" id="checkbox2" class="spendcheck" value="{{ md5($osoba->id). $secretword}}" /></td>
-            <td>    {{ $osoba->id }}                    </td>
             <td>    {{ $osoba->t_meno_osoby }}          </td>
             <td>    {{ $osoba->t_priezvisko_osoby }}    </td>
             <td>    {{ $osoba->fl_aktivna }}            </td>
