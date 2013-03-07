@@ -8,7 +8,7 @@ class Ciselniky_Controller extends Base_Controller {
 	{
         $active='ciselniky';
         echo $active;
-        return Redirect::to('ciselniky/sprava_partnerov')->with('active', 'ciselniky')->with('subactive', 'x');;
+        return Redirect::to('ciselniky/sprava_osob')->with('active', 'ciselniky')->with('subactive', 'x');;
 	}
 
 
