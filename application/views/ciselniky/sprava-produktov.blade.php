@@ -7,18 +7,58 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
+<?php
+
+if (isset($editovany_zaznam))
+ $editacia="ano";
+    else $editacia = "nie";
+
+?>
+
+
 <div class="thumbnail" >
-    <h2>    Pridaj produkt  </h2>
-{{ Form::open('ciselniky/pridajprodukt', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
+
+<?php
+if ($editacia == 'ano') {
+     echo "<h2>    Uprav produkt   </h2>";
+     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravprodukt" accept-charset="UTF-8">';  
+ }
+   else  {         
+    echo "<h2>    Pridaj produkt  </h2>";
+    echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridajprodukt" accept-charset="UTF-8">';
+         }
+
+?>
+    
+      <!--  <label class="control-label">    ID OSOBY:          </label>    -->
+        <input class="span3" type="hidden" name="id" value="<?php
+                                                                if (isset($editovany_zaznam[0]->id))
+                                                                    echo ($editovany_zaznam[0]->id); 
+                                                             ?>">
+    
 
     <div class="input-prepend">
         <label class="control-label">    Názov:          </label>
-        <input class="span3" type="text" name="nazov" value="">
+        <input class="span3" type="text" name="nazov" value="<?php
+                                                                if (isset($editovany_zaznam[0]->t_nazov))
+                                                                    echo ($editovany_zaznam[0]->t_nazov); 
+                                                             ?>">
     </div>
 
     <div class="input-prepend">
         <label class="control-label">    Základná cena:  </label>
-        <input class="span3" type="text" name="cena" value="">
+        <input class="span3" type="text" name="cena" value="<?php
+                                                                if (isset($editovany_zaznam[0]->vl_zakladna_cena))
+                                                                    echo ($editovany_zaznam[0]->vl_zakladna_cena); 
+                                                            ?>">
+    </div>
+
+     <div class="input-prepend">
+        <label class="control-label">    Merná jednotka:  </label>
+        <input class="span3" type="text" name="jednotka" value="<?php
+                                                                if (isset($editovany_zaznam[0]->t_merna_jednotka))
+                                                                    echo ($editovany_zaznam[0]->t_merna_jednotka); 
+                                                            ?>">
     </div>
 
     <div class="input-prepend">
@@ -30,18 +70,39 @@
         </select>
     </div>
    
-    <button onclick="formReset()" type="button" class="btn btn-primary">
-        <i class="icon-remove icon-white"></i>
-            Cancel
-    </button>
 
+<?php
 
-    <button type="submit" class="btn btn-primary">
-        <i class="icon-ok icon-white"></i>
-            Pridaj
-    </button>
+if ($editacia == "ano") {
+    echo ' <a  href="sprava_produktov">
+                <button type="button" class="btn btn-primary">
+                    <i class="icon-remove icon-white"></i>
+                        Cancel
+                 </button>
+           </a>';
 
-   
+    echo '       <button type="submit" class="btn btn-primary">
+                    <i class="icon-ok icon-white"></i>
+                        Aktualizuj
+                 </button>
+         ';
+    }
+   else {echo ' <button type="reset" class="btn btn-primary">
+                    <i class="icon-remove icon-white"></i>
+                        Cancel
+                </button>
+              ';
+
+         echo ' <button type="submit" class="btn btn-primary">
+                    <i class="icon-ok icon-white"></i>
+                        Pridaj
+                </button>
+              ';
+
+        }
+
+?>
+
 
 {{ Form::close() }}
    
@@ -71,7 +132,7 @@
             <td>    {{ $produkt->t_merna_jednotka }}             </td>
             <td>    {{ $produkt->vl_zakladna_cena }}             </td>
             <td>    {{ $produkt->id_kategoria_parent }}          </td>
-            <td> <a class="btn" href="upravitprodukt?id={{ $produkt->id }}"> Upraviť </a>
+            <td> <a class="btn" href="sprava_produktov?id={{ $produkt->id }}"> Upraviť </a>
                  <a class="btn" href="zmazatprodukt?produkt={{ md5($produkt->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
                     <i class="icon-remove"> </i>Vymazať</a>      </td>
         </tr>

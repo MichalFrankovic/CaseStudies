@@ -1,4 +1,4 @@
-<h2>Číselníky - SPRÁVA:</h2>
+
 
 <ul class="nav nav-tabs">
 	<li<?php echo $subactive=='podmenu-sprava-osob' ? ' class="active"' : ''; ?>>{{ HTML::link('ciselniky/sprava_osob', 'Osoby'); }}</li>

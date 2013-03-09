@@ -2,7 +2,7 @@
 
 class Ciselniky_Controller extends Base_Controller {
 
-// ZAčIATOK --- VYTVORENIE PODSTRÁNOK: ---
+
 
 	public function action_index()
 	{
@@ -12,57 +12,10 @@ class Ciselniky_Controller extends Base_Controller {
 	}
 
 
-  public function action_sprava_partnerov()
-    {
-       $view = View::make('ciselniky.sprava-partnerov')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-partnerov');
-       return $view;   
-    }
+// *********** --- PODSEKCIA 1 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU OSOB ********************************
+    //@Adriána Gogoľáková
 
-
-  public function action_sprava_kategorii()
-    {
-       $subactive = 'podmenu-sprava-kategorii';
-
-        $view = View::make('ciselniky.sprava-kategorii')
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-
-        $view->message = Session::get('message');
-        return $view;
-    }
-
-
-  public function action_sprava_typu_prijmu()
-    {
-       $subactive = 'podmenu-sprava-typu-prijmu';
-
-        $view = View::make('ciselniky.sprava-typu-prijmu')->with('secretword', md5(Auth::user()->t_heslo))
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-        
-        $view->typy = Typyprijmu::where('id_domacnost','=',Auth::user()->id)->get();
-        $view->message = Session::get('message');
-        return $view;
-    }
-
-
-   public function action_sprava_typu_vydavku()
-    {
-       $subactive = 'podmenu-sprava-typu-vydavku';
-
-        $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-        
-        $view->typy = Typyvydavku::where('id_domacnost','=',Auth::user()->id)->get();
-
-        $view->message = Session::get('message');
-        return $view;
-    }
-
-
-     public function action_sprava_osob()
+public function action_sprava_osob()
     {
        $subactive = 'podmenu-sprava-osob';
 
@@ -77,32 +30,6 @@ class Ciselniky_Controller extends Base_Controller {
         return $view;
     }
 
-
-    public function action_sprava_produktov()
-    {
-        $subactive = 'podmenu-sprava-produktov';
-
-        $view = View::make('ciselniky.sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo))
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-
-        $view->message = Session::get('message');
-
-        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
-        return $view;
-    }
-
-// KONIEC --- VYTVORENIE PODSTRÁNOK ---
-
-
-
-// TU ZAČÍNAJÚ FUNKCIE PRE PRÁCU NA PODSTRÁNKACH:
-
-// *********** --- PODSEKCIA 1 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU OSOB ********************************
-    //@Adriána Gogoľáková
 
 public function action_pridajosobu()
     {
@@ -184,6 +111,11 @@ public function action_multizmazanieosob()
 // *********** --- PODSEKCIA 2 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
   //@Juraj Zbojan
 
+public function action_sprava_partnerov()
+    {
+       $view = View::make('ciselniky.sprava-partnerov')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-partnerov');
+       return $view;   
+    }
 
 // *********** --- PODSEKCIA 2 (KONIEC) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
 
@@ -191,6 +123,22 @@ public function action_multizmazanieosob()
 
 // *********** --- PODSEKCIA 3 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
     //@Veronika Študencová
+
+ public function action_sprava_kategorii()
+    {
+       $subactive = 'podmenu-sprava-kategorii';
+
+        $view = View::make('ciselniky.sprava-kategorii')
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+
+        $view->message = Session::get('message');
+        return $view;
+    }
+
 
 public function action_pridajkategoriu()
     {
@@ -227,6 +175,40 @@ public function action_pridajkategoriu()
 
 // *********** --- PODSEKCIA 4 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************
     //@Michal Frankovič
+
+public function action_sprava_produktov()
+    {
+        $subactive = 'podmenu-sprava-produktov';
+
+        $id = Input::get('id');
+
+        if (isset($id)) {       // Buď sa stránka načíta normálne alebo sa načíta s editovaným záznamom
+
+          $editovany_zaznam = Kategoria::where('id','=',$id)->get();
+
+            $view = View::make('ciselniky.sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
+            ->with('editovany_zaznam',$editovany_zaznam);
+
+        } 
+          else {
+
+          $view = View::make('ciselniky.sprava-produktov')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+
+          }
+
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+
+        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->message = Session::get('message');
+        
+        return $view;
+    }
+
 
 public function action_pridajprodukt()
     {
@@ -267,11 +249,39 @@ public function action_multizmazanie()
       return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkty boli vymazané!');
     }
 
+
+
+    public function action_upravprodukt(){ 
+
+        $id = Input::get('id');
+        $t_nazov = Input::get('nazov');
+        $cena = Input::get('cena');
+        $jednotka = Input::get('jednotka');
+          
+        DB::query("UPDATE D_KATEGORIA_A_PRODUKT SET t_nazov = '$t_nazov', vl_zakladna_cena = '$cena', t_merna_jednotka = '$jednotka' WHERE id = '$id'");
+            
+        return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Zmeny boli uložené.');
+      }
+
 // *********** --- PODSEKCIA 4 (KONIEC) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************
 
 
 // *********** --- PODSEKCIA 5 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
    //@Ankhbayar Sukhee
+
+public function action_sprava_typu_prijmu()
+    {
+       $subactive = 'podmenu-sprava-typu-prijmu';
+
+        $view = View::make('ciselniky.sprava-typu-prijmu')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+        
+        $view->typy = Typyprijmu::where('id_domacnost','=',Auth::user()->id)->get();
+        $view->message = Session::get('message');
+        return $view;
+    }
+
+
 public function action_pridajtypprijmu()
     {
         $id_domacnost = Auth::user()->id;
@@ -313,6 +323,20 @@ public function action_pridajtypprijmu()
 
 // *********** --- PODSEKCIA 6 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
     //@Alisher Bek
+
+public function action_sprava_typu_vydavku()
+    {
+       $subactive = 'podmenu-sprava-typu-vydavku';
+
+        $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+        
+        $view->typy = Typyvydavku::where('id_domacnost','=',Auth::user()->id)->get();
+
+        $view->message = Session::get('message');
+        return $view;
+    }
+
 
 public function action_pridajtypvydavku()
     {
