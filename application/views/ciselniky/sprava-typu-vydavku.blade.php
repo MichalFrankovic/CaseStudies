@@ -4,7 +4,7 @@
 <h3 style="color: #bc4348;">{{ $message }}</h3>
 @endif
 
-@include('ciselniky/ciselniky-podmenu')
+@include('ciselniky/ciselniky-podmenu') 
 
 <?php
 
