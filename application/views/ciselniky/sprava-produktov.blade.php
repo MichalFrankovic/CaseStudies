@@ -31,7 +31,7 @@ if ($editacia == 'ano') {
 ?>
     
       <!--  <label class="control-label">    ID OSOBY:          </label>    -->
-        <input class="span3" type="hidden" name="id" value="<?php
+        <input class="span4" type="hidden" name="id" value="<?php
                                                                 if (isset($editovany_zaznam[0]->id))
                                                                     echo ($editovany_zaznam[0]->id); 
                                                              ?>">
@@ -39,7 +39,7 @@ if ($editacia == 'ano') {
 
     <div class="input-prepend">
         <label class="control-label">    Názov:          </label>
-        <input class="span3" type="text" name="nazov" value="<?php
+        <input class="span4" type="text" name="nazov" value="<?php
                                                                 if (isset($editovany_zaznam[0]->t_nazov))
                                                                     echo ($editovany_zaznam[0]->t_nazov); 
                                                              ?>">
@@ -47,7 +47,7 @@ if ($editacia == 'ano') {
 
     <div class="input-prepend">
         <label class="control-label">    Základná cena:  </label>
-        <input class="span3" type="text" name="cena" value="<?php
+        <input class="span4" type="text" name="cena" value="<?php
                                                                 if (isset($editovany_zaznam[0]->vl_zakladna_cena))
                                                                     echo ($editovany_zaznam[0]->vl_zakladna_cena); 
                                                             ?>">
@@ -55,7 +55,7 @@ if ($editacia == 'ano') {
 
      <div class="input-prepend">
         <label class="control-label">    Merná jednotka:  </label>
-        <input class="span3" type="text" name="jednotka" value="<?php
+        <input class="span4" type="text" name="jednotka" value="<?php
                                                                 if (isset($editovany_zaznam[0]->t_merna_jednotka))
                                                                     echo ($editovany_zaznam[0]->t_merna_jednotka); 
                                                             ?>">
@@ -63,9 +63,11 @@ if ($editacia == 'ano') {
 
     <div class="input-prepend">
         <label class="control-label">    Kategória:      </label>
-        <select name="category-id" class="span3">
+        <select name="kategoria-id" class="span4">
             @foreach ($kategorie as $kat)
-            <option value="{{ $kat->id }}">{{ $kat->t_nazov }}</option>
+            <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
+                                                selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
+            </option>
             @endforeach
         </select>
     </div>

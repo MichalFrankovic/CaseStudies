@@ -198,11 +198,45 @@ public function action_sprava_produktov()
 
           }
 
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+        $view->kategorie = DB::query("select
+                                      a.id,
+                                      concat(
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    else space(length(a.id_kategoria)-4)
+                                    end,
+                                    ' ',
+                                    a.nazov
+                                    ) nazov
+                                    from
+                                    (
+                                    select
+                                    kategoria.id id,
+                                    kategoria.id id_kategoria,
+                                    kategoria.t_nazov nazov,
+                                    kategoria.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT kategoria
+                                    where kategoria.fl_typ = 'K'
+                                    and kategoria.id_domacnost = ". Auth::user()->id ."
+
+                                    union all
+
+                                    select
+                                    produkt.id id,
+                                    produkt.id_kategoria_parent id_kategoria,
+                                    produkt.t_nazov nazov,
+                                    produkt.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT produkt
+                                    where produkt.fl_typ = 'P'
+                                    and produkt.id_domacnost = ". Auth::user()->id ."
+                                    ) a
+                                    order by a.id_kategoria,a.typ
+                                   ");
+       // $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 
-        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
+        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)
+                            ->where('fl_typ','=','P')->get();
 
         $view->message = Session::get('message');
         
@@ -257,8 +291,14 @@ public function action_multizmazanie()
         $t_nazov = Input::get('nazov');
         $cena = Input::get('cena');
         $jednotka = Input::get('jednotka');
+        $idkategoria = Input::get('kategoria-id');
           
-        DB::query("UPDATE D_KATEGORIA_A_PRODUKT SET t_nazov = '$t_nazov', vl_zakladna_cena = '$cena', t_merna_jednotka = '$jednotka' WHERE id = '$id'");
+        DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
+                    SET t_nazov = '$t_nazov', 
+                        vl_zakladna_cena = '$cena', 
+                        t_merna_jednotka = '$jednotka',
+                        id_kategoria_parent = '$idkategoria'  
+                    WHERE id = '$id'");
             
         return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Zmeny boli uložené.');
       }
