@@ -4,7 +4,7 @@ class Ciselniky_Controller extends Base_Controller {
 
 
 
-	public function action_index()
+	public function action_index() 
 	{
         $active='ciselniky';
         echo $active;
@@ -357,11 +357,27 @@ public function action_pridajtypprijmu()
 public function action_sprava_typu_vydavku()
     {
        $subactive = 'podmenu-sprava-typu-vydavku';
+	   
+	    $id = Input::get('id');
+
+        if (isset($id)) {      
+
+          $editovany_zaznam = Typyvydavku::where('id','=',$id)->get();
 
         $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
+			   ->with('editovany_zaznam', $editovany_zaznam);
+			} 
+          else {
+			  
+			  
+
+          $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-        
+
+          }
         $view->typy = Typyvydavku::where('id_domacnost','=',Auth::user()->id)->get();
+
 
         $view->message = Session::get('message');
         return $view;
@@ -387,7 +403,7 @@ public function action_zmazattypvydavku()
     $typvydavku_id = Input::get('typvydavku');
 
         DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
-        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku is deleted!'); 
+        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku bol vymazaný!'); 
     }
   
   public function action_multizmazattypy()
@@ -403,9 +419,20 @@ public function action_zmazattypvydavku()
         }
       }
 
-      return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku is deleted!');
+      return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typy vydavku boli vymazané!!');
     }
   
+  public function action_upravittypvydavku(){ 
+
+        $id = Input::get('id');
+        $t_nazov_typu_vydavku = Input::get('t_nazov_typu_vydavku');
+          
+        DB::query("UPDATE D_TYP_VYDAVKU 
+                    SET t_nazov_typu_vydavku = '$t_nazov_typu_vydavku' 
+                    WHERE id = '$id'");
+            
+        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Zmeny boli uložené.');
+      }
 // *********** --- PODSEKCIA 6 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
 
 
