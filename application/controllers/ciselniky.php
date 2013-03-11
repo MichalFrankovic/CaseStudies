@@ -218,16 +218,6 @@ public function action_sprava_produktov()
                                     where kategoria.fl_typ = 'K'
                                     and kategoria.id_domacnost = ". Auth::user()->id ."
 
-                                    union all
-
-                                    select
-                                    produkt.id id,
-                                    produkt.id_kategoria_parent id_kategoria,
-                                    produkt.t_nazov nazov,
-                                    produkt.fl_typ typ
-                                    from D_KATEGORIA_A_PRODUKT produkt
-                                    where produkt.fl_typ = 'P'
-                                    and produkt.id_domacnost = ". Auth::user()->id ."
                                     ) a
                                     order by a.id_kategoria,a.typ
                                    ");
@@ -249,7 +239,7 @@ public function action_pridajprodukt()
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
         $cena = floatval(str_replace(',', '.',Input::get('cena')));
-        $id_kategoria_parent = Input::get('category-id');
+        $id_kategoria_parent = Input::get('kategoria-id');
 
         DB::query("call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')");
         
