@@ -17,16 +17,36 @@ class Ciselniky_Controller extends Base_Controller {
 
 public function action_sprava_osob()
     {
-       $subactive = 'podmenu-sprava-osob';
 
-        $view = View::make('ciselniky.sprava-osob') ->with('secretword', md5(Auth::user()->t_heslo))
+
+        $subactive = 'podmenu-sprava-osob';
+
+        $id = Input::get('id');
+
+        if (isset($id)) {       
+
+          $editovany_zaznam = DB::table('D_OSOBA')->where('id', '=', $id)->get();
+
+            $view = View::make('ciselniky.sprava-osob')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
+            ->with('editovany_zaznam',$editovany_zaznam);
+
+        } 
+          else {
+
+          $view = View::make('ciselniky.sprava-osob')->with('secretword', md5(Auth::user()->t_heslo))
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
 
+          }
+
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-        
+
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 
+        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
+
         $view->message = Session::get('message');
+        
         return $view;
     }
 
@@ -48,11 +68,25 @@ public function action_pridajosobu()
 
 public function action_zmazatosobu()
     {
+       
+        
         $secretword = md5(Auth::user()->t_heslo);
         $osoba_id = Input::get('osoba');
 
-        DB::query('DELETE FROM D_OSOBA WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$osoba_id.'\''); //mazanie hlavicky
+      
+        $id = Input::get('id');
+            try {
+
+                DB::query('DELETE FROM D_OSOBA WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$osoba_id.'\''); //mazanie hlavicky
+              
         return Redirect::to('ciselniky/sprava_osob')->with('message', 'Osoba bola vymazaná!'); 
+            }
+            catch (Exception $e){
+                $e->getMessage();
+                
+                return Redirect::to('ciselniky/sprava_osob')->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+            }
+
     }
     
 
@@ -61,48 +95,56 @@ public function action_multizmazanieosob()
       $secretword = md5(Auth::user()->t_heslo);
       $osoba_ids = Input::get('osoba');
 
+      if (count($osoba_ids) > 0){
       if (is_array($osoba_ids))
       {
-        foreach ($osoba_ids as $osoba_id)
-        {
-          DB::query('DELETE FROM D_OSOBA WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$osoba_id.'\''); //mazanie poloziek
-        }
+            foreach ($osoba_ids as $osoba_id)
+            {
+            try
+              {
+              DB::query('DELETE FROM D_OSOBA WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$osoba_id.'\''); //mazanie poloziek
+              
+            }
+            catch (Exception $e){
+                                $e->getMessage();
+                                return Redirect::to('ciselniky/sprava_osob')->with('message', 'Nemozno zmazat osobu');
+                              }           
+            }
       }
-
-      return Redirect::to('ciselniky/sprava_osob')->with('message', 'Osoby boli vymazané!');
+    return Redirect::to('ciselniky/sprava_osob')->with('message', 'Osoby boli vymazané.');
     }
 
 
-//--- ADA ------>EDITOVANIE UZIVATELA  --- * este treba upravit, stale mi to hadze vsetky a zmeny neuklada
+      return Redirect::to('ciselniky/sprava_osob')->with('message', 'Nebola zvolená ziadna osoba!');
+    }
+
+
         public function action_upravitosobu()
         {
-            $view = View::make('ciselniky.editovanie-osoby')->with('active', 'ciselniky')->with('subactive', 'podmenu-sprava-osob');
-            $id = Input::get('id');
 
-            //$view->osoby = DB::table('D_OSOBA')->where('id', '=',Auth::user()->id)->get();
-           
-            $echo_domac = Auth::user()->t_nazov_domacnosti;
-            $view->osoby = DB::table('D_OSOBA')
-            ->where_id_domacnost(Auth::user()->id)
-            ->get(array('id', 't_meno_osoby', 't_priezvisko_osoby', 'fl_aktivna'));
+        $id = Input::get('id');
+        $t_meno_osoby = Input::get('meno');
+        $t_priezvisko_osoby = Input::get('priezvisko');
+        $fl_aktivna = Input::get('aktivna');
+        if (isset($_POST['aktivna'])){
+        $fl_aktivna = 'A';
+        }    else 
+        $fl_aktivna='N';
+          
+        if(($fl_aktivna==(isset($_POST['aktivna']))) OR ($t_meno_osoby==(isset($_POST['meno']))) OR ($t_priezvisko_osoby==(isset($_POST['priezvisko']))))
+        {
+         
 
-            return $view;   
-        }
-
-          public function action_editUserDone(){                                   
-   
-            $id = Input::get('id');
-            $meno = Input::get('t_meno_osoby');
-            $priezvisko = Input::get('t_priezvisko_osoby');
-            $aktivna = Input::get('fl_aktivna');
-            $objekt = DB::first("SELECT id, t_meno_osoby, t_priezvisko_osoby, fl_aktivna FROM D_OSOBA WHERE id= " . $id); 
-           
+          DB::query("UPDATE D_OSOBA SET t_meno_osoby = '$t_meno_osoby', t_priezvisko_osoby = '$t_priezvisko_osoby', fl_aktivna = '$fl_aktivna' WHERE id = '$id'");
             
-    
-              DB::query("UPDATE D_OSOBA SET t_meno_osoby = '$meno', t_priezvisko_osoby = '$priezvisko', fl_aktivna = '$aktivna' WHERE id = " . $id);
-                               
-                return Redirect::to('ciselniky/sprava_osob')->with('message', 'Zmeny boli uložené');
-            }
+        return Redirect::to('ciselniky/sprava_osob')->with('message', 'Zmeny osoby boli uložené.');
+        }
+        else
+        {
+         return Redirect::to('ciselniky/sprava_osob')->with('message', 'Žiadne zmeny sa neuskutočnili!');
+         
+        }
+      }
 
 // *********** --- PODSEKCIA 1 (KONIEC) --- FUNKCIE PRE SPRÁVU OSOB ********************************
 
