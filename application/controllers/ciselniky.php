@@ -166,51 +166,119 @@ public function action_sprava_partnerov()
 // *********** --- PODSEKCIA 3 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
     //@Veronika Študencová
 
- public function action_sprava_kategorii()
+    public function action_sprava_kategorii()
     {
        $subactive = 'podmenu-sprava-kategorii';
 
-        $view = View::make('ciselniky.sprava-kategorii')
+               $id = Input::get('id');
+
+        if (isset($id)) {       // Buď sa stránka načíta normálne alebo sa načíta s editovaným záznamom
+
+          $editovany_zaznam = Kategoria::where('id','=',$id)->get();
+
+            $view = View::make('ciselniky.sprava-kategorii')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
+            ->with('editovany_zaznam',$editovany_zaznam);
+
+        } 
+          else {
+
+          $view = View::make('ciselniky.sprava-kategorii')->with('secretword', md5(Auth::user()->t_heslo))
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
 
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+          }
+
+
+
+        $view->kategorie = DB::query("select
+                                      a.id,
+                                      a.nazov AS t_nazov,
+                                      concat(
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    else space(length(a.id_kategoria)-4)
+                                    end,
+                                    ' ',
+                                    a.nazov
+                                    ) nazov
+                                    from
+                                    (
+                                    select
+                                    kategoria.id id,
+                                    kategoria.id id_kategoria,
+                                    kategoria.t_nazov nazov,
+                                    kategoria.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT kategoria
+                                    where kategoria.fl_typ = 'K'
+                                    and kategoria.id_domacnost = ". Auth::user()->id ."
+
+                                    
+                                    ) a
+                                    order by a.id_kategoria,a.typ
+                                   ");
+       // $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+
+        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)
+                            ->where('fl_typ','=','P')->get();
 
         $view->message = Session::get('message');
         return $view;
     }
 
 
-public function action_pridajkategoriu()
+    public function action_pridajkategoriu()
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
-        $id_kategoria_parent = Input::get('category-id');
+        $id_kategoria_parent = Input::get('Nadkategoria-id');
        //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
        
        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
 
-       return Redirect::to('ciselniky/pridanie')->with('message', 'Kategória bola pridaná!');
+       return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Kategória bola pridaná!');
     }
 
 
-    public function action_pridanie()
+    public function action_zmazatkategoriu()
     {
-        $subactive = 'ciselniky/sprava-kategorii';
+        $secretword = md5(Auth::user()->t_heslo);
+        $kat_id = Input::get('kat');
 
-        $view = View::make('ciselniky.sprava-kategorii')
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-
-        $view->message = Session::get('message');
-
-        return $view;
-
+        DB::query('DELETE FROM D_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$kat_id.'\''); //mazanie hlavicky
+        return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Kategória bola vymazaná!'); 
     }
+
+
+    public function action_multizmazaniekat()
+    {
+      $secretword = md5(Auth::user()->t_heslo);
+      $kat_ids = Input::get('kat');
+
+      if (is_array($kat_ids))
+      {
+        foreach ($kat_ids as $kat_id)
+        {
+          DB::query('DELETE FROM D_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$kat_id.'\''); //mazanie poloziek
+        }
+      }
+
+      return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Kategorie boli vymazané!');
+    }
+
+    public function action_upravkat(){ 
+      
+        $id = Input::get('id');
+        $t_nazov = Input::get('nazov');
+       
+          
+        DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
+                    SET t_nazov = '$t_nazov'
+                         
+                    WHERE id = '$id'");
+            
+        return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Zmeny boli uložené.');
+      }
 
 // *********** --- PODSEKCIA 3 (KONIEC) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
 
