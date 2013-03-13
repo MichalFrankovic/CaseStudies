@@ -344,13 +344,28 @@ public function action_multizmazanie()
 public function action_sprava_typu_prijmu()
     {
        $subactive = 'podmenu-sprava-typu-prijmu';
+       $id = Input::get('id');
+
+       if (isset($id)) {       // Buď sa stránka načíta normálne alebo sa načíta s editovaným záznamom
+
+        $editovany_zaznam = Typyprijmu::where('id','=',$id)->get();
 
         $view = View::make('ciselniky.sprava-typu-prijmu')->with('secretword', md5(Auth::user()->t_heslo))
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
+            ->with('editovany_zaznam',$editovany_zaznam);
+
+        } 
         
+        else {
+
+        $view = View::make('ciselniky.sprava-typu-prijmu')->with('secretword', md5(Auth::user()->t_heslo))
+            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id); 
+             }
+
         $view->typy = Typyprijmu::where('id_domacnost','=',Auth::user()->id)->get();
         $view->message = Session::get('message');
         return $view;
+
     }
 
 
@@ -388,7 +403,15 @@ public function action_pridajtypprijmu()
 
       return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typy prijmu boli vymazané!');
     }
+    public function action_upravtypprijmu(){
 
+        $id = Input::get('id');
+        $t_nazov_typu = Input::get('nazov_typu');
+                  
+        DB::query("UPDATE D_TYP_PRIJMU SET t_nazov_typu = '$t_nazov_typu' WHERE id = '$id'");
+            
+        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Zmeny boli uložené.');
+      }
 // *********** --- PODSEKCIA 5 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
 
 
