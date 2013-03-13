@@ -404,7 +404,7 @@ public function action_sprava_typu_vydavku()
 
         if (isset($id)) {      
 
-          $editovany_zaznam = Typyvydavku::where('id','=',$id)->get();
+          $editovany_zaznam = DB::table('D_TYP_VYDAVKU')->where('id', '=', $id)->get();
 
         $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
@@ -418,9 +418,11 @@ public function action_sprava_typu_vydavku()
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
 
           }
-        $view->typy = Typyvydavku::where('id_domacnost','=',Auth::user()->id)->get();
+		
+        $view->typy = Typyvydavku::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+        $view->typy = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
 
-
+        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
         $view->message = Session::get('message');
         return $view;
     }
@@ -444,37 +446,55 @@ public function action_zmazattypvydavku()
         $secretword = md5(Auth::user()->t_heslo);
     $typvydavku_id = Input::get('typvydavku');
 
+        $id = Input::get('id');
+            try {
         DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
         return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku bol vymazaný!'); 
     }
-  
+  catch (Exception $e){
+                $e->getMessage();
+				  return Redirect::to('ciselniky/sprava_osob')->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+            }
+
+    }
   public function action_multizmazattypy()
     {
       $secretword = md5(Auth::user()->t_heslo);
       $typvydavku_ids = Input::get('typvydavku');
-
+        if (count($typvydavku_ids) > 0){
       if (is_array($typvydavku_ids))
       {
         foreach ($typvydavku_ids as $typvydavku_id)
+		 {
+            try
         {
           DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
         }
+		catch (Exception $e){
+                                $e->getMessage();
+                                return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Nemozno zmazat osobu');
       }
-
+	   }
+ }
       return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typy vydavku boli vymazané!!');
     }
-  
-  public function action_upravittypvydavku(){ 
+    return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Nebola zvolená ziadna osoba!');
+    }
+
+  public function action_upravittypvydavku()
+  { 
 
         $id = Input::get('id');
         $t_nazov_typu_vydavku = Input::get('t_nazov_typu_vydavku');
-          
+  
         DB::query("UPDATE D_TYP_VYDAVKU 
                     SET t_nazov_typu_vydavku = '$t_nazov_typu_vydavku' 
                     WHERE id = '$id'");
             
         return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Zmeny boli uložené.');
-      }
+      
+         }
+
 // *********** --- PODSEKCIA 6 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
 
 
