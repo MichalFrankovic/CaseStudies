@@ -133,7 +133,11 @@ if ($editacia == "ano") {
             <td>    {{ $produkt->t_nazov }}                      </td>
             <td>    {{ $produkt->t_merna_jednotka }}             </td>
             <td>    {{ $produkt->vl_zakladna_cena }}             </td>
-            <td>    {{ $produkt->id_kategoria_parent }}          </td>
+            <td>    @foreach ($kategorie as $kat) 
+                        @if ($kat->id == $produkt->id_kategoria_parent)
+                                {{$kat->nazov}}
+                        @endif 
+                    @endforeach                                  </td>
             <td> <a class="btn" href="sprava_produktov?id={{ $produkt->id }}"> Upraviť </a>
                  <a class="btn" href="zmazatprodukt?produkt={{ md5($produkt->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
                     <i class="icon-remove"> </i>Vymazať</a>      </td>
