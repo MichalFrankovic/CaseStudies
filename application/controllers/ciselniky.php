@@ -442,10 +442,8 @@ public function action_sprava_typu_vydavku()
 
           }
 		
-        $view->typy = Typyvydavku::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
         $view->typy = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
 
-        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
         $view->message = Session::get('message');
         return $view;
     }
@@ -501,27 +499,32 @@ public function action_zmazattypvydavku()
  }
       return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typy vydavku boli vymazané!!');
     }
-    return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Nebola zvolená ziadna osoba!');
+    return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Nebola označena ziadna osoba!');
     }
 
   public function action_upravittypvydavku()
   { 
 
         $id = Input::get('id');
-        $t_nazov_typu_vydavku = Input::get('t_nazov_typu_vydavku');
+        $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
+
+
   
-        DB::query("UPDATE D_TYP_VYDAVKU 
-                    SET t_nazov_typu_vydavku = '$t_nazov_typu_vydavku' 
-                    WHERE id = '$id'");
-            
+ 
+
+        DB::query("UPDATE D_TYP_VYDAVKU SET t_nazov_typu_vydavku = '$t_nazov_typu_vydavku' WHERE id = '$id'");
+  
+
+
         return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Zmeny boli uložené.');
-      
-         }
+		
+  }
+
 
 // *********** --- PODSEKCIA 6 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
 
 
 
-  }
-  
+
+	  }
 
