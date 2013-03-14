@@ -524,7 +524,7 @@ public function action_zmazattypvydavku()
 // *********** --- PODSEKCIA 6 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
 
 
-
+ 
 
 	  }
 
