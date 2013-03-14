@@ -6,38 +6,88 @@
 
 @include('ciselniky/ciselniky-podmenu')
 
+<?php
+
+if (isset($editovany_zaznam))
+ $editacia="ano";
+    else $editacia = "nie";
+
+?>
 
 <div class="thumbnail" >
-    <h2>Pridaj kategóriu</h2>
 
-    {{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
+<?php
+if ($editacia == 'ano') {
+     echo "<h2>    Uprav kategóriu   </h2>";
+     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravkat" accept-charset="UTF-8">';  
+ }
+   else  {         
+    echo "<h2>    Pridaj kategóriu  </h2>";
+    echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridajkategoriu" accept-charset="UTF-8">';
+         }
 
-    <div class="input-prepend" style="float:left;width:275px">
-         <label class="control-label">   Názov kategórie:          </label>
+?>
 
-        <input class="span3" type="text" name="nazov" value="">
+
+        <input class="span4" type="hidden" name="id" value="<?php
+                                                                if (isset($editovany_zaznam[0]->id))
+                                                                    echo ($editovany_zaznam[0]->id); 
+                                                             ?>">
+    
+
+    <div class="input-prepend">
+        <label class="control-label">    Kategória:          </label>
+        <input class="span4" type="text" name="nazov" value="<?php
+                                                                if (isset($editovany_zaznam[0]->t_nazov))
+                                                                    echo ($editovany_zaznam[0]->t_nazov); 
+                                                             ?>">
     </div>
 
     <div class="input-prepend">
-      <label class="control-label">  Pod-kategória:          </label>
+      <label class="control-label">  Nadkategória:          </label>
 
-        <select name="category-id" class="span3">
-            <option value="" selected="selected">ŽIADNA</option>
+        <select name="Nadkategoria-id" class="span4">
             @foreach ($kategorie as $kat)
-            <option value="{{ $kat->id }}">{{ $kat->t_nazov }}</option>
+            <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
+                                                selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
+            </option>
             @endforeach
         </select>
     </div>
 
-    <button onclick="formReset()" type="button" class="btn btn-primary">
-        <i class="icon-remove icon-white"></i>
-            Cancel
-    </button>
+{{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
 
-    <button type="submit" class="btn btn-primary">
-        <i class="icon-ok icon-white"></i>
-            Pridaj
-    </button>
+<?php
+
+if ($editacia == "ano") {
+    echo ' <a  href="sprava_kategorii">
+                <button type="button" class="btn btn-primary">
+                    <i class="icon-remove icon-white"></i>
+                        Cancel
+                 </button>
+           </a>';
+
+    echo '       <button type="submit" class="btn btn-primary">
+                    <i class="icon-ok icon-white"></i>
+                        Aktualizuj
+                 </button>
+         ';
+    }
+   else {echo ' <button type="reset" class="btn btn-primary">
+                    <i class="icon-remove icon-white"></i>
+                        Cancel
+                </button>
+              ';
+
+         echo ' <button type="submit" class="btn btn-primary">
+                    <i class="icon-ok icon-white"></i>
+                        Pridaj
+                </button>
+              ';
+
+        }
+
+?>
 
 {{ Form::close() }}
 
@@ -46,23 +96,27 @@
 
 
 <h2 class="">   Zoznam kategórií    </h2>
-<form id="form1" name="form1" method="post" action="multizmazanie">
+<form id="form1" name="form1" method="post" action="multizmazaniekat">
   <table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
-            <th>    Názov kategórie      </th>
-            <th>    Názov podkategórie   </th>
+            <th>    Kategória      </th>
+            <th>    Nadkategória   </th>
             <th>    Výber akcie          </th>
         </tr>
     </thead>
-        <tbody>
+
+    <tbody>
         @foreach ($kategorie as $kat)
         <tr>
-            <td> <input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" /> </td>
-            <td>    {{ $kat->t_nazov }}         </td>
-            <td>    {{ $kat->id }}              </td>
-            <td> <a class="btn" href="upravitprodukt?id={{ $kat->id }}"> Upraviť </a>     </td>
+            <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). 
+                $secretword}}" /></td>
+            <td>    {{ $kat->t_nazov }}              </td> 
+            <td>    {{ $kat->nazov }}              </td>
+            <td> <a class="btn" href="sprava_kategorii?id={{ $kat->id }}"> Upraviť </a>
+                 <a class="btn" href="zmazatkategoriu?kat={{ md5($kat->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
+                    <i class="icon-remove"> </i>Vymazať</a>      </td>
         </tr>
         @endforeach
     </tbody>
