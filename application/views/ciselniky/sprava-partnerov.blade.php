@@ -19,12 +19,13 @@ if (isset($editovany_zaznam))
 
 <?php
 if ($editacia == 'ano')
-	{
+  {
+   
      echo "<h2>    Upraviť partnera   </h2>";
      echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravitpartnera" accept-charset="UTF-8">';  
-	}
+  }
 else
-	{         
+  {         
      echo "<h2>    Pridať partnera    </h2>";
      echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridatpartnera" accept-charset="UTF-8">';
     }
@@ -41,7 +42,16 @@ else
                                                               ?>">
     </div>
 
-	
+  <div class="input-prepend">
+      <label class="control-label">    Typ partnera:          </label>
+        <select name="typ" class="span3">
+            <option value="Nezaradený" selected="selected">Vyberte</option>
+      <option value="Príjemca platby">Príjemca platby</option>
+      <option value="Zdroj príjmu">Zdroj príjmu</option>
+      <option value="Aj príjemca platby aj zdroj príjmu">Aj príjemca platby aj zdroj príjmu</option>
+        </select>
+    </div>
+  
        
     <div class="input-prepend">
         <label class="control-label">    Adresa:          </label>
@@ -104,7 +114,7 @@ if ($editacia == "ano") {
         <tr>
             <td><input type="checkbox" name="par[]" id="checkbox2" class="spendcheck" value="{{ md5($par->id). $secretword}}" /></td>
             <td>    {{ $par->t_nazov }}          </td>
-			<td>    {{ $par->fl_typ }}          </td>
+      <td>    {{ $par->fl_typ }}          </td>
             <td>    {{ $par->t_adresa }}          </td>
             
             <td> <a class="btn" href="sprava_partnerov?id={{ $par->id }}"> Upraviť </a>

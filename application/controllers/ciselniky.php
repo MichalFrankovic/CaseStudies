@@ -189,7 +189,7 @@ public function action_pridatpartnera()
      $id_domacnost = Auth::user()->id;
      $t_nazov = Input::get('nazov');
      $t_adresa = Input::get('adresa');
-   $fl_typ = Input::get('typ');
+     $fl_typ = Input::get('typ');
 
    DB::query("INSERT INTO `web`.`D_OBCHODNY_PARTNER` (`id` ,`id_domacnost` ,`t_nazov` ,`t_adresa` ,`fl_typ` )
    VALUES (NULL , '$id_domacnost', '$t_nazov', '$t_adresa', '$fl_typ');");
@@ -203,10 +203,10 @@ public function action_upravitpartnera()
      $id = Input::get('id');
      $t_nazov = Input::get('nazov');
      $t_adresa = Input::get('adresa');
-    // $fl_typ = Input::get('typ');
+     $fl_typ = Input::get('typ');
 
-    //DB::query("UPDATE D_OBCHODNY_PARTNER SET t_nazov = '$t_nazov', t_adresa = '$t_adresa', fl_typ = '$fl_typ' WHERE id = '$id'");
-   DB::query("UPDATE D_OBCHODNY_PARTNER SET t_nazov = '$t_nazov', t_adresa = '$t_adresa' WHERE id = '$id'");
+   DB::query("UPDATE D_OBCHODNY_PARTNER SET t_nazov = '$t_nazov', t_adresa = '$t_adresa', fl_typ = '$fl_typ' WHERE id = '$id'");
+  
    
    return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Zmeny boli uložené.');
     } 
@@ -214,10 +214,8 @@ public function action_upravitpartnera()
 
 public function action_zmazatpartnera()
     {
-    
-     $secretword = md5(Auth::user()->t_heslo);
-
      $id = Input::get('id');
+     $secretword = md5(Auth::user()->t_heslo);
 
        try 
      {
@@ -236,31 +234,30 @@ public function action_zmazatpartnera()
 
 public function action_multizmazaniepartnerov()
     {
-   $partner_ids = Input::get('partner');
-   $secretword = md5(Auth::user()->t_heslo);
-
-     if (count($partner_ids) > 0)
+     $partner_ids = Input::get('par');
+     $secretword = md5(Auth::user()->t_heslo);
+   if (count($partner_ids) > 0)
     {
-     if (is_array($osoba_ids))
+         if (is_array($partner_ids))
       {
-       foreach ($osoba_ids as $osoba_id)
+       foreach ($partner_ids as $par)
         {
          try
           {
-           DB::query('DELETE FROM D_OBCHODNY_PARTNER WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$partner_id.'\'');
-              
+           DB::query('DELETE FROM D_OBCHODNY_PARTNER WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$par.'\'');     
           }
-         catch (Exception $e)
+                 catch (Exception $e)
           {
            $e->getMessage();
-           return Redirect::to('ciselniky/sprava_osob')->with('message', 'Nie je možné zmazať partnera');
+           return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nie je možné zmazať partnera');
           }
         }
       }
      return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Partneri boli vymazaní.');
     }
-   else return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nebola zvolená žiadna osoba!');
+     else return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nebola zvolená žiadna osoba!');
     }
+
 
 
 // *********** --- PODSEKCIA 2 (KONIEC) --- FUNKCIE PRE SPRÁVU PARTNEROV ********************************
