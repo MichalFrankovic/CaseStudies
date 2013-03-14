@@ -698,5 +698,5 @@ public function action_zmazattypvydavku()
 
  
 
-	  }
+	  } 
 

@@ -105,4 +105,4 @@ if ($editacia == "ano") {
 
 </form>
 
-@include('foot')
+@include('foot') 
