@@ -21,11 +21,11 @@ if (isset($editovany_zaznam))
 <?php
 if ($editacia == 'ano') {
      echo "<h2>    Uprav produkt   </h2>";
-     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravprodukt" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormProdukty()" method="POST" action="upravprodukt" accept-charset="UTF-8">';  
  }
    else  {         
     echo "<h2>    Pridaj produkt  </h2>";
-    echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridajprodukt" accept-charset="UTF-8">';
+    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormProdukty()" method="POST" action="pridajprodukt" accept-charset="UTF-8">';
          }
 
 ?>
@@ -145,7 +145,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
-<a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+<a class="btn" href="#" onclick="multizmazanie()"> <i class="icon-remove"> </i> Vymazať zvolené </a>
 </form>
 
 

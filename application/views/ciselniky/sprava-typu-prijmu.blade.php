@@ -21,11 +21,11 @@ if (isset($editovany_zaznam))
 <?php
 if ($editacia == 'ano') {
      echo "<h2>    Upravte typ prijmu   </h2>";
-     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravtypprijmu" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyPrijmu()" method="POST" action="upravtypprijmu" accept-charset="UTF-8">';  
  }
    else  {         
     echo "<h2>    Pridajte typ prijmu  </h2>";
-    echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridajtypprijmu" accept-charset="UTF-8">';
+    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyPrijmu()" method="POST" action="pridajtypprijmu" accept-charset="UTF-8">';
          }
 
 ?>

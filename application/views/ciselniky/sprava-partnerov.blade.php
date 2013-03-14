@@ -22,12 +22,12 @@ if ($editacia == 'ano')
   {
    
      echo "<h2>    Upraviť partnera   </h2>";
-     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravitpartnera" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormPartneri()" method="POST" action="upravitpartnera" accept-charset="UTF-8">';  
   }
 else
   {         
      echo "<h2>    Pridať partnera    </h2>";
-     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridatpartnera" accept-charset="UTF-8">';
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormPartneri()" method="POST" action="pridatpartnera" accept-charset="UTF-8">';
     }
 ?>
     

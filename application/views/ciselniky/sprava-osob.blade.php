@@ -20,11 +20,11 @@ if (isset($editovany_zaznam))
 <?php
 if ($editacia == 'ano') {
      echo "<h2>    Uprav osobu   </h2>";
-     echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="upravitosobu" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormOsoby()" method="POST" action="upravitosobu" accept-charset="UTF-8">';  
  }
    else  {         
     echo "<h2>    Pridaj osobu  </h2>";
-    echo '<form class="side-by-side" id="aktualnyformular" method="POST" action="pridajosobu" accept-charset="UTF-8">';
+    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormOsoby()" method="POST" action="pridajosobu" accept-charset="UTF-8">';
          }
 
 ?>
