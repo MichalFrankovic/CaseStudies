@@ -45,9 +45,9 @@ if ($editacia == 'ano') {
 
 if ($editacia == "ano") {
     echo ' <a  href="sprava_typu_vydavku">
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" >
                     <i class="icon-remove icon-white"></i>
-                        Cancel
+                        Cancel 
                  </button>
            </a>';
 
@@ -101,7 +101,8 @@ if ($editacia == "ano") {
     </tbody>
     
   </table>
-<a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+   <td><button type="submit"  class="btn"     name="Submit"    onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /> <i class="icon-remove"></i>Vymazať zvolené</button></td>
+
 </form>
 
 @include('foot')
