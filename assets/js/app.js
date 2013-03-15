@@ -94,7 +94,7 @@ return false;
                 return false;
             }
 
-            var alphaExp = /^[a-zA-Z]+$/;
+            var alphaExp = /^[a-zA-ZáéíóúýžščďťňľÁÉÍÓÚÝŽŠČĎŤŇĽ]+$/;
                 if(elem.value.match(alphaExp)){
                   
                     } else {
