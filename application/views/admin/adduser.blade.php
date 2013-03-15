@@ -87,4 +87,4 @@
     </table>
 </form>-->
 
-@include('foot');
+@include('foot')

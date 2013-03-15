@@ -35,4 +35,4 @@
 {{ Form::close() }}
 
 
-@include('foot');
+@include('foot')

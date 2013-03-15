@@ -33,4 +33,4 @@
 @endif
 
 
-@include('foot');
+@include('foot')

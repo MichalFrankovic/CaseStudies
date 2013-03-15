@@ -80,6 +80,6 @@ function checkedAll (form1) {
         </tr>
     </table>
 </form>
-@include('foot');
+@include('foot')
 <!--
 -->

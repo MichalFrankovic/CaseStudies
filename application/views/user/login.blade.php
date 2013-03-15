@@ -48,4 +48,4 @@
 
 {{ Html::link('user/recovery', 'Zabudli ste heslo?') }}
 
-@include('foot');
+@include('foot')

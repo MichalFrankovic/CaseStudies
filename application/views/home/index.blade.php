@@ -12,4 +12,4 @@
 <p>Príjmovo výdavkový systém pre domácnosti</p>
 
 
-@include('foot');
+@include('foot')
