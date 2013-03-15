@@ -96,8 +96,7 @@
 		$tabs = array(
 			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
-			'sources'	=> 'Zdroje príjmov',
-			'partners'	=> 'Partneri',
+			
 		);
 		foreach($tabs as $key => $title){
 			$class = '';
@@ -141,7 +140,7 @@
 			<div class="controls">
 				<div class="input-prepend">
 				  	<span class="add-on" value='x'>€</span>
-				  	{{ Form::text('vl_suma_prijmu', 'xhhhhhhh', array('class' => 'input-small', 'value' => 'x')) }}
+				  	{{ Form::text('vl_suma_prijmu', '', array('class' => 'input-small', 'value' => '')) }}
 				</div>
 				
 			</div>

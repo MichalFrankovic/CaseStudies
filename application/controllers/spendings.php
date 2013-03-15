@@ -518,24 +518,12 @@ class Spendings_Controller extends Base_Controller {
     	
     }
 
+
     public function  getVydavok($id){
         return null;
 
     }
 
-    public function action_pridanie()
-    {
-        $subactive = 'spendings/pridanie';
-
-        $view = View::make('spendings.addstuff')
-            ->with('active', 'vydavky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-        $view->message = Session::get('message');
-        return $view;
-
-    }
-   
 
     public function action_pridajdodavatela()
     {

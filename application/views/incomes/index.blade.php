@@ -128,8 +128,8 @@
 		$tabs = array(
 			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
-			'sources'	=> 'Zdroje príjmov',
-			'partners'	=> 'Partneri',
+			
+			
 		);
 		foreach($tabs as $key => $title){
 			$class = '';
