@@ -93,6 +93,16 @@ return false;
                 elem.focus(); // set the focus to this input
                 return false;
             }
+
+            var alphaExp = /^[a-zA-Z]+$/;
+                if(elem.value.match(alphaExp)){
+                  
+                    } else {
+                         alert(helperMsg);
+                elem.focus(); // set the focus to this input
+                return false;
+                    }
+
             return true;
         }
 

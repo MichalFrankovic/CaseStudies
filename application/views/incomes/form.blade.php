@@ -140,8 +140,8 @@
 			{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
 				<div class="input-prepend">
-				  	<span class="add-on">€</span>
-				  	{{ Form::text('vl_suma_prijmu', '', array('class' => 'input-small')) }}
+				  	<span class="add-on" value='x'>€</span>
+				  	{{ Form::text('vl_suma_prijmu', 'xhhhhhhh', array('class' => 'input-small', 'value' => 'x')) }}
 				</div>
 				
 			</div>
