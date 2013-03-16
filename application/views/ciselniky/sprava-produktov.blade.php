@@ -55,20 +55,39 @@ if ($editacia == 'ano') {
 
      <div class="input-prepend">
         <label class="control-label">    Merná jednotka:  </label>
-        <input class="span4" type="text" name="jednotka" value="<?php
-                                                                if (isset($editovany_zaznam[0]->t_merna_jednotka))
-                                                                    echo ($editovany_zaznam[0]->t_merna_jednotka); 
-                                                            ?>">
+        <select class="span4" type="text" name="jednotka"> 
+            <?php
+                    if (isset($editovany_zaznam[0]->t_merna_jednotka)) 
+                    {
+                        echo ('<option value="'.$editovany_zaznam[0]->t_merna_jednotka.'" selected="selected">'.$editovany_zaznam[0]->t_merna_jednotka.'</option>'); 
+                        echo '
+                                <option value="kus">kus</option>
+                                <option value="kg">kg</option>
+                                <option value="liter">liter</option>';
+                    }
+                        else {
+                                echo '  <option value="kus">kus</option>
+                                        <option value="kg">kg</option>
+                                        <option value="liter">liter</option>';
+                             }
+             ?>
+         </select>
     </div>
 
     <div class="input-prepend">
         <label class="control-label">    Kategória:      </label>
         <select name="kategoria-id" class="span4">
+            <?php if (empty($editovany_zaznam[0]->id_kategoria_parent))    
+                    echo '<option value="Nezaradený" selected="selected">Vyber</option>';  
+            ?>
+
             @foreach ($kategorie as $kat)
             <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
                                                 selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
+                                           
             </option>
             @endforeach
+           
         </select>
     </div>
    
@@ -79,7 +98,7 @@ if ($editacia == "ano") {
     echo ' <a  href="sprava_produktov">
                 <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
-                        Cancel
+                        Zruš
                  </button>
            </a>';
 
@@ -91,7 +110,7 @@ if ($editacia == "ano") {
     }
    else {echo ' <button type="reset" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
-                        Cancel
+                        Zruš
                 </button>
               ';
 

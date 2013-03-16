@@ -437,6 +437,7 @@ public function action_sprava_produktov()
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 
         $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)
+                            ->order_by('t_nazov','ASC')
                             ->where('fl_typ','=','P')->get();
 
         $view->message = Session::get('message');
@@ -451,8 +452,13 @@ public function action_pridajprodukt()
         $t_nazov = Input::get('nazov');
         $cena = floatval(str_replace(',', '.',Input::get('cena')));
         $id_kategoria_parent = Input::get('kategoria-id');
+        $t_merna_jednotka = Input::get('jednotka');
 
-        DB::query("call produkt_insert($id_domacnost,'$t_nazov', 'kus',$cena, '$id_kategoria_parent')");
+        DB::query("call produkt_insert($id_domacnost,
+                                      '$t_nazov', 
+                                      '$t_merna_jednotka',
+                                       $cena,
+                                      '$id_kategoria_parent')");
         
         return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkt bol pridaný!');
     }

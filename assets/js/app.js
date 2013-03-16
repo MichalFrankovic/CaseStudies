@@ -46,14 +46,17 @@ function validujFormProdukty()
 {
     var nazov = document.forms["tentoForm"]["nazov"];
     var cena = document.forms["tentoForm"]["cena"];
+    var kategoria = document.forms["tentoForm"]["kategoria-id"];
     
     
      if(notEmpty(nazov, "Prosím zadajte názov")){                
           
         if(isNumeric(cena, "Zadajte prosím číslo")){  
 
-            return true;
-             }
+            if(madeSelection(kategoria, "Zadajte prosím kategóriu")){  
+                return true;
+                 }
+            }
         }
 
 return false;
