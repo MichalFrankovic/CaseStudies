@@ -87,44 +87,53 @@ return false;
 
 
 
-        function notEmpty(elem, helperMsg){
-            if(elem.value.length == 0){
+        function notEmpty(elem, helperMsg)
+        {
+            if(elem.value.trim() == '')
+            {
                 alert(helperMsg);
                 elem.focus(); // set the focus to this input
                 return false;
             }
 
-            var alphaExp = /^[a-zA-ZáéíóúýžščďťňľÁÉÍÓÚÝŽŠČĎŤŇĽ]+$/;
-                if(elem.value.match(alphaExp)){
-                  
-                    } else {
-                         alert(helperMsg);
-                elem.focus(); // set the focus to this input
-                return false;
-                    }
+            /*var alphaExp = /^[a-zA-ZáéíóúýžščďťňľÁÉÍÓÚÝŽŠČĎŤŇĽäô]+$/;
+                if(elem.value.match(alphaExp))
+                {
+ 
+                } else {
+                        alert('Nepovolený znak!');
+                        elem.focus(); // set the focus to this input
+                        elem.select();
+                        return false;
+                    }*/
 
             return true;
         }
 
 
-        function isNumeric(elem, helperMsg){
+        function isNumeric(elem, helperMsg)
+        {
             var numericExpression = /^[0-9]+$/;
-            if(elem.value.match(numericExpression)){
+            if(elem.value.match(numericExpression))
+            {
                 return true;
-            }else{
-                alert(helperMsg);
-                elem.focus();
-                return false;
+            } else {
+                    alert('Toto nie je číslo');
+                    elem.focus();
+                    elem.select();
+                    return false;
             }
         }
 
 
-        function madeSelection(elem, helperMsg){
-            if(elem.value == "Nezaradený"){
+        function madeSelection(elem, helperMsg)
+        {
+            if(elem.value == "Nezaradený")
+            {
                 alert(helperMsg);
                 elem.focus();
                 return false;
-            }else{
+            } else {
                 return true;
             }
         }
