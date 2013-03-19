@@ -4,9 +4,13 @@ function validujFormOsoby()
 {
     var priezvisko = document.forms["tentoForm"]["priezvisko"];
        
-     if(notEmpty(priezvisko, "Prosím zadajte priezvisko")){                 
+     if (notEmpty(priezvisko, "Prosím zadajte priezvisko")) {
+
+        if(ismeno(priezvisko)){ 
+                        
             return true;
              }
+         }
         
 return false;
 }
@@ -90,6 +94,7 @@ return false;
 
 
 
+// Funkcia na validáciu, či užívateľ niečo zadal (môžu to byť aj čísla)
         function notEmpty(elem, helperMsg)
         {
             if(elem.value.trim() == '')
@@ -114,6 +119,29 @@ return false;
         }
 
 
+// Funkcia na validáciu, či užívateľ zadal znaky BEZ číslic
+        function ismeno(input)
+        {  
+                // Check if input contains a digit
+                if (/\d/.test(input.value)) {
+                    alert('Priezvisko nemôže obsahovať číslo');
+
+                    // Remove all digit characters
+                    input.value = input.value.replace(/\d/gi, '');
+                    return false;
+                }
+
+                // Check if input is empty
+                if (input.value === '') {
+                    alert('Nezadal si priezvisko');
+                    return false;
+                    }
+
+            return true;
+        }
+
+
+// Funkcia na validáciu, či užívateľ zadal číslice
         function isNumeric(elem, helperMsg)
         {
             var numericExpression = /^[0-9]+$/;
@@ -129,6 +157,7 @@ return false;
         }
 
 
+// Funkcia, či užívateľ vybral možnosť option zo select-u
         function madeSelection(elem, helperMsg)
         {
             if(elem.value == "Nezaradený")
