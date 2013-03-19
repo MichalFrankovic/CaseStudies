@@ -95,7 +95,7 @@ if ($editacia == 'ano') {
 <?php
 
 if ($editacia == "ano") {
-    echo ' <a  href="sprava_produktov">
+    echo ' <a  onClick="history.go(-1)">            <!-- Tento Javascript vložený kvôli IE -->
                 <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
                         Zruš
