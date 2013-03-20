@@ -291,7 +291,7 @@ public function action_multizmazaniepartnerov()
 
 
 
-        $view->kategorie = DB::query("select
+        $view->kategorie = DB::query("SELECT
                                       a.id,
                                       a.nazov AS t_nazov,
                                       concat(
@@ -300,28 +300,46 @@ public function action_multizmazaniepartnerov()
                                     end,
                                     ' ',
                                     a.nazov
-                                    ) nazov
-                                    from
-                                    (
-                                    select
-                                    kategoria.id id,
-                                    kategoria.id id_kategoria,
-                                    kategoria.t_nazov nazov,
-                                    kategoria.fl_typ typ
-                                    from D_KATEGORIA_A_PRODUKT kategoria
-                                    where kategoria.fl_typ = 'K'
-                                    and kategoria.id_domacnost = ". Auth::user()->id ."
-
+                                    ) AS nazov
+                                      FROM
+                                      (
+                                      SELECT
+                                      kategoria.id id,
+                                      kategoria.id id_kategoria,
+                                      kategoria.t_nazov nazov,
+                                      kategoria.fl_typ typ
+                                      FROM D_KATEGORIA_A_PRODUKT kategoria
+                                      WHERE kategoria.fl_typ = 'K'
+                                      AND kategoria.id_domacnost = ". Auth::user()->id ." 
+                                      ORDER BY id_kategoria           
+                                      ) AS a
                                     
-                                    ) a
-                                    order by a.id_kategoria,a.typ
                                    ");
        // $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 
-        $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)
-                            ->where('fl_typ','=','P')->get();
+        $view->kategorie2 = DB::query("SELECT
+                                      a.id,
+                                      a.nazov AS t_nazov,
+                                      concat(
+                                    case when a.typ =  'K' then concat( substr(a.id_kategoria,4,3))
+                                    end
+                                    ) AS nazov
+                                      FROM
+                                      (
+                                      SELECT
+                                      kategoria.id id,
+                                      kategoria.id id_kategoria,
+                                      kategoria.t_nazov nazov,
+                                      kategoria.fl_typ typ
+                                      FROM D_KATEGORIA_A_PRODUKT kategoria
+                                      WHERE kategoria.fl_typ = 'K'
+                                      AND kategoria.id_domacnost = ". Auth::user()->id ." 
+                                      ORDER BY nazov
+                                      ) AS a
+                                     
+                                   ");
 
         $view->message = Session::get('message');
         return $view;

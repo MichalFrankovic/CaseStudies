@@ -47,6 +47,7 @@ if ($editacia == 'ano') {
       <label class="control-label">  Nadkategória:          </label>
 
         <select name="Nadkategoria-id" class="span4">
+           <option value="Nezaradený" selected="selected">Vyberte</option>
             @foreach ($kategorie as $kat)
             <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
                                                 selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
@@ -108,7 +109,7 @@ if ($editacia == "ano") {
     </thead>
 
     <tbody>
-        @foreach ($kategorie as $kat)
+        @foreach ($kategorie2 as $kat)
         <tr>
             <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /></td>
             <td>    {{ $kat->t_nazov }}              </td> 

@@ -36,10 +36,14 @@ return false;
 function validujFormKategorie()
 {
     var nazov = document.forms["tentoForm"]["nazov"];
+    var nadkategoria = document.forms["tentoForm"]["Nadkategoria-id"];
     
-     if(notEmpty(nazov, "Prosím zadajte názov")){                
+     if(notEmpty(nazov, "Prosím zadajte názov")){    
+
+        if(madeSelection(nadkategoria, "Zadajte prosím nadkategóriu")){              
                    
             return true; 
+            }
         }
 
 return false;
