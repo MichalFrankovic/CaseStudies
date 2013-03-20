@@ -60,10 +60,10 @@ if ($editacia == 'ano') {
 <?php
 
 if ($editacia == "ano") {
-    echo ' <a  href="sprava_kategorii">
+    echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
                 <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
-                        Cancel
+                        Zruš
                  </button>
            </a>';
 
@@ -75,7 +75,7 @@ if ($editacia == "ano") {
     }
    else {echo ' <button type="reset" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
-                        Cancel
+                        Zruš
                 </button>
               ';
 
@@ -110,8 +110,7 @@ if ($editacia == "ano") {
     <tbody>
         @foreach ($kategorie as $kat)
         <tr>
-            <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). 
-                $secretword}}" /></td>
+            <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /></td>
             <td>    {{ $kat->t_nazov }}              </td> 
             <td>    {{ $kat->nazov }}              </td>
             <td> <a class="btn" href="sprava_kategorii?id={{ $kat->id }}"> Upraviť </a>
@@ -121,7 +120,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
-<a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+<a class="btn" href="#" onclick="multizmazanie('kat[]')"> <i class="icon-remove"> </i> Vymazať zvolené </a>
 </form>
 
 

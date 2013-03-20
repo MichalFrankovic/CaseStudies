@@ -674,7 +674,7 @@ public function action_zmazattypvydavku()
  }
       return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typy vydavku boli vymazané!!');
     }
-    return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Nebola označena ziadna osoba!');
+    return Redirect::to('ciselniky/sprava_typu_vydavku');//->with('message', 'Nebola označena ziadna osoba!');
     }
 
   public function action_upravittypvydavku()

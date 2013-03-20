@@ -65,10 +65,10 @@ else
 <?php
 
 if ($editacia == "ano") {
-    echo ' <a  href="sprava_partnerov">
+   echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
                 <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
-                        Cancel
+                        Zruš
                  </button>
            </a>';
 
@@ -79,6 +79,11 @@ if ($editacia == "ano") {
          ';
     }
    else {
+         echo ' <button type="reset" class="btn btn-primary">
+                    <i class="icon-remove icon-white"></i>
+                        Zruš
+                </button>
+              ';
 
          echo ' <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>
@@ -124,7 +129,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
-<a class="btn" href="#" onclick="document.getElementById('form1').submit(); return false;"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+<a class="btn" href="#" onclick="multizmazanie('par[]')"> <i class="icon-remove"> </i> Vymazať zvolené </a>
 </form>
 
 

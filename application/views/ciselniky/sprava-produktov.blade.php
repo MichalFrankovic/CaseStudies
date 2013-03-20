@@ -95,7 +95,7 @@ if ($editacia == 'ano') {
 <?php
 
 if ($editacia == "ano") {
-    echo ' <a  onClick="history.go(-1)">            <!-- Tento Javascript vložený kvôli IE -->
+    echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
                 <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
                         Zruš
@@ -164,7 +164,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
-<a class="btn" href="#" onclick="multizmazanie()"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+<a class="btn" href="#" onclick="multizmazanie('produkt[]')"> <i class="icon-remove"> </i> Vymazať zvolené </a>
 </form>
 
 

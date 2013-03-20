@@ -44,10 +44,10 @@ if ($editacia == 'ano') {
     <?php
 
 if ($editacia == "ano") {
-    echo ' <a  href="sprava_typu_vydavku">
-                <button type="button" class="btn btn-primary" >
+     echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
+                <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
-                        Cancel 
+                        Zruš
                  </button>
            </a>';
 
@@ -58,6 +58,11 @@ if ($editacia == "ano") {
          ';
     }
    else {
+         echo ' <button type="reset" class="btn btn-primary">
+                    <i class="icon-remove icon-white"></i>
+                        Zruš
+                </button>
+              ';
 
          echo ' <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>
@@ -101,7 +106,7 @@ if ($editacia == "ano") {
     </tbody>
     
   </table>
-   <td><button type="submit"  class="btn"     name="Submit"    onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /> <i class="icon-remove"></i>Vymazať zvolené</button></td>
+   <td><button type="submit"  class="btn"     name="Submit"    onclick="multizmazanie('typvydavku[]')" /> <i class="icon-remove"></i>Vymazať zvolené</button></td>
 
 </form>
 

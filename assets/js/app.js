@@ -174,16 +174,37 @@ return false;
 
 // -----------------------------------------------------------------------------------
 
-function multizmazanie()
-{
+        function multizmazanie(input)
+        {
+           
+            var chks = document.getElementsByName(input);
+            var hasChecked = false;
 
-    var odpoved = confirm('Určite chcete zmazať tieto záznamy?')
+                for (var i = 0; i < chks.length; i++)
+                    {
+                        if (chks[i].checked)
+                            {
+                                hasChecked = true;
+                                break;
+                            }
+
+                    }
+
+                if (hasChecked == false)
+                    {
+                    alert("Nevybral si žiadnu z položiek! \nSa spamätaj akože...");
+                    return false;
+                    }
+
+            var odpoved = confirm('Určite chcete zmazať tieto záznamy?');
     
-    if (odpoved) {
-            document.getElementById('form1').submit();
-            }
+                if (odpoved) {
+                    document.getElementById('form1').submit();
+                    }
+                    
+        return true;
+        }
 
-}
 
 // -----------------------------------------------------------------------------------
 
