@@ -202,7 +202,7 @@ class Spendings_Controller extends Base_Controller {
     {
         $data = Input::All() ;
         $data_for_sql['id_osoba'] = $data['osoba'];
-        $data_for_sql['id_obchodny_partner'] =  $data['dodavatel'];
+        $data_for_sql['id_obchodny_partner'] =  $data['partner'];
         $data_for_sql['d_datum'] =  date('Y-m-d',strtotime($data['datum']));
         $data_for_sql['t_poznamka'] =  $data['poznamka'];
         $data_for_sql['vl_zlava'] =  intval($data['celkova-zlava']);
@@ -308,13 +308,13 @@ class Spendings_Controller extends Base_Controller {
     	return Redirect::to('spendings/list')->with('message', 'Výdavky boli vymazané!');
     }
     
-    public function action_templatespending() {
+    public function action_sablona() {
     	
     	$id = Input::get('id');
     	
     	if (isset($id)) {
     		
-    		$view = View::make('spendings.templateedit')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+    		$view = View::make('spendings.sablona-editacia')->with('active', 'vydavky')->with('subactive', 'spendings/sablona');
     		
     		$view->message = Session::get('message');
     		
@@ -357,10 +357,10 @@ class Spendings_Controller extends Base_Controller {
                                     ) a
                                     order by a.id_kategoria,a.typ
                                    ");
-    		 
-    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
+
+            $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
     		
-    		$view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
+    		$view->editovana_sablona = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
     				"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
     				"where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).") and v.id = '".$id."'");
     		
@@ -369,7 +369,7 @@ class Spendings_Controller extends Base_Controller {
     		
     	} else {
     		
-    		$view = View::make('spendings.templatespending')->with('active', 'vydavky')->with('subactive', 'spendings/templatespending');
+    		$view = View::make('spendings.sablona-nova')->with('active', 'vydavky')->with('subactive', 'spendings/sablona');
     		 
     		$view->message = Session::get('message');
     		 
@@ -413,18 +413,18 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
     		 
-    		$view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
+    		$view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
     		 
     		return $view;
     		
     	}
     }
 
-    public function action_savetemplate() {
+    public function action_ulozsablonu() {
     	
     	$data = Input::All();
     	$data_for_sql['t_poznamka'] =  $data['nazov'];
-    	$data_for_sql['id_obchodny_partner'] =  $data['dodavatel'];
+    	$data_for_sql['id_obchodny_partner'] =  $data['partner'];
     	$data_for_sql['fl_pravidelny'] =  $data['pravidelnost'];
     	
     	$polozky_for_sql['id_kategoria_a_produkt'] = $data['polozka-id'];
@@ -440,7 +440,7 @@ class Spendings_Controller extends Base_Controller {
     		->where('id_vydavok', '=', $data['hlavicka-id'])
     		->update($polozky_for_sql);
     		
-    		return Redirect::to('spendings/templatespending')->with('message', 'Šablóna bola úspešne zmenená!');
+    		return Redirect::to('spendings/sablona')->with('message', 'Šablóna bola úspešne zmenená!');
     		
     	} else {
 
@@ -454,26 +454,26 @@ class Spendings_Controller extends Base_Controller {
     		
     		$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
     		
-    		return Redirect::to('spendings/templatespending')->with('message', 'Šablóna bola úspešne pridaná!');
+    		return Redirect::to('spendings/sablona')->with('message', 'Šablóna bola úspešne pridaná!');
     		
     	}
     	
     }
     
-    public function action_deletetemplatespending() {
+    public function action_zmazsablonu() {
     	
     	$secretword = md5(Auth::user()->t_heslo);
-    	$vydavok_id = Input::get('template');
+    	$vydavok_id = Input::get('sablona');
     	DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
     	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
     	return Redirect::to('spendings/periodicalspending')->with('message', 'Šablóna bola vymazaná!');
     	
     }
     
-    public function action_multideletetemplatespending() {
+    public function action_zmazsablony() {
     	
     	$secretword = md5(Auth::user()->t_heslo);
-    	$vydavok_ids = Input::get('template');
+    	$vydavok_ids = Input::get('sablona');
     	if (is_array($vydavok_ids))
     	{
     		foreach ($vydavok_ids as $vydavok_id)

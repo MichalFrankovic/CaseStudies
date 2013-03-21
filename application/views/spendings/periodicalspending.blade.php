@@ -64,7 +64,7 @@ function multiCheck()
 </script>
 
 <h4 class="">Zoznam šablón výdavkov</h4>
-<form id="form1" name="form1" method="post" action="multideletetemplatespending">
+<form id="form1" name="form1" method="post" action="zmazsablony">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -80,14 +80,14 @@ function multiCheck()
         <tbody>
         @foreach ($sablony as $sablona)
         <tr>
-            <td><input type="checkbox" name="template[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
+            <td><input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
             <td>{{ $sablona->t_poznamka }}</td>
             <td>{{ $sablona->prijemca }}</td>
             <td>{{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }}</td>
             <td>{{ $sablona->kategoria }}</td>
             <td>{{ $sablona->vl_jednotkova_cena }} €</td>
-            <td><a class="btn" href="templatespending?id={{ $sablona->id }}">Upraviť</a>
-                <a class="btn" href="deletetemplatespending?template={{ md5($sablona->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
+            <td><a class="btn" href="sablona?id={{ $sablona->id }}">Upraviť</a>
+                <a class="btn" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
         </tr>
         @endforeach
         </tbody>
