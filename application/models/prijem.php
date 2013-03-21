@@ -67,8 +67,7 @@ class Prijem extends Eloquent
 		return $person;
 	}
 
-     * @author: Andreyco
-     */
+    
 	public static function get_person_for_list()
 	{
 		$person		= array();
