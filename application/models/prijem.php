@@ -26,6 +26,7 @@ class Prijem extends Eloquent
 
 		$query = DB::table(static::$table.' as P')
     		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
+    		->join('D_TYP_PRIJMU as T', 'P.id_typ_prijmu', '=', 'T.id')
     		->where_in('P.id_osoba', $familyMembers)
     		->order_by('P.d_datum', 'DESC');
 
@@ -45,7 +46,8 @@ class Prijem extends Eloquent
     			'P.vl_suma_prijmu',
     			'P.d_datum',
     			'P.t_poznamka',
-    			'Z.t_popis'
+    			'Z.t_popis',
+    			'T.t_nazov_typu'
 			));
     }
 
@@ -132,6 +134,15 @@ public static function get_zdroj_prijmu_for_list()
 		endforeach;
 
 		return $source_html;
+	}
+	
+	
+	
+	public static function get_typy()
+	{
+		return DB::table('D_TYP_PRIJMU')
+			->where('id_domacnost', '=', Auth::user()->id)
+			->get();
 	}
 	/**
 	
