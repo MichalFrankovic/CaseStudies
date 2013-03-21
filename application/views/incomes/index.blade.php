@@ -196,7 +196,7 @@
 		<tbody>
 			@foreach($incomes as $income)
 			<tr>
-				<td><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{ md5($income->id). $secretword}}" /></td>
+				<td><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{$income->id}}" /></td>
 
 				<td>
 					
