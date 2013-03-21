@@ -163,6 +163,15 @@
     <span class="add-on">Do: </span>
     <input class="span3 datepicker" type="text" name="do" value="{{ $do }}">
 </div>
+<div class="input-prepend">
+        <span class="add-on">Typ prijmu: </span>
+    <select name="typ_prijmu"  class="span3">
+        <option value="all" selected="selected">VSETKY</option>
+        @foreach ($typy as $typ)
+        <option value="{{ $typ->id }}" > {{ $typ->t_nazov_typu }}</option>
+        @endforeach
+    </select>
+ </div>
  <div class="input-prepend">
         <span class="add-on">Zdroj prijmu: </span>
     <select name="zdroj"  class="span3">
@@ -186,9 +195,10 @@
 		<thead>
 			<tr style="font-weight: bold;">
 				<td><input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /></td>
-				<td>Zdroj prijmu</td>
-				<td>Vlozena suma</td>
+				<td>Typ</td>
 				<td>Dátum</td>
+				<td>Vlozena suma</td>
+				<td>Zdroj prijmu</td>
 				<td>Poznámka</td>
 				<td></td>
 			</tr>
@@ -198,24 +208,23 @@
 			<tr>
 				<td><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{$income->id}}" /></td>
 
-				<td>
-					
-					{{ $income->t_popis }}
-				
+				<td>{{ $income->t_nazov_typu }}</td>
+				<td>					
+					{{ date('d.m.Y', strtotime($income->d_datum)) }}
 				</td>
 				<td>
 					{{ $income->vl_suma_prijmu }} €
 				</td>
-				<td>					
-					{{ date('d.m.Y', strtotime($income->d_datum)) }}
+				<td>				
+					{{ $income->t_popis }}
 				</td>
-
+				
 				<td>					
 					{{ $income->t_poznamka }}
 					
 				</td>
 				<td><a class="btn" href="form?id={{ $income->id }}">Upraviť</a>
-				    <a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a>
+				    <a class="btn" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a>
 				</td>
 			</tr>
 			@endforeach
