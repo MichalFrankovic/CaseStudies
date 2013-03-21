@@ -77,6 +77,8 @@ class Incomes_Controller extends Base_Controller {
 						->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
 		$viewData = array(
 			'list_person'	=> Prijem::get_person_for_list(),
+			'list_typ_prijmu'=> Prijem::get_typ_prijmu_for_list(),
+			'list_zdroj_prijmu'	=> Prijem::get_zdroj_prijmu_for_list()
 		);
 		return View::make('incomes.form', $viewData);
 	}
@@ -98,8 +100,9 @@ class Incomes_Controller extends Base_Controller {
 		$do = ($do!='') ? $do : date('Y-m-d');
 		$viewData = array(
 				'list_person'	=> Prijem::get_person_for_list(),
-				'partners'		=> Prijem::get_partners(),
+			'list_typ_prijmu'=> Prijem::get_typ_prijmu_for_list(),
 				'prijmy'		=> Prijem::get_incomes(),
+				'zdroj_prijmu'		=> Prijem::get_zdroj_prijmu(),
 				'sources'		=> Prijem::get_sources(),
 		);
 		$vydajca = Input::get('vydajca');
@@ -128,13 +131,15 @@ class Incomes_Controller extends Base_Controller {
 	{	
 		
 		$data = array(
-			'id_zdroj_prijmu'	=> Input::get('id_zdroj_prijmu'),
-			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
+			'id_osoba'	        => Input::get('id_osoba'),
+			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
 			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
+			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
+			'id_zdroj_prijmu'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),
 		);
 		
-		$id = DB::table('F_PRIJEM')->insert_get_id($data);
+		  $id = DB::table('F_PRIJEM')->insert_get_id($data);
 		if($id)
 		{
 			return Redirect::to('incomes')
@@ -146,6 +151,7 @@ class Incomes_Controller extends Base_Controller {
 				->with('status_class', 'error');
 		}
 	}
+	
 
 
 
@@ -154,7 +160,7 @@ class Incomes_Controller extends Base_Controller {
 	 * @author Andreyco
 	 */
 	public function get_partners()
-	{
+{
 		$viewData = array(
 			'partners'	=> Prijem::get_partners(Auth::user()->id),
 		);
@@ -167,14 +173,14 @@ class Incomes_Controller extends Base_Controller {
 	 * Vyhladaj vsetky zdroje prijmov
 	 * @author Andreyco
 	 */
-	public  function get_sources()
-	{
-		$viewData = array(
-			'sources'	=> Prijem::get_sources(),
-		);
+	//public  function get_sources()
+	//{
+		//$viewData = array(
+		//	'sources'	=> Prijem::get_sources(),
+	//	);
 		// print_r($viewData['sources']);
-		return View::make('incomes.sources', $viewData);
-	}
+	//	return View::make('incomes.sources', $viewData);
+//	}
 
 
 
