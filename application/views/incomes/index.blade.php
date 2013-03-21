@@ -185,7 +185,7 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr style="font-weight: bold;">
-				<td>#</td>
+				<td><input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /></td>
 				<td>Zdroj prijmu</td>
 				<td>Vlozena suma</td>
 				<td>Dátum</td>
@@ -194,36 +194,33 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($incomes as $key => $income)
+			@foreach($incomes as $income)
 			<tr>
-				<td>{{$key+1}}</td>
+				<td><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{ md5($income->id). $secretword}}" /></td>
 
 				<td>
-					<span class="editable-popis" data-pk="{{$income->id}}" data-original-title="Zadajte popis">
-						{{ $income->t_popis }}
-					</span>
+					
+					{{ $income->t_popis }}
+				
 				</td>
 				<td>
-					<span class="editable-suma" data-pk="{{$income->id}}" data-original-title="Zadajte sumu">{{ $income->vl_suma_prijmu }}</span> €
+					{{ $income->vl_suma_prijmu }} €
 				</td>
-				<td>
-					<span class="editable-datum" data-pk="{{$income->id}}" data-original-title="Zadajte dátum">
-						{{ date('d.m.Y', strtotime($income->d_datum)) }}
-					</span>
+				<td>					
+					{{ date('d.m.Y', strtotime($income->d_datum)) }}
 				</td>
 
-				<td>
-					<span class="editable-poznamka" data-pk="{{$income->id}}" data-original-title="Zadajte poznámku">
-						{{ $income->t_poznamka }}
-					</span>
+				<td>					
+					{{ $income->t_poznamka }}
+					
 				</td>
-				<td>
-					<a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}"><i class="icon-remove icon-white"></i></a>
+				<td><a class="btn" href="form?id={{ $income->id }}">Upraviť</a>
+				    <a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a>
 				</td>
 			</tr>
 			@endforeach
 		</tbody>
-		
 	</table>
+	<a class="btn" href="#" onclick="multizmazanie('income[]')"><i class="icon-remove"></i>Vymazať zvolené</a>
 @endsection
 
