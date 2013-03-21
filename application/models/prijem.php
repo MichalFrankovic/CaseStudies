@@ -67,9 +67,6 @@ class Prijem extends Eloquent
 		return $person;
 	}
 
-
-
-    /**
      * @author: Andreyco
      */
 	public static function get_person_for_list()
@@ -89,7 +86,7 @@ public static function get_typ_prijmu()
 	{
 		$typ_prijmu = DB::table('D_TYP_PRIJMU')
 			->where_id_domacnost(Auth::user()->id)
-			->get(array('id', 't_nazov_typu', 'id_domacnost'));
+			->get(array('id', 't_nazov_typu'));
 
 		return $typ_prijmu;
 	}
@@ -102,15 +99,11 @@ public static function get_typ_prijmu_for_list()
 		endforeach;
 		return $typ_prijmu;
 	}
-	
-	
-	//zdroj prijmu 
-	//author Alisher Israilov
 	public static function get_zdroj_prijmu()
 	{
 		$zdroj_prijmu = DB::table('D_ZDROJ_PRIJMU')
 			->where_id_obchodny_partner(Auth::user()->id)
-			->get(array('id', 'id_obchodny_partner', 't_popis', 'vl_zakladna_suma', 'fl_pravidelny'));
+			->get(array('id',  't_popis', ));
 
 		return $zdroj_prijmu;
 	}
@@ -166,7 +159,6 @@ public static function get_sources()
 			->get(array('id'));
 		foreach($familyMembers as &$fM)
 		{
-
 			$fM = $fM->id;
 		}
 
