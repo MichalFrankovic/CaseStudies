@@ -102,7 +102,7 @@ class Incomes_Controller extends Base_Controller {
 				'list_person'	=> Prijem::get_person_for_list(),
 			'list_typ_prijmu'=> Prijem::get_typ_prijmu_for_list(),
 				'prijmy'		=> Prijem::get_incomes(),
-				'zdroj_prijmu'		=> Prijem::get_zdroj_prijmu(),
+				'list_zdroj_prijmu'		=> Prijem::get_zdroj_prijmu_for_list(),
 				'sources'		=> Prijem::get_sources(),
 		);
 		$vydajca = Input::get('vydajca');
@@ -127,13 +127,13 @@ class Incomes_Controller extends Base_Controller {
 	 * Ulozenie zmien v prijme
 	 * @author Andreyco
 	 */
-	public function post_form()
+public function post_form()
 	{	
 		
 		$data = array(
 			'id_osoba'	        => Input::get('id_osoba'),
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
-			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
+			'd_datum'	 > date('Y-m-d', strtotime(Input::get('d_datum'))),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
 			'id_zdroj_prijmu'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),
@@ -152,6 +152,10 @@ class Incomes_Controller extends Base_Controller {
 		}
 	}
 	
+
+
+
+
 
 
 
