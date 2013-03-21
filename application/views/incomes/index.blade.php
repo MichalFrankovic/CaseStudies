@@ -177,7 +177,7 @@
     <select name="zdroj"  class="span3">
         <option value="all" selected="selected">VSETCI</option>
         @foreach ($sources as $source)
-        <option value="{{ $source->id }}" > {{ $source->t_popis }}</option>
+        <option value="{{ $source->id }}" > {{ $source->t_poznamka }}</option>
         @endforeach
     </select>
      </div>
@@ -216,7 +216,7 @@
 					{{ $income->vl_suma_prijmu }} €
 				</td>
 				<td>				
-					{{ $income->t_popis }}
+					{{ $income->t_nazov }}
 				</td>
 				
 				<td>					

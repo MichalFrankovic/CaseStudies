@@ -24,8 +24,8 @@ class Prijem extends Eloquent
 			$fM = $fM->id;
 		}
 
-		$query = DB::table(static::$table.' as P')
-    		->join('D_ZDROJ_PRIJMU as Z', 'P.id_zdroj_prijmu', '=', 'Z.id')
+		$query = DB::table('F_PRIJEM as P')
+    		->join('D_OBCHODNY_PARTNER as Z', 'P.id_obchodny_partner', '=', 'Z.id')
     		->join('D_TYP_PRIJMU as T', 'P.id_typ_prijmu', '=', 'T.id')
     		->where_in('P.id_osoba', $familyMembers)
     		->order_by('P.d_datum', 'DESC');
@@ -46,8 +46,8 @@ class Prijem extends Eloquent
     			'P.vl_suma_prijmu',
     			'P.d_datum',
     			'P.t_poznamka',
-    			'Z.t_popis',
-    			'T.t_nazov_typu'
+    			'T.t_nazov_typu',
+    			'Z.t_nazov'
 			));
     }
 
@@ -91,7 +91,9 @@ public static function get_typ_prijmu()
 
 		return $typ_prijmu;
 	}
-public static function get_typ_prijmu_for_list()
+
+
+	public static function get_typ_prijmu_for_list()
 	{
 		$typ_prijmu		= array();
 		$typ_prijmu['']	= 'zvoľte typ prijmu';
@@ -100,25 +102,29 @@ public static function get_typ_prijmu_for_list()
 		endforeach;
 		return $typ_prijmu;
 	}
+
+
 	public static function get_zdroj_prijmu()
 	{
-		$zdroj_prijmu = DB::table('D_ZDROJ_PRIJMU')
-			->where_id_obchodny_partner(Auth::user()->id)
-			->get(array('id',  't_popis', ));
+		$zdroj_prijmu = DB::table('D_OBCHODNY_PARTNER')
+			->where_id_(Auth::user()->id)
+			->get(array('id',  't_nazov', ));
 
 		return $zdroj_prijmu;
 	}
-public static function get_zdroj_prijmu_for_list()
+
+
+	public static function get_zdroj_prijmu_for_list()
 	{
 		$zdroj_prijmu		= array();
 		$zdroj_prijmu['']	= 'zvoľte zdroj prijmu';
 		foreach(self::get_zdroj_prijmu()  as $z):
-			$zdroj_prijmu[$z->id]	=  '('.$z->t_popis.')';
+			$zdroj_prijmu[$z->id]	=  '('.$z->t_nazov.')';
 		endforeach;
 		return $zdroj_prijmu;
 	}
 	
-	public static function get_source_list($person_id)
+	/*public static function get_source_list($person_id)
 	{
 		if(!$person_id){
 			return array();
@@ -134,7 +140,7 @@ public static function get_zdroj_prijmu_for_list()
 		endforeach;
 
 		return $source_html;
-	}
+	}*/
 	
 	
 	
@@ -145,7 +151,6 @@ public static function get_zdroj_prijmu_for_list()
 			->get();
 	}
 	/**
-	
 	 * Vyhladaj vsetky zdroje prijmov pre konkretnu osobu
 	 * @author Andreyco
 	 */
@@ -172,18 +177,16 @@ public static function get_sources()
 			$fM = $fM->id;
 		}
 
-		return DB::table('D_ZDROJ_PRIJMU as Z')
+		return DB::table('D_OBCHODNY_PARTNER as Z')
 			->left_join('D_OSOBA as O', 'O.id', '=', 'Z.id')
-			->left_join('D_OBCHODNY_PARTNER as P', 'Z.id_obchodny_partner', '=', 'P.id')
+			->left_join('F_PRIJEM as P', 'Z.id', '=', 'P.id')
 			->where_in('Z.id', $familyMembers)
 			->get(array(
 				'Z.id',
-				'Z.t_popis',
-				'Z.vl_zakladna_suma',
-				'Z.fl_pravidelny',
+				'P.vl_suma_prijmu',
 				'O.t_meno_osoby',
 				'O.t_priezvisko_osoby',
-				'P.t_nazov',
+				'P.t_poznamka',
 			));
 	}
 
