@@ -3,7 +3,7 @@
 @section('styles')
 	<style type="text/css">
 	.btn.btn-primary{
-		margin-left: 180px;
+		margin-left: 180px; 
 	}
 	</style>
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
@@ -12,6 +12,7 @@
 		.information{
 			padding: 20px;
 			margin-bottom: 20px;
+			
 		}
 		.information.success{
 			background: rgba(0, 255, 0, .3);
@@ -96,7 +97,7 @@
 		$tabs = array(
 			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
-			
+			 
 		);
 		foreach($tabs as $key => $title){
 			$class = '';
@@ -124,6 +125,12 @@
 		      {{ Form::select('id_osoba', $list_person, null, array('class' => ' input-xlarge')) }}
 		    </div>
 	  	</div>
+		<div class="control-group">
+			{{ Form::label(null, 'Typ prijmu', array('class'=>'control-label')) }}
+		    <div class="controls">
+		      {{ Form::select('id_typ_prijmu', $list_typ_prijmu, null, array('class' => ' input-xlarge')) }}
+		    </div>
+	  	</div>
 
 	  	<div class="control-group">
 	  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
@@ -142,15 +149,18 @@
 				  	<span class="add-on" value='x'>€</span>
 				  	{{ Form::text('vl_suma_prijmu', '', array('class' => 'input-small', 'value' => '')) }}
 				</div>
-				
-			</div>
+                </div>
+                </div>
+				<div class="control-group">
+			{{ Form::label(null, 'Zdroj prijmu', array('class'=>'control-label')) }}
+		    <div class="controls">
+		      {{ Form::select('id_zdroj_prijmu', $list_zdroj_prijmu, null, array('class' => ' input-xlarge')) }}
+		    </div>
+			
 		</div>
 		
 		<div class="control-group">
-			{{ Form::label(null, 'Zdroj príjmu', array('class'=>'control-label')) }}
-			<div class="controls">
-				{{ Form::select('id_zdroj_prijmu', array('' => 'zvoľte zdroj príjmu'), null, array('class'=>'input-xlarge')) }}
-			</div>
+			
 		</div>
 		
 		<div class="control-group">
@@ -159,11 +169,10 @@
 				{{ Form::textarea('t_poznamka', null, array('rows'=>3, 'class'=>'input-xxlarge')) }}
 			</div>
 		</div>
-		
-		<button type="submit" class="btn btn-primary">
-			<i class="icon-ok icon-white"></i>
-			Ulož príjem
-		</button>
+      
+        
+ <button type="reset" class="btn btn-primary" style="margin-left:110px" ><i class="icon-remove icon-white"></i>Zruš</button>
+ <button type="submit" class="btn btn-primary"style="margin:5px"><i class="icon-ok icon-white"></i>Ulož príjem</button></span>
 
 	{{ Form::close() }}
 
