@@ -584,8 +584,17 @@ public function action_pridajtypprijmu()
         $secretword = md5(Auth::user()->t_heslo);
         $typ_id = Input::get('typ');
 
-        DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie hlavicky
-        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol vymazaný!');
+        $id = Input::get('id');
+        try {
+            DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie hlavicky
+            return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol vymazaný!');
+            }
+        catch (Exception $e){
+                $e->getMessage();
+                
+            return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Daný typ prijmu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+            }
+
     }
 
     public function action_multitypzmazat()
