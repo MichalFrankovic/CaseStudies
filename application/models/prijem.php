@@ -123,11 +123,6 @@ public static function get_zdroj_prijmu_for_list()
 		return $zdroj_prijmu;
 	}
 	
-
-	/**
-	 * Vyhladaj vsetky zdroje prijmov pre konkretnu osobu
-	 * @author Andreyco
-	 */
 	public static function get_source_list($person_id)
 	{
 		if(!$person_id){
@@ -145,9 +140,12 @@ public static function get_zdroj_prijmu_for_list()
 
 		return $source_html;
 	}
-
-
-
+	/**
+	
+	 * Vyhladaj vsetky zdroje prijmov pre konkretnu osobu
+	 * @author Andreyco
+	 */
+	
 	/**
 	 * Vyhladaj partnerov pre pouzivatela
 	 * @author Andreyco
@@ -160,13 +158,7 @@ public static function get_zdroj_prijmu_for_list()
 	}
 
 
-
-	/**
-	 * Vyhladaj vsetky zdroje prijmov pre prihlaseneho pouzivatela
-	 * a vsetkych clenov domacnosti
-	 * @author Andreyco
-	 */
-	public static function get_sources()
+public static function get_sources()
 	{
 		$familyMembers = DB::table('D_OSOBA')
 			->where('id_domacnost', '=', Auth::user()->id)
@@ -191,7 +183,12 @@ public static function get_zdroj_prijmu_for_list()
 			));
 	}
 
-
+	/**
+	 * Vyhladaj vsetky zdroje prijmov pre prihlaseneho pouzivatela
+	 * a vsetkych clenov domacnosti
+	 * @author Andreyco
+	 */
+	
 
 	/**
 	 * Ajax ukladanie dat z tabulky
