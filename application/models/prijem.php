@@ -81,7 +81,48 @@ class Prijem extends Eloquent
 		return $person;
 	}
 
+//typ prijmu
+	//author Alisher Israilov
 
+public static function get_typ_prijmu()
+	{
+		$typ_prijmu = DB::table('D_TYP_PRIJMU')
+			->where_id_domacnost(Auth::user()->id)
+			->get(array('id', 't_nazov_typu', 'id_domacnost'));
+
+		return $typ_prijmu;
+	}
+public static function get_typ_prijmu_for_list()
+	{
+		$typ_prijmu		= array();
+		$typ_prijmu['']	= 'zvoľte typ prijmu';
+		foreach(self::get_typ_prijmu()  as $t):
+			$typ_prijmu[$t->id]	= ' ('.$t->t_nazov_typu.')';
+		endforeach;
+		return $typ_prijmu;
+	}
+	
+	
+	//zdroj prijmu 
+	//author Alisher Israilov
+	public static function get_zdroj_prijmu()
+	{
+		$zdroj_prijmu = DB::table('D_ZDROJ_PRIJMU')
+			->where_id_obchodny_partner(Auth::user()->id)
+			->get(array('id', 'id_obchodny_partner', 't_popis', 'vl_zakladna_suma', 'fl_pravidelny'));
+
+		return $zdroj_prijmu;
+	}
+public static function get_zdroj_prijmu_for_list()
+	{
+		$zdroj_prijmu		= array();
+		$zdroj_prijmu['']	= 'zvoľte zdroj prijmu';
+		foreach(self::get_zdroj_prijmu()  as $z):
+			$zdroj_prijmu[$z->id]	=  '('.$z->t_popis.')';
+		endforeach;
+		return $zdroj_prijmu;
+	}
+	
 
 	/**
 	 * Vyhladaj vsetky zdroje prijmov pre konkretnu osobu
