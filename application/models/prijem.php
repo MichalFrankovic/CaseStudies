@@ -11,9 +11,9 @@ class Prijem extends Eloquent
     }
     /**
      * Vyhladaj vsetky prijmy pre domacnost
-     * @author Andreyco
+     * @author Andreyco 
      */
-    public static function get_incomes()
+    public static function get_incomes() 
     {
     	
     	$familyMembers = DB::table('D_OSOBA')
@@ -48,6 +48,7 @@ class Prijem extends Eloquent
     			'Z.t_popis'
 			));
     }
+
 
 
 
@@ -165,6 +166,7 @@ public static function get_sources()
 			->get(array('id'));
 		foreach($familyMembers as &$fM)
 		{
+
 			$fM = $fM->id;
 		}
 

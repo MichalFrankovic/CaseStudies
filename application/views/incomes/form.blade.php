@@ -129,8 +129,8 @@
 			{{ Form::label(null, 'Typ prijmu', array('class'=>'control-label')) }}
 		    <div class="controls">
 		      {{ Form::select('id_typ_prijmu', $list_typ_prijmu, null, array('class' => ' input-xlarge')) }}
-		    </div>
-	  	</div>
+		    </div> 
+	  	</div> 
 
 	  	<div class="control-group">
 	  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
