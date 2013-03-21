@@ -566,10 +566,17 @@ public function action_pridajtypprijmu()
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov_typu = Input::get('nazov_typu');
-        
+        $errors ='';
+        $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->first();
+        if (!empty($duplicate)) {
+            $errors= 'Tento názov typu už je pridaný. ';
+        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+        }
+         else {
        DB::query("INSERT INTO `web`.`D_TYP_PRIJMU` (`t_nazov_typu`, `id_domacnost`) VALUES('$t_nazov_typu', '$id_domacnost');");
 
        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol pridaný!');
+         }
     }
 
     public function action_zmazattypprijmu()
