@@ -12,6 +12,8 @@ class Vydavok extends Eloquent
 
     public function partner() {
 
-        return $this->belongs_to('Partner', 'id'); //Nastala zmena lebo id_obchodny_partner bol zmazany
+        return $this->belongs_to('Partner', 'id_obchodny_partner'); 
+        // NENASTALA zmena aj napriek tomu, že z TAB D_OBCHODNY_PARTNER bol zmenený identifikátor
+        // Vo VIEW_F_VYDAVOK má partner stále id_obchodny_partner
     }
 }

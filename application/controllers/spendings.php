@@ -34,14 +34,14 @@ class Spendings_Controller extends Base_Controller {
 
 	public function action_index()
 	{
-        return Redirect::to('spendings/list');
+        return Redirect::to('spendings/zoznam');
 	}
 
-    public function action_list()
+    public function action_zoznam()
     {
 
-        $view = View::make('spendings.main')
-            ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
+        $view = View::make('spendings.zoznam')
+            ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
         $view->do = '';
         $view->od = '';
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
@@ -49,7 +49,7 @@ class Spendings_Controller extends Base_Controller {
 
         if (empty($view->osoby)) {
             $view = View::make('spendings.message')
-                ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
+                ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
             $view->message = "Nebola vytvorená žiadna osoba";
             return $view;
         }
@@ -75,8 +75,8 @@ class Spendings_Controller extends Base_Controller {
     public function action_filter()
     {
         //Auth::user()->id = 2;
-        $view = View::make('spendings.main')
-            ->with('active', 'vydavky')->with('subactive', 'spendings/list')->with('secretword', md5(Auth::user()->t_heslo));
+        $view = View::make('spendings.zoznam')
+            ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         foreach ($view->osoby as $osoba)
         {
@@ -125,15 +125,15 @@ class Spendings_Controller extends Base_Controller {
         //Auth::user()->id = 1;
         $id = Input::get('id');
         //if (!isset($id)) $id = Session::get('id');
-        $subactive = 'spendings/simplespending';
+        $subactive = 'spendings/jednoduchyvydavok';
 
         if (!isset($id))
         {
-            $view = View::make('spendings.newspending')
+            $view = View::make('spendings.vydavok-novy')
                 ->with('active', 'vydavky')->with('subactive', $subactive)->with('secretword', md5(Auth::user()->t_heslo));
         }else
         {
-            $view = View::make('spendings.simplespending')
+            $view = View::make('spendings.vydavok-editacia')
                 ->with('active', 'vydavky')->with('subactive', $subactive)->with('secretword', md5(Auth::user()->t_heslo));
             $view->vydavky = Vydavok::where('id', '=', $id);
             $view->polozky_vydavku = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->where('id_vydavok','=', $id)->get();
@@ -290,7 +290,7 @@ class Spendings_Controller extends Base_Controller {
         $vydavok_id = Input::get('vydavok');
         DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
         DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
-        return Redirect::to('spendings/list')->with('message', 'Výdavok bol vymazaný!');
+        return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol vymazaný!');
     }
     
     public function action_multideletespending()
@@ -305,7 +305,7 @@ class Spendings_Controller extends Base_Controller {
     			DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
     		}
     	}
-    	return Redirect::to('spendings/list')->with('message', 'Výdavky boli vymazané!');
+    	return Redirect::to('spendings/zoznam')->with('message', 'Výdavky boli vymazané!');
     }
     
     public function action_sablona() {
