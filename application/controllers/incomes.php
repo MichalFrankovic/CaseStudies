@@ -136,7 +136,7 @@ class Incomes_Controller extends Base_Controller {
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
 			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
-			'id_zdroj_prijmu'	=> Input::get('id_zdroj_prijmu'),
+			'id_obchodny_partner'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),
 		);
 		

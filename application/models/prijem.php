@@ -107,8 +107,8 @@ public static function get_typ_prijmu()
 	public static function get_zdroj_prijmu()
 	{
 		$zdroj_prijmu = DB::table('D_OBCHODNY_PARTNER')
-			->where_id_(Auth::user()->id)
-			->get(array('id',  't_nazov', ));
+			->where_fl_typ('Z')
+			->get(array('id',  't_nazov'));
 
 		return $zdroj_prijmu;
 	}

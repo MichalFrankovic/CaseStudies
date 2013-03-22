@@ -152,7 +152,7 @@
                 </div>
                 </div>
 				<div class="control-group">
-			{{ Form::label(null, 'Zdroj prijmu', array('class'=>'control-label')) }}
+			{{ Form::label(null, 'Zdroj príjmu - partner', array('class'=>'control-label')) }}
 		    <div class="controls">
 		      {{ Form::select('id_zdroj_prijmu', $list_zdroj_prijmu, null, array('class' => ' input-xlarge')) }}
 		    </div>
