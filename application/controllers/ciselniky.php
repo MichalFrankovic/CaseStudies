@@ -319,7 +319,7 @@ public function action_multizmazaniepartnerov()
 
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 
-        $view->kategorie2 = DB::query("SELECT
+       /* $view->kategorie2 = DB::query("SELECT
                                       a.id,
                                       a.nazov AS t_nazov,
                                       concat(
@@ -339,7 +339,10 @@ public function action_multizmazaniepartnerov()
                                       ORDER BY nazov
                                       ) AS a
                                      
-                                   ");
+                                   "); */
+        $view->kategorie2 = Kategoria::where('id_domacnost','=',Auth::user()->id)
+                                  ->order_by('t_nazov','ASC')
+                                  ->where('fl_typ','=','K')->get();
 
         $view->message = Session::get('message');
         return $view;

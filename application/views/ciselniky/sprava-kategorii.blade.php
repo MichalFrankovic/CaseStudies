@@ -47,7 +47,7 @@ if ($editacia == 'ano') {
       <label class="control-label">  Nadkategória:          </label>
 
         <select name="Nadkategoria-id" class="span4">
-           <option value="Nezaradený" selected="selected">Vyberte</option>
+           <option value="" selected="selected">  </option>
             @foreach ($kategorie as $kat)
             <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
                                                 selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
@@ -113,7 +113,7 @@ if ($editacia == "ano") {
         <tr>
             <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /></td>
             <td>    {{ $kat->t_nazov }}              </td> 
-            <td>    {{ $kat->nazov }}              </td>
+            <td>    {{ $kat->id_kategoria_parent }}              </td>
             <td> <a class="btn" href="sprava_kategorii?id={{ $kat->id }}"> Upraviť </a>
                  <a class="btn" href="zmazatkategoriu?kat={{ md5($kat->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
                     <i class="icon-remove"> </i>Vymazať</a>      </td>
