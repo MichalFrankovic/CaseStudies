@@ -392,10 +392,12 @@ public function action_multizmazaniepartnerov()
       
         $id = Input::get('id');
         $t_nazov = Input::get('nazov');
+        $nadkategoria = Input::get('Nadkategoria-id');
        
           
         DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
-                    SET t_nazov = '$t_nazov'
+                    SET t_nazov = '$t_nazov',
+                        id_kategoria_parent = '$nadkategoria'
                          
                     WHERE id = '$id'");
             

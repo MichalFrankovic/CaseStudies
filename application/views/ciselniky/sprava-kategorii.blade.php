@@ -113,7 +113,11 @@ if ($editacia == "ano") {
         <tr>
             <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /></td>
             <td>    {{ $kat->t_nazov }}              </td> 
-            <td>    {{ $kat->id_kategoria_parent }}              </td>
+            <td>    @foreach ($kategorie as $k)
+                        @if($kat->id_kategoria_parent == $k->id)
+                           {{$k->nazov}}   
+                        @endif 
+                    @endforeach                      </td>
             <td> <a class="btn" href="sprava_kategorii?id={{ $kat->id }}"> Upraviť </a>
                  <a class="btn" href="zmazatkategoriu?kat={{ md5($kat->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
                     <i class="icon-remove"> </i>Vymazať</a>      </td>
