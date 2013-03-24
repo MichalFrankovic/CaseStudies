@@ -122,7 +122,7 @@ class Spendings_Controller extends Base_Controller {
     
     public function action_simplespending()
     {
-        //Auth::user()->id = 1;
+      
         $id = Input::get('id');
         //if (!isset($id)) $id = Session::get('id');
         $subactive = 'spendings/jednoduchyvydavok';
@@ -152,6 +152,7 @@ class Spendings_Controller extends Base_Controller {
 
 
         }
+
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         foreach ($view->osoby as $osoba)
         {
@@ -192,7 +193,7 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
         $view->dzejson = Response::json($view->polozky);
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
+       $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
         $view->message = Session::get('message');
         return $view;
 
@@ -202,11 +203,12 @@ class Spendings_Controller extends Base_Controller {
     {
         $data = Input::All() ;
         $data_for_sql['id_osoba'] = $data['osoba'];
-        $data_for_sql['id_obchodny_partner'] =  $data['partner'];
+        $data_for_sql['id_obchodny_partner'] =  $data['partner'];            
         $data_for_sql['d_datum'] =  date('Y-m-d',strtotime($data['datum']));
         $data_for_sql['t_poznamka'] =  $data['poznamka'];
         $data_for_sql['vl_zlava'] =  intval($data['celkova-zlava']);
         $data_for_sql['fl_typ_zlavy'] =  $data['celkovy-typ-zlavy'];
+
         if (isset($data['update']))
         {
             /*
@@ -231,12 +233,13 @@ class Spendings_Controller extends Base_Controller {
            //vydavok sa nerovna N bude sa updatovat
             if ($data['vydavok-id'][$i] != 'N')
             {
-                //echo "UPDATE";
+                // Aktualizovanie položiek
                 DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')
                  ->where('id', '=', $data['vydavok-id'][$i])
                  ->update($polozky_for_sql);
             }
-           //vydavok sa rovna N bude nova polozka
+
+           // vydavok sa rovna N bude nova polozka
             if ($data['vydavok-id'][$i] == 'N')
             {
                 //echo "INSERT";
@@ -245,12 +248,13 @@ class Spendings_Controller extends Base_Controller {
             }
               unset($polozky_for_sql);
             }
-            return Redirect::to_action('spendings@simplespending?id='.$data['hlavicka-id'])->with("message", 'Výdavok bol aktualizovaný');
+            //return Redirect::to_action('spendings@simplespending?id='.$data['hlavicka-id'])->with("message", 'Výdavok bol aktualizovaný');
+            return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol úspešne aktualizovaný!');
 
         /*
          * INSERT NOVEHO VYDAVKU
          */
-        }else{
+        } else{
                 $data_for_sql['fl_sablona'] =  'N';
                 $data_for_sql['fl_pravidelny'] =  'N';
                  $idvydavku = DB::table('F_VYDAVOK')
@@ -265,17 +269,18 @@ class Spendings_Controller extends Base_Controller {
                         $polozky_for_sql['vl_zlava'] = floatval($data['zlava'][$i]);
                         $polozky_for_sql['fl_typ_zlavy'] = $data['typ-zlavy'][$i];
                         //echo "INSERT";
-                        $polozky_for_sql['id_vydavok'] = $idvydavku;
+                        $polozky_for_sql['id_vydavok'] = $idvydavku;        
                         DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
                         unset($polozky_for_sql);
                     }
 
-                return Redirect::to('spendings')->with('message', 'Výdavok bol úspešne pridaný!');
+                return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol úspešne pridaný!');
 
                 }
 
-
      }
+
+
     public function action_deletepolozka()
     {
         $secretword = md5(Auth::user()->t_heslo);
@@ -284,6 +289,8 @@ class Spendings_Controller extends Base_Controller {
 
         return Redirect::to_action('spendings@simplespending?id='.Input::get('vydavokid'))->with("message", 'Položka bola vymazaná');
     }
+
+
     public function action_deletespending()
     {
         $secretword = md5(Auth::user()->t_heslo);
@@ -293,6 +300,7 @@ class Spendings_Controller extends Base_Controller {
         return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol vymazaný!');
     }
     
+
     public function action_multideletespending()
     {
     	$secretword = md5(Auth::user()->t_heslo);
@@ -308,6 +316,7 @@ class Spendings_Controller extends Base_Controller {
     	return Redirect::to('spendings/zoznam')->with('message', 'Výdavky boli vymazané!');
     }
     
+
     public function action_sablona() {
     	
     	$id = Input::get('id');

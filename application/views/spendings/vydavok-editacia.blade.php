@@ -19,8 +19,8 @@
     </div>
 
     <div class="input-prepend" style="float:left;width:350px">
-            <span class="add-on"> Dodávateľ:  </span>
-          <select name="dodavatel" class="span3">
+            <span class="add-on"> Partner:    </span>
+          <select name="partner" class="span3">
             @foreach ($partneri as $partner)
             <option value="{{ $partner->id }}" @if ($vydavky[0]->id_obchodny_partner ==  $partner->id) selected="selected" @endif> {{ $partner->t_nazov }}</option>
             @endforeach
@@ -28,8 +28,8 @@
     </div>
 
     <div class="input-prepend">
-            <span class="add-on"> Zaplatil:   </span>
-        <select name="osoba" class="span3">
+            <span class="add-on"> Zaplatila osoba:   </span>
+        <select name="osoba" class="span2">
             @foreach ($osoby as $osoba)
             <option value="{{ $osoba->id }}" @if ($vydavky[0]->id_osoba ==  $osoba->id) selected="selected" @endif> {{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }}</option>
             @endforeach
@@ -38,7 +38,7 @@
 
     <div class="input-prepend">
             <span class="add-on"> Poznámka:   </span>
-            <input name="poznamka" class="span9" type="text" value="{{ $vydavky[0]->t_poznamka }}">
+            <input name="poznamka" class="span10" type="text" value="{{ $vydavky[0]->t_poznamka }}">
     </div>
 
   <HR>
@@ -95,13 +95,13 @@
 
     <HR>
 
-    <div>
-         <p>Celková zľava</p>
-    </div>
+   <h4> Celková zľava   </h4>
+
     <div class="input-prepend" style="float:left; width:185px;" >
          <span class="add-on">  Hodnota zľavy:        </span>
         <input name="celkova-zlava" class="span1" type="text" value="{{ $vydavky[0]->vl_zlava }}" />
     </div>
+
     <div class="input-prepend" >
             <span class="add-on"> Typ zľavy:          </span>
         <select name="celkovy-typ-zlavy" class="span2">
@@ -115,16 +115,21 @@
          <span class="add-on">  Celková suma:         </span>
          <input class="span3" type="text"  disabled="disabled" value="{{ number_format(round($vydavky[0]->suma_vydavku_po_celk_zlave,2),2) }}">
     </div>
+
     <div class="input-prepend">
          <span class="add-on">  Celková zľava:        </span>
          <input class="span3" type="text" disabled="disabled" value="{{ number_format(round($vydavky[0]->celkova_zlava,2),2) }}">
     </div>
-    <hr>
-    <div>
-         <input type="submit" class="btn" value="Aktualizovať produkt" />
-    </div>
-
+    
 {{ Form::close() }}
+
+  <HR>
+
+    <button type="submit" class="btn btn-danger">
+          <i class=" icon-edit icon-white"></i>
+              Aktualizovať produkt
+    </button>
+
 
 </div>
 

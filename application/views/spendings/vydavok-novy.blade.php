@@ -13,13 +13,13 @@
     <h4>Parametre:</h4>
 
     <div class="input-prepend" style="float:left;width:295px">
-        <span class="add-on">   Dátum:      </span>
+        <span class="add-on">   Dátum:            </span>
         <input name="datum" class="span3 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y') }}">
     </div>
 
     <div class="input-prepend" style="float:left;width:350px">
-        <span class="add-on">   Dodávateľ:  </span>
-        <select name="dodavatel" class="span3">
+        <span class="add-on">   Partner:          </span>
+        <select name="partner" class="span3">
             @foreach ($partneri as $partner)
             <option value="{{ $partner->id }}"> {{ $partner->t_nazov }} </option>
             @endforeach
@@ -27,8 +27,8 @@
     </div>
 
     <div class="input-prepend">
-        <span class="add-on">   Zaplatil:   </span>
-        <select name="osoba" class="span3">
+        <span class="add-on">   Zaplatila osoba:   </span>
+        <select name="osoba" class="span2">
             @foreach ($osoby as $osoba)
             <option value="{{ $osoba->id }}" > {{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }}</option>
             @endforeach
@@ -92,9 +92,40 @@
    
      <HR>
 
+    <h4> Celková zľava   </h4>
+        <div class="input-prepend" style="float:left; width:185px;">
+            <span class="add-on">Hodnota zľavy: </span>
+            <input name="celkova-zlava" class="span1" type="text" value="0" />
+        </div>
 
+        <div class="input-prepend">
+            <span class="add-on">Typ zľavy: </span>
+            <select name="celkovy-typ-zlavy" class="span2">
+                <option value="0" >Bez zľavy</option>
+                <option value="P" >Zľava v %</option>
+                <option value="A" >Zľava v EUR</option>
+            </select>
+        </div>
+       
+        <div class="input-prepend">
+            <span class="add-on">Celková suma: </span>
+            <input class="span3" type="text"  disabled="disabled">
+        </div>
+
+        <div class="input-prepend">
+            <span class="add-on">Celková zľava: </span>
+            <input class="span3" type="text" disabled="disabled">
+        </div>
+        
 {{ Form::close() }}
     
+    <HR>
+
+     <button type="submit" class="btn btn-danger">
+        <i class=" icon-edit icon-white"></i>
+            Ulož výdavok
+    </button>
+
 </div>
 
 
