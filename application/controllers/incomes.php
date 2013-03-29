@@ -160,13 +160,6 @@ class Incomes_Controller extends Base_Controller {
 	 * Zobraz zoznam partnerov
 	 * @author Andreyco
 	 */
-	public function get_partners()
-{
-		$viewData = array(
-			'partners'	=> Prijem::get_partners(Auth::user()->id),
-		);
-		return View::make('incomes.partners', $viewData);
-	}
 
 
 
@@ -203,63 +196,17 @@ class Incomes_Controller extends Base_Controller {
 		}
 	}
 
-
+}
 
 	/**
 	 * AJAX actions
 	 * @author Andreyco
 	 */
-	public function get_ajaxload($param, $id = false)
-	{
-		switch($param)
-		{
-			case 'partners':
-				$partners = array();
-				foreach(Prijem::get_partners() as $partner)
-				{
-					array_push($partners, array($partner->id => $partner->t_nazov) );
-				}
-				return Response::json($partners);
-				break;
-
-			case 'familymembers':
-				$members = array();
-				foreach(Prijem::get_person() as $member)
-				{
-					$members[$member->id] = $member->t_meno_osoby.' '.$member->t_priezvisko_osoby;
-				}
-				return Response::json($members);
-				break;
-
-			case 'incomesources':
-				return Response::json(Prijem::get_source_list( $id ));
-				break;
-		}
-	}
-
+	
 
 
 	/**
 	 * AJAX save
 	 * @author Andreyco
 	 */
-	public function post_ajaxsave($table)
-	{
-		$data = array(
-			Input::get('name')	=> Input::get('value'),
-			'id'	=> Input::get('pk'), 
-		);
-		// Transform date into valid format
-		if(Input::get('name') == 'd_datum')
-		{
-			$data['d_datum'] = date('Y-m-d', strtotime($data['d_datum']));
-		}
-		return Response::json(Prijem::ajaxsave($table, $data));
-	}
-
-	public function post_inline_edit()
-	{
-		return Response::json(Prijem::inline_save());
-	}
-
-}
+	
