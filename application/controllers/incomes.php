@@ -198,17 +198,35 @@ class Incomes_Controller extends Base_Controller {
 		}
 	}
 
-}
-
 	/**
-	 * AJAX actions
-	 * @author Andreyco
+	 * multizmazanie prijmu
+	 * @author AnkhaaS
 	 */
 	
+	public function get_multideleteincomes()
+    {
+      $deleted = 0;
+      $income_ids = Input::get('income');
 
+      if (is_array($income_ids))
+      {
+        foreach ($income_ids as $income_id)
+        {
+           DB::table('F_PRIJEM')->where('id', '=', $income_id)->delete();//mazanie poloziek
+           $deleted = $deleted + 1;
+        }
+      }
+      if($deleted > 0){
+      return Redirect::to('incomes/index')
+      		->with('status', 'Prijmy boli vymazané!')
+      		->with('status_class', 'success');
+      }
+      else{
+      return Redirect::to('incomes/index')
+			->with('status', 'Pri vykonávaní operácie došlo k chybe')
+			->with('status_class', 'error');
+      }
+    }
+}
 
-	/**
-	 * AJAX save
-	 * @author Andreyco
-	 */
 	

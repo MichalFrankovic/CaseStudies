@@ -204,6 +204,8 @@
     </div>
  </div>
 	<h2 class="">Zoznam prijmov</h2>
+	<form id="form1" name="form1" method="get" action="multideleteincomes">
+
 	<table class="table table-bordered">
 		<thead>
 			<tr style="font-weight: bold;">
@@ -211,10 +213,10 @@
 				<td>Osoba</td>
 				<td>Typ</td>
 				<td>Dátum</td>
-				<td>Vlozena suma</td>
-				<td>Zdroj prijmu</td>
+				<td>Suma</td>
+				<td>Zdroj</td>
 				<td>Poznámka</td>
-				<td></td>
+				<td>Vyber akcie</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -245,5 +247,6 @@
 		</tbody>
 	</table>
 	<a class="btn" href="#" onclick="multizmazanie('income[]')"><i class="icon-remove"></i>Vymazať zvolené</a>
+	</form>
 @endsection
 
