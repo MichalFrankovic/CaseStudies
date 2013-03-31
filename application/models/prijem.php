@@ -13,7 +13,7 @@ class Prijem extends Eloquent
      * Vyhladaj vsetky prijmy pre domacnost
      * @author Andreyco 
      */
-    public static function get_incomes() 
+    public static function get_incomes()
     {
     	
     	$familyMembers = DB::table('D_OSOBA')
@@ -24,12 +24,19 @@ class Prijem extends Eloquent
 			$fM = $fM->id;
 		}
 
-		$query = DB::table('F_PRIJEM as P')
+		$query = DB::table(static::$table.' as P')
     		->join('D_OBCHODNY_PARTNER as Z', 'P.id_obchodny_partner', '=', 'Z.id')
     		->join('D_TYP_PRIJMU as T', 'P.id_typ_prijmu', '=', 'T.id')
+    		->join('D_OSOBA as O', 'P.id_osoba', '=', 'O.id')
     		->where_in('P.id_osoba', $familyMembers)
     		->order_by('P.d_datum', 'DESC');
 
+		if(Input::get('osoba') && Input::get('osoba') !== 'all'){
+			$query->where('O.id', '=', Input::get('osoba'));
+		}
+		if(Input::get('typ_prijmu') && Input::get('typ_prijmu') !== 'all'){
+			$query->where('T.id', '=', Input::get('typ_prijmu'));
+		}
 		if(Input::get('zdroj') && Input::get('zdroj') !== 'all'){
 			$query->where('Z.id', '=', Input::get('zdroj'));
 		}
@@ -46,8 +53,10 @@ class Prijem extends Eloquent
     			'P.vl_suma_prijmu',
     			'P.d_datum',
     			'P.t_poznamka',
-    			'T.t_nazov_typu',
-    			'Z.t_nazov'
+    			'O.t_meno_osoby',
+    			'O.t_priezvisko_osoby',
+    			'Z.t_nazov',
+    			'T.t_nazov_typu'
 			));
     }
 
@@ -142,8 +151,10 @@ public static function get_typ_prijmu()
 		return $source_html;
 	}*/
 	
-	
-	
+	/**
+	 * Vyhladaj typy prijmov
+	 * @author AnkhaaS
+	 */
 	public static function get_typy()
 	{
 		return DB::table('D_TYP_PRIJMU')
@@ -156,13 +167,14 @@ public static function get_typ_prijmu()
 	 */
 	
 	/**
-	 * Vyhladaj partnerov pre pouzivatela
-	 * @author Andreyco
+	 * Vyhladaj zdroj prijmu 
+	 * @author AnkhaaS
 	 */
 	public static function get_partners()
 	{
 		return DB::table('D_OBCHODNY_PARTNER')
 			->where('id_domacnost', '=', Auth::user()->id)
+			->where('fl_typ','=','Z')
 			->get();
 	}
 

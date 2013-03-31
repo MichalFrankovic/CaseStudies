@@ -152,19 +152,30 @@
 	
 	
 		
-	{{ Form::open('incomes/index', 'get', array('class' => 'side-by-side')); }}
+{{ Form::open('incomes/index', 'get', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
-    <h4>Datum</h4>
-    <div class="input-prepend" style="float:left;width:275px">
-        <span class="add-on">Od: </span>
+    <h4>Filter</h4>
+
+<div class="input-prepend">
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
+    <select name="osoba"  class="span3">
+        <option value="all" selected="selected">VSETKY</option>
+        @foreach ($persons as $person)
+        <option value="{{ $person->id }}" > {{ $person->t_meno_osoby }}&nbsp;{{ $person->t_priezvisko_osoby }}</option>
+        @endforeach
+    </select>
+ </div>
+    <div class="input-prepend" style="float:left;margin-right:50px">
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum od: </span>
         <input class="span3 datepicker" type="text" name="od" value="{{ $od }}" >
     </div>
-    <div class="input-prepend">
-    <span class="add-on">Do: </span>
+    <div class="input-prepend" style="margin-left:50px">
+    <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum do: </span>
     <input class="span3 datepicker" type="text" name="do" value="{{ $do }}">
 </div>
-<div class="input-prepend">
-        <span class="add-on">Typ prijmu: </span>
+
+<div class="input-prepend" style="float:left;margin-right:50px">
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Typ prijmu: </span>
     <select name="typ_prijmu"  class="span3">
         <option value="all" selected="selected">VSETKY</option>
         @foreach ($typy as $typ)
@@ -173,28 +184,31 @@
     </select>
  </div>
  <div class="input-prepend">
-        <span class="add-on">Zdroj prijmu: </span>
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Zdroj prijmu: </span>
     <select name="zdroj"  class="span3">
         <option value="all" selected="selected">VSETCI</option>
-        @foreach ($sources as $source)
-        <option value="{{ $source->id }}" > {{ $source->t_poznamka }}</option>
+        @foreach ($partners as $source)
+        <option value="{{ $source->id }}" > {{ $source->t_nazov }}</option>
         @endforeach
     </select>
      </div>
     <div class="input-prepend">
 
-        
-    <div class="submit">
-        {{ Form::submit('Zobraziť' , array('class' => 'btn')); }}
+    <div class="submit" style="float:left;margin-right:20px">
+        {{ Form::reset('Vynulovať filter' , array('class' => 'btn','style'=>'width:120px')); }}
+    </div>    
+    <div class="submit" style="width:120px">
+        {{ Form::submit('Zobraziť' , array('class' => 'btn','style'=>'width:120px')); }}
     </div>
     {{ Form::close() }}
     </div>
  </div>
-	
+	<h2 class="">Zoznam prijmov</h2>
 	<table class="table table-bordered">
 		<thead>
 			<tr style="font-weight: bold;">
 				<td><input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /></td>
+				<td>Osoba</td>
 				<td>Typ</td>
 				<td>Dátum</td>
 				<td>Vlozena suma</td>
@@ -207,7 +221,7 @@
 			@foreach($incomes as $income)
 			<tr>
 				<td><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{$income->id}}" /></td>
-
+				<td>{{ $income->t_meno_osoby }}&nbsp;{{ $income->t_priezvisko_osoby }}</td>
 				<td>{{ $income->t_nazov_typu }}</td>
 				<td>					
 					{{ date('d.m.Y', strtotime($income->d_datum)) }}

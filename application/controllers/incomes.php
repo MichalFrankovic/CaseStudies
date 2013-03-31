@@ -24,8 +24,10 @@ class Incomes_Controller extends Base_Controller {
 		
 		$viewData = array(
 			'incomes'		=> Prijem::get_incomes(),
-			'sources'		=> Prijem::get_sources(),
+			//'sources'		=> Prijem::get_sources(),
 			'typy'			=> Prijem::get_typy(),
+			'persons'		=> Prijem::get_person(),
+			'partners'		=> Prijem::get_partners(),
 		);
 		
 		return View::make('incomes.index', $viewData)
