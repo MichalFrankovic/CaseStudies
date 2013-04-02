@@ -36,6 +36,15 @@
     </div>
 
     <div class="input-prepend">
+        <span class="add-on">   Typ výdavku:   </span>
+        <select name="typ-vydavku" class="span2">
+            @foreach ($typy_vydavkov as $typ)
+            <option value="{{ $typ->id }}" > {{ $typ->t_nazov_typu_vydavku }} </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="input-prepend">
         <span class="add-on">   Poznámka:   </span>
         <input name="poznamka" class="span10" type="text" value="">
     </div>
@@ -45,13 +54,15 @@
     <h4>Položky výdavku</h4>
 
     <table id="tbl-vydavky" class="table table-bordered" >
-        <tr>
-            <th scope="col">                        </th>
-            <th scope="col">    Položka             </th>
-            <th scope="col">    Cena /ks (bez zľavy)</th>
-            <th scope="col">    Počet               </th>
-            <th scope="col">    Zľava               </th>
-        </tr>
+        <thead>
+            <tr>
+                <th>                        </th>
+                <th>    Položka             </th>
+                <th>    Cena /ks (bez zľavy)</th>
+                <th>    Počet               </th>
+                <th>    Zľava               </th>
+            </tr>
+        </thead>
         <input type="hidden" name="vydavok-id[]" id="hidden" value="N"/>
         <tr>
             <td><a class="btn" href=""><i class="icon-remove"></i></a></td>

@@ -192,11 +192,16 @@ class Spendings_Controller extends Base_Controller {
                                     ) a
                                     order by a.id_kategoria,a.typ
                                    ");
-        $view->dzejson = Response::json($view->polozky);
-       $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
-        $view->message = Session::get('message');
-        return $view;
 
+        $view->dzejson = Response::json($view->polozky);
+        
+        $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
+        
+        $view->message = Session::get('message');
+
+        $view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->get();
+        
+        return $view;
     }
 
     public function action_savespending()
@@ -206,6 +211,7 @@ class Spendings_Controller extends Base_Controller {
         $data_for_sql['id_obchodny_partner'] =  $data['partner'];            
         $data_for_sql['d_datum'] =  date('Y-m-d',strtotime($data['datum']));
         $data_for_sql['t_poznamka'] =  $data['poznamka'];
+        $data_for_sql['id_typ_vydavku'] =  $data['typ-vydavku'];
         $data_for_sql['vl_zlava'] =  intval($data['celkova-zlava']);
         $data_for_sql['fl_typ_zlavy'] =  $data['celkovy-typ-zlavy'];
 
@@ -242,7 +248,7 @@ class Spendings_Controller extends Base_Controller {
            // vydavok sa rovna N bude nova polozka
             if ($data['vydavok-id'][$i] == 'N')
             {
-                //echo "INSERT";
+                
                 $polozky_for_sql['id_vydavok'] = $data['hlavicka-id'];
                 DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
             }
@@ -257,10 +263,11 @@ class Spendings_Controller extends Base_Controller {
         } else{
                 $data_for_sql['fl_sablona'] =  'N';
                 $data_for_sql['fl_pravidelny'] =  'N';
-                 $idvydavku = DB::table('F_VYDAVOK')
+
+                $idvydavku = DB::table('F_VYDAVOK')
                        ->insert_get_id($data_for_sql);
 
-                //echo "INSERT";
+                
                 for ( $i = 0 ;$i < count($data['vydavok-id']);$i++)
                     {
                         $polozky_for_sql['id_kategoria_a_produkt'] = $data['polozka-id'][$i];
@@ -268,7 +275,7 @@ class Spendings_Controller extends Base_Controller {
                         $polozky_for_sql['num_mnozstvo'] = intval($data['mnozstvo'][$i]);
                         $polozky_for_sql['vl_zlava'] = floatval($data['zlava'][$i]);
                         $polozky_for_sql['fl_typ_zlavy'] = $data['typ-zlavy'][$i];
-                        //echo "INSERT";
+                       
                         $polozky_for_sql['id_vydavok'] = $idvydavku;        
                         DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
                         unset($polozky_for_sql);
