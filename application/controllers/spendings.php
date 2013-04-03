@@ -37,17 +37,24 @@ class Spendings_Controller extends Base_Controller {
         return Redirect::to('spendings/zoznam');
 	}
 
+
+    //Adriana Gogoľáková - 25/03/2013
     public function action_zoznam()
     {
 
         $view = View::make('spendings.zoznam')
             ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
+        
+        //Dátum
         $view->do = '';
+        
         $view->od = '';
+        
+        //Osoby - nákupcovia
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         $view->message = Session::get('message');
 
-        if (empty($view->osoby)) {
+       if (empty($view->osoby)) {
             $view = View::make('spendings.message')
                 ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
             $view->message = "Nebola vytvorená žiadna osoba";
@@ -57,47 +64,120 @@ class Spendings_Controller extends Base_Controller {
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
-            $id_domov[] = $osoba->id_domacnost;     // ZMENA
+            $id_domov[] = $osoba->id_domacnost;     
         }
+              
+        //Výdavky: Vydavok (VIEW_F_VYDAVOK)
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
 
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')
-        ->where_in('id_domacnost', $id_domov)       // ZMENA
-        ->get();
+        //Obchodní partneri - príjemcovia
+        $view->partneri = DB::table('D_OBCHODNY_PARTNER') ->where_in('id_domacnost', $id_domov)->get();
 
-
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-
+        //Typy výdavkov
+        $view->typyV = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
+        
+       /* $id = Input::get('id');
+        $editovany_zaznam = Kategoria::where('id','=',$id)->get();
+        //Kategorie
+        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();*/
+       
         return $view;
-
     }
 
+
+    //Adriana Gogoľáková - 25/03/2013
     public function action_filter()
     {
-        //Auth::user()->id = 2;
+
         $view = View::make('spendings.zoznam')
             ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
+        
+        //Osoba - všetky osoby
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
         }
+        $id = Input::get('id');
+
+        //Položky výdavku
+        $view->polozky = DB::query("select
+                                      a.id,
+                                      concat(
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    else space(length(a.id_kategoria)-4)
+                                    end,
+                                    ' ',
+                                    a.nazov
+                                    ) nazov
+                                    from
+                                    (
+                                    select
+                                    kategoria.id id,
+                                    kategoria.id id_kategoria,
+                                    kategoria.t_nazov nazov,
+                                    kategoria.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT kategoria
+                                    where kategoria.fl_typ = 'K'
+                                    and kategoria.id_domacnost = ". Auth::user()->id ."
+
+                                    union all
+
+                                    select
+                                    produkt.id id,
+                                    produkt.id_kategoria_parent id_kategoria,
+                                    produkt.t_nazov nazov,
+                                    produkt.fl_typ typ
+                                    from D_KATEGORIA_A_PRODUKT produkt
+                                    where produkt.fl_typ = 'P'
+                                    and produkt.id_domacnost = ". Auth::user()->id ."
+                                    ) a
+                                    order by a.id_kategoria,a.typ
+                                   ");
+
+        $id = Input::get('id');
+        $view->polozky_vydavku = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->where('id_vydavok','=', $id)->get();
+
+        //Dátum
         $od = Input::get('od');
         $od = ($od!='') ? date('Y-m-d',strtotime($od)) : '';
 
         $do = Input::get('do');
         $do = ($do!='') ? date('Y-m-d',strtotime($do)) : date('Y-m-d');
 
+        //Obchodný partner - prijemca
         $prijemca = Input::get('prijemca');
         $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
-        $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
+
+
+        //Typy výdavkov
+        $view->typyV = DB::table('D_TYP_VYDAVKU')
+        ->where('id_domacnost', '=',Auth::user()->id)
+        ->get();
+        //Výdavky
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do)->order_by('d_datum', 'DESC');
-        if ($prijemca != 'all') $view->vydavky->where("id_obchodny_partner",'=',$prijemca);
+
+        //Filter podľa obchodného partnera
+        if ($prijemca != 'all') 
+        $view->vydavky->where("id_obchodny_partner",'=',$prijemca);
+
+
+        //Filter podľa osoby
+        $osoba = Input::get('osoba');
+        if($osoba !='all')
+        $view->vydavky->where("id_osoba",'=',$osoba);
+
+        //Filter podľa typu výdavku
+        $typ = Input::get('typ');
+        if($typ !='all')
+        $view->vydavky->where("id_typ_vydavku",'=',$typ);
+        
         $view->do = $do;
         $view->od = $od;
         $view->vydavky = $view->vydavky->get();
         return $view;
     }
+
 
     public function action_periodicalspending()
     {
