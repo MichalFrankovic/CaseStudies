@@ -116,7 +116,7 @@ public static function get_typ_prijmu()
 	public static function get_zdroj_prijmu()
 	{
 		$zdroj_prijmu = DB::table('D_OBCHODNY_PARTNER')
-			->where_fl_typ('Z')
+			->where_fl_typ('Zdroj príjmu')
 			->get(array('id',  't_nazov'));
 
 		return $zdroj_prijmu;
@@ -174,7 +174,7 @@ public static function get_typ_prijmu()
 	{
 		return DB::table('D_OBCHODNY_PARTNER')
 			->where('id_domacnost', '=', Auth::user()->id)
-			->where('fl_typ','=','Z')
+			->where('fl_typ','=','Zdroj príjmu')
 			->get();
 	}
 

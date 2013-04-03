@@ -31,31 +31,37 @@ else
     }
 ?>
     
-    <input class="span3" type="hidden" name="id" value="<?php if (isset($editovany_zaznam[0]->id))
+    <input class="span4" type="hidden" name="id" value="<?php if (isset($editovany_zaznam[0]->id))
                                                                     echo ($editovany_zaznam[0]->id); 
                                                          ?>">
     
     <div class="input-prepend">
         <label class="control-label">    Názov:          </label>
-        <input class="span3" type="text" name="nazov" value="<?php if (isset($editovany_zaznam[0]->t_nazov))
+        <input class="span4" type="text" name="nazov" value="<?php if (isset($editovany_zaznam[0]->t_nazov))
                                                                     echo ($editovany_zaznam[0]->t_nazov); 
                                                               ?>">
     </div>
 
   <div class="input-prepend">
       <label class="control-label">    Typ partnera:          </label>
-        <select name="typ" class="span3">
-            <option value="Nezaradený" selected="selected">Vyberte</option>
-      <option value="Príjemca platby">Príjemca platby</option>
-      <option value="Zdroj príjmu">Zdroj príjmu</option>
-      <option value="Aj príjemca platby aj zdroj príjmu">Aj príjemca platby aj zdroj príjmu</option>
+        <select class="span4" type="text" name="typ">
+           <?php
+              if (isset($editovany_zaznam[0]->fl_typ)) 
+                {
+                  echo ('<option value="'.$editovany_zaznam[0]->fl_typ.'" selected="selected">'.$editovany_zaznam[0]->fl_typ.'</option>'); 
+                }  
+             ?>
+    			<option value="Nezaradený">  Vyberte                         </option>
+    			<option value="Príjemca platby">                 Príjemca platby                 </option>
+    			<option value="Zdroj príjmu">                    Zdroj príjmu                    </option>
+    			<option value="Príjemca platby aj zdroj príjmu"> Príjemca platby aj zdroj príjmu </option>	
         </select>
     </div>
   
        
     <div class="input-prepend">
         <label class="control-label">    Adresa:          </label>
-        <input class="span3" type="text" name="adresa" value="<?php if (isset($editovany_zaznam[0]->t_adresa))
+        <input class="span4" type="text" name="adresa" value="<?php if (isset($editovany_zaznam[0]->t_adresa))
                                                                     echo ($editovany_zaznam[0]->t_adresa); 
                                                               ?>">
     </div>
@@ -117,12 +123,12 @@ if ($editacia == "ano") {
     <tbody>
         @foreach ($partneri as $par)
         <tr>
-            <td><input type="checkbox" name="par[]" id="checkbox2" class="spendcheck" value="{{ md5($par->id). $secretword}}" /></td>
+            <td style="text-align: center;"><input type="checkbox" name="par[]" id="checkbox2" class="spendcheck" value="{{ md5($par->id). $secretword}}" /></td>
             <td>    {{ $par->t_nazov }}          </td>
-      <td>    {{ $par->fl_typ }}          </td>
+			<td>	{{ $par->fl_typ }}					</td>
             <td>    {{ $par->t_adresa }}          </td>
             
-            <td> <a class="btn" href="sprava_partnerov?id={{ $par->id }}"> Upraviť </a>
+            <td style="text-align: center;"> <a class="btn" href="sprava_partnerov?id={{ $par->id }}"> Upraviť </a>
                  <a class="btn" href="zmazatpartnera?id={{ md5($par->id). $secretword}}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')">
                     <i class="icon-remove"> </i>Vymazať</a>      </td>
         </tr>

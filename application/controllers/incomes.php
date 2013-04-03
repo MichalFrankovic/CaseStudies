@@ -110,7 +110,7 @@ class Incomes_Controller extends Base_Controller {
 		);
 		$vydajca = Input::get('vydajca');
 		$view->partners = DB::table('D_OBCHODNY_PARTNER')	->where_in('id_domacnost', $id_osob)
-		->where('fl_typ','=','P' )->get();
+		->where('fl_typ','=','Príjemca platby' )->get();
 		$view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 	
 		$view->prijmy = Prijem::where_in('id',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do);
