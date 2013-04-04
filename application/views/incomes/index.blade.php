@@ -150,7 +150,12 @@
 		</div>
 	@endif
 	
-	
+	<?php
+
+	$zdroj = Input::get('zdroj');
+	$osoba = Input::get('osoba');
+	$styp = Input::get('typ_prijmu');
+	?>
 		
 {{ Form::open('incomes/index', 'get', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
@@ -161,7 +166,7 @@
     <select name="osoba"  class="span3">
         <option value="all" selected="selected">VSETKY</option>
         @foreach ($persons as $person)
-        <option value="{{ $person->id }}" > {{ $person->t_meno_osoby }}&nbsp;{{ $person->t_priezvisko_osoby }}</option>
+        <option value="{{ $person->id }}" <?php if($person->id==$osoba){echo 'selected="selected"';}?>> {{ $person->t_meno_osoby }}&nbsp;{{ $person->t_priezvisko_osoby }}</option>
         @endforeach
     </select>
  </div>
@@ -179,7 +184,7 @@
     <select name="typ_prijmu"  class="span3">
         <option value="all" selected="selected">VSETKY</option>
         @foreach ($typy as $typ)
-        <option value="{{ $typ->id }}" > {{ $typ->t_nazov_typu }}</option>
+        <option value="{{ $typ->id }}" <?php if($typ->id==$styp){echo 'selected="selected"';}?>> {{ $typ->t_nazov_typu }}</option>
         @endforeach
     </select>
  </div>
@@ -188,20 +193,17 @@
     <select name="zdroj"  class="span3">
         <option value="all" selected="selected">VSETCI</option>
         @foreach ($partners as $source)
-        <option value="{{ $source->id }}" > {{ $source->t_nazov }}</option>
+        <option value="{{ $source->id }}" <?php if($source->id==$zdroj){echo 'selected="selected"';}?>> {{ $source->t_nazov }}</option>
         @endforeach
     </select>
      </div>
-    <div class="input-prepend">
-
-    <div class="submit" style="float:left;margin-right:20px">
-        {{ Form::reset('Vynulovať filter' , array('class' => 'btn','style'=>'width:120px')); }}
-    </div>    
-    <div class="submit" style="width:120px">
-        {{ Form::submit('Zobraziť' , array('class' => 'btn','style'=>'width:120px')); }}
-    </div>
+       <!-- {{ Form::reset('Vynulovať filter' , array('class' => 'btn','style'=>'width:120px')); }}-->
+    <a class="btn btn-primary" href="{{ URL::to('incomes/index') }}" ><i class="icon-remove icon-white"></i>Vynulovat filter</a>
+       
+       <!--{{ Form::submit('Zobraziť' , array('class' => 'btn btn-primary','style'=>'width:120px')); }}-->
+    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>Zobrazovať	</button>
     {{ Form::close() }}
-    </div>
+    
  </div>
 	<h2 class="">Zoznam prijmov</h2>
 	<form id="form1" name="form1" method="get" action="multideleteincomes">

@@ -15,7 +15,8 @@ class Prijem extends Eloquent
      */
     public static function get_incomes()
     {
-    	
+    	$od=Input::get('od');
+    	$do=Input::get('do');
     	$familyMembers = DB::table('D_OSOBA')
 			->where('id_domacnost', '=', Auth::user()->id)
 			->get(array('id'));
@@ -41,10 +42,17 @@ class Prijem extends Eloquent
 			$query->where('Z.id', '=', Input::get('zdroj'));
 		}
 		
-		if(Input::get('od') && Input::get('do'))
-		{
+		if($od!=''&&$do!=''){
 			$query	->where('P.d_datum', '>=', date('Y-m-d', strtotime(Input::get('od'))))
 					->where('P.d_datum', '<=', date('Y-m-d', strtotime(Input::get('do'))))
+					->order_by('d_datum', 'DESC');
+		}
+		if($od==''&&$do!=''){
+			$query	->where('P.d_datum', '<=', date('Y-m-d', strtotime(Input::get('do'))))
+					->order_by('d_datum', 'DESC');
+		}
+		if($od!=''&&$do==''){
+			$query	->where('P.d_datum', '>=', date('Y-m-d', strtotime(Input::get('od'))))
 					->order_by('d_datum', 'DESC');
 		}
 
