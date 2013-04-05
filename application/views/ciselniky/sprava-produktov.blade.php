@@ -6,6 +6,19 @@
 
 @include('ciselniky/ciselniky-podmenu')
 
+<script type="text/javascript">
+// Zabránenie duplicitným zobrazeniam hodnôt v selectoch na stránkach
+    window.onload = function()
+    {
+        var found = [];
+            $("select option").each(function() 
+                {
+                  if($.inArray(this.value, found) != -1) $(this).remove();
+                  found.push(this.value);
+                });
+    }
+
+</script>
 
 <?php
 

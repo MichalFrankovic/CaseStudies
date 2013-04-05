@@ -139,7 +139,7 @@
 
     <button type="submit" class="btn btn-danger">
           <i class=" icon-edit icon-white"></i>
-              Aktualizovať produkt
+              Aktualizuj výdavok
     </button>
 
 
