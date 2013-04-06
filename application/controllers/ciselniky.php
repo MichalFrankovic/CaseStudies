@@ -414,7 +414,13 @@ public function action_sprava_produktov()
     {
         $subactive = 'podmenu-sprava-produktov';
 
-        $id = Input::get('id');
+    $x = Input::get('id');
+          if (isset($x)) {
+               $id = Input::get('id');
+                        }
+                          else {
+                            $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+                          }
 
         if (isset($id)) {       // Buď sa stránka načíta normálne alebo sa načíta s editovaným záznamom
 
@@ -464,6 +470,10 @@ public function action_sprava_produktov()
                             ->where('fl_typ','=','P')->get();
 
         $view->message = Session::get('message');
+
+
+        $view->errors = Session::get('errors');
+        $view->error = Session::get('error');
         
         return $view;
     }
@@ -473,17 +483,44 @@ public function action_pridajprodukt()
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
-        $cena = floatval(str_replace(',', '.',Input::get('cena')));
+        $cena = Input::get('cena');
         $id_kategoria_parent = Input::get('kategoria-id');
         $t_merna_jednotka = Input::get('jednotka');
+     
+ $view = Redirect::to('ciselniky/sprava_produktov');
+                    
+
+if (empty($t_nazov)) {  
+      $errors['nazov'] = 'Zadajte prosím názov produktu';
+    }
+
+
+if (!preg_match('/[0-9]|[0-9]./', $cena)){
+        $errors['cena'] = 'Cena musí obsahovať číslo';
+    } 
+
+
+if ($id_kategoria_parent == 'Nezaradený') {  
+      $errors['kategoria'] = 'Vyber kategóriu, v ktorej sa produkt nachádza';
+    }
+
+
+if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+      
+      $view = Redirect::to('ciselniky/sprava_produktov')->with('error', $error)->with('errors',$errors);
+      return $view;
+    }
 
         DB::query("call produkt_insert($id_domacnost,
                                       '$t_nazov', 
                                       '$t_merna_jednotka',
                                        $cena,
                                       '$id_kategoria_parent')");
-        
-        return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkt bol pridaný!');
+
+        $view = Redirect::to('ciselniky/sprava_produktov')->with('message','Produkt bol úspešne pridaný');
+        return $view; 
+       
     }
 
 
@@ -523,6 +560,31 @@ public function action_multizmazanie()
         $jednotka = Input::get('jednotka');
         $idkategoria = Input::get('kategoria-id');
           
+if (empty($t_nazov)) {  
+      $errors['nazov'] = 'Zadaj nový názov produktu';
+    }
+
+
+if (!preg_match('/[0-9]|[0-9]./', $cena)){
+        $errors['cena'] = 'Zadaj aktuálnu cenu';
+    } 
+
+
+if ($idkategoria == 'Nezaradený') {  
+      $errors['kategoria'] = 'Vyber kategóriu, v ktorej sa produkt nachádza';
+    }
+
+
+if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+      
+      $view = Redirect::to('ciselniky/sprava_produktov')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('id',$id);
+      return $view;
+    }
+
         DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
                     SET t_nazov = '$t_nazov', 
                         vl_zakladna_cena = '$cena', 
