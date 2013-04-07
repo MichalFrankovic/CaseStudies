@@ -56,7 +56,10 @@ if ($editacia == 'ano') {
    <div {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Názov:          </label>
         <input class="span4" type="text" name="nazov" value="<?php
-                                                                if (isset($editovany_zaznam[0]->t_nazov))
+                                                    if (isset($meneny_nazov))
+                                                                echo $meneny_nazov;
+
+                                                            elseif (isset($editovany_zaznam[0]->t_nazov))
                                                                     echo ($editovany_zaznam[0]->t_nazov); 
                                                              ?>">
     {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? '<span class="help-inline">'.$errors['nazov'].'</span>' : '' }}
@@ -66,7 +69,10 @@ if ($editacia == 'ano') {
     <div {{ isset($errors->cena) || (is_array($errors) && isset($errors['cena'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Základná cena:  </label>
         <input class="span4" type="text" name="cena" value="<?php
-                                                                if (isset($editovany_zaznam[0]->vl_zakladna_cena))
+                                                    if (isset($meneny_cena))
+                                                                echo $meneny_cena;
+
+                                                            elseif (isset($editovany_zaznam[0]->vl_zakladna_cena))
                                                                     echo ($editovany_zaznam[0]->vl_zakladna_cena); 
                                                             ?>">
     {{ isset($errors->cena) || (is_array($errors) && isset($errors['cena'])) ? '<span class="help-inline">'.$errors['cena'].'</span>' : '' }}
@@ -77,7 +83,17 @@ if ($editacia == 'ano') {
         <label class="control-label">    Merná jednotka:  </label>
         <select class="span4" type="text" name="jednotka"> 
             <?php
-                    if (isset($editovany_zaznam[0]->t_merna_jednotka)) 
+
+                if (isset($meneny_jednotka))
+                {
+                    echo '<option value="'.$meneny_jednotka.'" selected="selected">'.$meneny_jednotka.'</option>'; 
+                    echo '
+                                <option value="kus">    kus     </option>
+                                <option value="kg">     kg      </option>
+                                <option value="liter">  liter   </option>';
+                }
+
+                elseif (isset($editovany_zaznam[0]->t_merna_jednotka)) 
                     {
                         echo ('<option value="'.$editovany_zaznam[0]->t_merna_jednotka.'" selected="selected">'.$editovany_zaznam[0]->t_merna_jednotka.'</option>'); 
                         echo '
@@ -108,6 +124,18 @@ if ($editacia == 'ano') {
                                            
             </option>
             @endforeach
+           
+            <?php /*
+            @if (isset($meneny_kategoria)
+                @foreach ($kategorie as $kat)
+            <option value="{{ $kat->id }}" @if ($kat->id == $meneny_kategoria)
+                                                selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
+                                           
+            </option>
+                @endforeach
+
+
+            @endif */ ?>
            
         </select>
     {{ isset($errors->kategoria) || (is_array($errors) && isset($errors['kategoria'])) ? '<span class="help-inline">'.$errors['kategoria'].'</span>' : '' }}

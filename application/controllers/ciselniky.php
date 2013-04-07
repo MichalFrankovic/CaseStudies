@@ -472,8 +472,13 @@ public function action_sprava_produktov()
         $view->message = Session::get('message');
 
 
+        // Kvôli držaniu hodnoty poľa ak niektoré iné pole je zle zadané
         $view->errors = Session::get('errors');
         $view->error = Session::get('error');
+        $view->meneny_nazov = Session::get('meneny_nazov');
+        $view->meneny_cena = Session::get('meneny_cena');
+        $view->meneny_jednotka = Session::get('meneny_jednotka');
+        $view->meneny_kategoria = Session::get('meneny_kategoria');
         
         return $view;
     }
@@ -508,7 +513,13 @@ if ($id_kategoria_parent == 'Nezaradený') {
 if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
       
-      $view = Redirect::to('ciselniky/sprava_produktov')->with('error', $error)->with('errors',$errors);
+      $view = Redirect::to('ciselniky/sprava_produktov')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('meneny_nazov',$t_nazov)
+                        ->with('meneny_cena',$cena)
+                        ->with('meneny_jednotka',$t_merna_jednotka)
+                        ->with('meneny_kategoria',$id_kategoria_parent);
       return $view;
     }
 
@@ -581,7 +592,11 @@ if (!empty($errors)) {
       $view = Redirect::to('ciselniky/sprava_produktov')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('id',$id);
+                        ->with('id',$id)
+                        ->with('meneny_nazov',$t_nazov)
+                        ->with('meneny_cena',$cena)
+                        ->with('meneny_jednotka',$jednotka)
+                        ->with('meneny_kategoria',$idkategoria);
       return $view;
     }
 
