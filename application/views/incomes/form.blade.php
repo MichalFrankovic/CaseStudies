@@ -94,11 +94,21 @@
 
 	<ul class="nav nav-tabs">
 		<?php
-		$tabs = array(
-			'index'	=> 'Výpis príjmov',
-			'form'	=> 'Nový príjem',
-			 
-		);
+
+		if ($uprava == 'nie') {
+			$tabs = array(
+				'index'	=> 'Výpis príjmov',
+				'form'	=> 'Nový príjem',
+			);
+		}
+
+		if ($uprava == 'ano') {
+			$tabs = array(
+				'index'	=> 'Výpis príjmov',
+				'form'	=> 'Uprav príjem', 
+				);
+		}
+
 		foreach($tabs as $key => $title){
 			$class = '';
 			$url   = URL::to('incomes/'.$key);
@@ -118,43 +128,86 @@
 		</div>
 	@endif
 
-	{{ Form::open(URL::current(), 'POST', array('class'=>'form-horizontal well', 'id'=>'income-create')) }}
+
+
+@if ($uprava == 'ano')
+	<form class="form-horizontal well" id="income-create" method="POST" action="form?editacia=ano&id={{ $editacia[0]->id }}" accept-charset="UTF-8">
+@endif
+
+@if ($uprava == 'nie')
+	<form class="form-horizontal well" id="income-create" method="POST" action="{{ URL::to('incomes/form?editacia=nie') }}" accept-charset="UTF-8">
+@endif
+
 		<div class="control-group">
 			{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
 		    <div class="controls">
-		      {{ Form::select('id_osoba', $list_person, null, array('class' => ' input-xlarge')) }}
+		      	
+			    <select name='id_osoba' class='input-xlarge'>
+			      	@foreach ($osoby as $osoba)
+			      	<option value="{{ $osoba->id }}" @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
+	                                                selected="selected" @endif > {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby}}
+
+			      	</option>
+			      	
+			      	@endforeach
+			     </select>
+		         	
 		    </div>
 	  	</div>
+
+
 		<div class="control-group">
 			{{ Form::label(null, 'Typ prijmu', array('class'=>'control-label')) }}
 		    <div class="controls">
-		      {{ Form::select('id_typ_prijmu', $list_typ_prijmu, null, array('class' => ' input-xlarge')) }}
+		     <select name='id_typ_prijmu' class='input-xlarge'>
+			      	@foreach ($typ_prijmu as $typ)
+			      	<option value="{{ $typ->id }}" @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
+	                                                selected="selected" @endif > {{$typ->t_nazov_typu}} 
+
+			      	</option>
+			      	
+			      	@endforeach
+			 </select>
 		    </div> 
 	  	</div> 
+
 
 	  	<div class="control-group">
 	  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
 	  		<div class="controls">
 	  			<div class="input-prepend">
 				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
-				  	{{ Form::text('d_datum', date('m/d/Y'), array('class'=>'datepicker input-small')) }}
+				  	
+				  	<input class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) echo $editacia[0]->d_datum; ?>" name="d_datum"> </input>
 				</div>
 	  		</div>
 	  	</div>
 		
+
 		<div class="control-group">
 			{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
 				<div class="input-prepend">
-				  	<span class="add-on" value='x'>€</span>
-				  	{{ Form::text('vl_suma_prijmu', '', array('class' => 'input-small', 'value' => '')) }}
+				  	<span class="add-on" value=''>€</span>
+				  	
+				  	<input class="input-small" type="text" value="<?php if (isset($editacia[0]->vl_suma_prijmu)) echo $editacia[0]->vl_suma_prijmu; ?>" name="vl_suma_prijmu"> </input>
 				</div>
-                </div>
-                </div>
-				<div class="control-group">
+            </div>
+        </div>
+
+		
+		<div class="control-group">
 			{{ Form::label(null, 'Zdroj príjmu - partner', array('class'=>'control-label')) }}
 		    <div class="controls">
-		      {{ Form::select('id_zdroj_prijmu', $list_zdroj_prijmu, null, array('class' => ' input-xlarge')) }}
+		      <select name='id_zdroj_prijmu' class='input-xlarge'>
+			      	@foreach ($zdroj_prijmu as $zdroj)
+			      	<option value="{{ $zdroj->id }}" @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
+	                                                selected="selected" @endif > {{$zdroj->t_nazov}} 
+
+			      	</option>
+			      	
+			      	@endforeach
+			     </select>
 		    </div>
 			
 		</div>
@@ -166,13 +219,18 @@
 		<div class="control-group">
 			{{ Form::label(null, 'Poznámka', array('class'=>'control-label')) }}
 			<div class="controls">
-				{{ Form::textarea('t_poznamka', null, array('rows'=>3, 'class'=>'input-xxlarge')) }}
+				<textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" value=""> <?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?> </textarea>
 			</div>
 		</div>
       
         
- <button type="reset" class="btn btn-primary" style="margin-left:110px" ><i class="icon-remove icon-white"></i>Zruš</button>
- <button type="submit" class="btn btn-primary"style="margin:5px"><i class="icon-ok icon-white"></i>Ulož príjem</button></span>
+ <button type="reset" class="btn btn-primary" style="margin-left:110px" >
+ 	<i class="icon-remove icon-white"> </i>	Zruš	
+ </button>
+
+ <button type="submit" class="btn btn-primary"style="margin:5px">
+ 	<i class="icon-ok icon-white"> </i> <?php if ($uprava == 'nie') echo 'Ulož príjem'; else echo 'Aktualizuj príjem'; ?>
+ </button>
 
 	{{ Form::close() }}
 

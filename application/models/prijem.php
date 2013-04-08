@@ -79,7 +79,6 @@ class Prijem extends Eloquent
 	{
 		$person = DB::table('D_OSOBA')
 			->where_id_domacnost(Auth::user()->id)
-			->where_fl_aktivna('A')
 			->where_fl_domacnost('N')
 			->get(array('id', 't_meno_osoby', 't_priezvisko_osoby'));
 

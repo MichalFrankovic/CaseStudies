@@ -164,7 +164,7 @@
 <div class="input-prepend">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
     <select name="osoba"  class="span3">
-        <option value="all" selected="selected">VSETKY</option>
+        <option value="all" selected="selected">VŠETKY</option>
         @foreach ($persons as $person)
         <option value="{{ $person->id }}" <?php if($person->id==$osoba){echo 'selected="selected"';}?>> {{ $person->t_meno_osoby }}&nbsp;{{ $person->t_priezvisko_osoby }}</option>
         @endforeach
@@ -180,32 +180,32 @@
 </div>
 
 <div class="input-prepend" style="float:left;margin-right:50px">
-        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Typ prijmu: </span>
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Typ príjmu: </span>
     <select name="typ_prijmu"  class="span3">
-        <option value="all" selected="selected">VSETKY</option>
+        <option value="all" selected="selected">VŠETKY</option>
         @foreach ($typy as $typ)
         <option value="{{ $typ->id }}" <?php if($typ->id==$styp){echo 'selected="selected"';}?>> {{ $typ->t_nazov_typu }}</option>
         @endforeach
     </select>
  </div>
  <div class="input-prepend">
-        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Zdroj prijmu: </span>
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Zdroj príjmu: </span>
     <select name="zdroj"  class="span3">
-        <option value="all" selected="selected">VSETCI</option>
+        <option value="all" selected="selected">VŠETCI</option>
         @foreach ($partners as $source)
         <option value="{{ $source->id }}" <?php if($source->id==$zdroj){echo 'selected="selected"';}?>> {{ $source->t_nazov }}</option>
         @endforeach
     </select>
      </div>
        <!-- {{ Form::reset('Vynulovať filter' , array('class' => 'btn','style'=>'width:120px')); }}-->
-    <a class="btn btn-primary" href="{{ URL::to('incomes/index') }}" ><i class="icon-remove icon-white"></i>Vynulovat filter</a>
+    <a class="btn btn-primary" href="{{ URL::to('incomes/index') }}" ><i class="icon-remove icon-white"></i>Vynulovať filter</a>
        
        <!--{{ Form::submit('Zobraziť' , array('class' => 'btn btn-primary','style'=>'width:120px')); }}-->
-    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i>Zobrazovať	</button>
+    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Zobraziť	</button>
     {{ Form::close() }}
     
  </div>
-	<h2 class="">Zoznam prijmov</h2>
+	<h2 class="">Zoznam príjmov</h2>
 	<form id="form1" name="form1" method="get" action="multideleteincomes">
 
 	<table class="table table-bordered">
@@ -218,7 +218,7 @@
 				<td>Suma</td>
 				<td>Zdroj</td>
 				<td>Poznámka</td>
-				<td>Vyber akcie</td>
+				<td>Výber akcie</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -241,7 +241,7 @@
 					{{ $income->t_poznamka }}
 					
 				</td>
-				<td><a class="btn" href="form?id={{ $income->id }}">Upraviť</a>
+				<td><a class="btn" href="{{ URL::to('incomes/form?id='.$income->id) }}">Upraviť</a>
 				    <a class="btn" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a>
 				</td>
 			</tr>

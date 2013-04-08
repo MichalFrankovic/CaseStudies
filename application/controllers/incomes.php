@@ -73,19 +73,61 @@ class Incomes_Controller extends Base_Controller {
 	 */
 	public function get_form()
 	{	
-		
-		
-		
-		$view = View::make('incomes.main')
-						->with('active', 'prijmy')->with('subactive', 'incomes/form')->with('secretword', md5(Auth::user()->t_heslo));
+		$idprijmu = Input::get('id');
+
+		if (isset($idprijmu))
+		{
+
+			$view = View::make('incomes.form')
+							->with('active', 'prijmy')
+							->with('subactive', 'incomes/form')
+							->with('secretword', md5(Auth::user()->t_heslo));
+
+			$editacia = DB::table('F_PRIJEM as P')
+    		->join('D_OBCHODNY_PARTNER as Z', 'P.id_obchodny_partner', '=', 'Z.id')
+    		->join('D_TYP_PRIJMU as T', 'P.id_typ_prijmu', '=', 'T.id')
+    		->join('D_OSOBA as O', 'P.id_osoba', '=', 'O.id')
+    		->where('P.id','=', $idprijmu)
+    		->get();
+
+    		$editacia[0]->id = $idprijmu;
+
+		}
+
 		$viewData = array(
-			'list_person'	=> Prijem::get_person_for_list(),
-			'list_typ_prijmu'=> Prijem::get_typ_prijmu_for_list(),
-			'list_zdroj_prijmu'	=> Prijem::get_zdroj_prijmu_for_list()
-		);
-		return View::make('incomes.form', $viewData);
+				'list_person'	=> Prijem::get_person_for_list(),
+				'list_typ_prijmu'=> Prijem::get_typ_prijmu_for_list(),
+				'list_zdroj_prijmu'	=> Prijem::get_zdroj_prijmu_for_list()
+			);
+
+		$osoby = DB::table('D_OSOBA')
+			->where_id_domacnost(Auth::user()->id)
+			->where_fl_domacnost('N')
+			->get(array('id', 't_meno_osoby', 't_priezvisko_osoby'));
+
+		$typ_prijmu = DB::table('D_TYP_PRIJMU')
+			->where_id_domacnost(Auth::user()->id)
+			->get(array('id', 't_nazov_typu'));
+
+		$zdroj_prijmu = DB::table('D_OBCHODNY_PARTNER')
+			->where_fl_typ('Zdroj príjmu')
+			->get(array('id',  't_nazov'));
+
+	if (isset($editacia)) { $uprava = 'ano';}
+		else { $uprava = 'nie';
+			    $editacia = ' '; }
+
+			$view = View::make('incomes.form', $viewData)
+			->with('editacia',$editacia)
+			->with('osoby',$osoby)
+			->with('typ_prijmu',$typ_prijmu)
+			->with('zdroj_prijmu',$zdroj_prijmu)
+			->with('uprava',$uprava);
+    		return $view;
+
 	}
 	
+
 	public function action_filter()
 	{
 	
@@ -127,12 +169,15 @@ class Incomes_Controller extends Base_Controller {
 
 
 	/**
-	 * Ulozenie zmien v prijme
+	 * Ulozenie noveho prijmu
 	 * @author Andreyco
 	 */
 	public function post_form()
 	{	
-		
+	
+	$idecko = Input::get('id');	
+	$editacia = Input::get('editacia');
+
 		$data = array(
 			'id_osoba'	        => Input::get('id_osoba'),
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
@@ -142,17 +187,41 @@ class Incomes_Controller extends Base_Controller {
 			't_poznamka'		=> Input::get('t_poznamka'),
 		);
 		
-		  $id = DB::table('F_PRIJEM')->insert_get_id($data);
-		if($id)
+		
+	if ($editacia == 'nie') 
 		{
-			return Redirect::to('incomes')
-				->with('status', 'Nový Príjem bol úspešne uložený')
-				->with('status_class', 'success');
-		} else {
-			return Redirect::to('incomes')
-				->with('status', 'Pri ukladaní došlo k chybe')
-				->with('status_class', 'error');
-		}
+		$id = DB::table('F_PRIJEM')->insert_get_id($data);
+
+			if($id)
+			{
+				return Redirect::to('incomes')
+					->with('status', 'Nový Príjem bol úspešne uložený')
+					->with('status_class', 'success');
+			} else {
+				return Redirect::to('incomes')
+					->with('status', 'Pri ukladaní došlo k chybe')
+					->with('status_class', 'error');
+			}
+
+		} else { /*$aktualizacia = DB::table('F_PRIJEM')
+					->where('id','=',$idecko)
+					->update($data);*/
+
+				$aktualizacia = DB::query("UPDATE F_PRIJEM
+											SET 
+											id_obchodny_partner = '$data[id_obchodny_partner]',
+											vl_suma_prijmu = '$data[vl_suma_prijmu]',
+											id_osoba = '$data[id_osoba]',
+											id_typ_prijmu = '$data[id_typ_prijmu]',
+											d_datum = '$data[d_datum]',
+											t_poznamka = '$data[t_poznamka]'
+											WHERE id= '$idecko'");
+
+				return Redirect::to('incomes')
+					->with('status', 'Údaje boli aktualizované')
+					->with('status_class', 'success');
+				}
+
 	}
 	
 
