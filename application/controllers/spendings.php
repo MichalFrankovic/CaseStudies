@@ -42,7 +42,7 @@ class Spendings_Controller extends Base_Controller {
     public function action_zoznam()
     {
 
-        $view = View::make('spendings.zoznam')
+       $view = View::make('spendings.zoznam')
             ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
         
         //Dátum
@@ -71,8 +71,9 @@ class Spendings_Controller extends Base_Controller {
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
 
         //Obchodní partneri - príjemcovia
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER') ->where_in('id_domacnost', $id_domov)->get();
+        $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER') ->where('id_domacnost', '=',Auth::user()->id)->get();
 
+        
         //Typy výdavkov
         $view->typyV = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
         
@@ -89,7 +90,7 @@ class Spendings_Controller extends Base_Controller {
     public function action_filter()
     {
 
-        $view = View::make('spendings.zoznam')
+         $view = View::make('spendings.zoznam')
             ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
         
         //Osoba - všetky osoby
@@ -145,11 +146,7 @@ class Spendings_Controller extends Base_Controller {
         $do = Input::get('do');
         $do = ($do!='') ? date('Y-m-d',strtotime($do)) : date('Y-m-d');
 
-        //Obchodný partner - prijemca
-        $prijemca = Input::get('prijemca');
-        $view->partneri = DB::table('D_OBCHODNY_PARTNER')->where_in('id_domacnost', $id_osob)->get();
-
-
+        
         //Typy výdavkov
         $view->typyV = DB::table('D_TYP_VYDAVKU')
         ->where('id_domacnost', '=',Auth::user()->id)
@@ -157,7 +154,14 @@ class Spendings_Controller extends Base_Controller {
         //Výdavky
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do)->order_by('d_datum', 'DESC');
 
+        //Obchodný partner - prijemca
+        $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER') 
+        ->where('id_domacnost', '=',Auth::user()
+        ->id)->get();
+
+        
         //Filter podľa obchodného partnera
+        $prijemca = Input::get('partner');
         if ($prijemca != 'all') 
         $view->vydavky->where("id_obchodny_partner",'=',$prijemca);
 
@@ -335,7 +339,9 @@ class Spendings_Controller extends Base_Controller {
               unset($polozky_for_sql);
             }
             //return Redirect::to_action('spendings@simplespending?id='.$data['hlavicka-id'])->with("message", 'Výdavok bol aktualizovaný');
-            return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol úspešne aktualizovaný!');
+            return Redirect::to('spendings/zoznam')
+                        ->with('message', 'Výdavok bol úspešne aktualizovaný!')
+                        ->with('status_class','sprava-uspesna');
 
         /*
          * INSERT NOVEHO VYDAVKU
@@ -361,7 +367,9 @@ class Spendings_Controller extends Base_Controller {
                         unset($polozky_for_sql);
                     }
 
-                return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol úspešne pridaný!');
+                return Redirect::to('spendings/zoznam')
+                        ->with('message', 'Výdavok bol úspešne pridaný!')
+                        ->with('status_class','sprava-uspesna');
 
                 }
 
@@ -374,7 +382,9 @@ class Spendings_Controller extends Base_Controller {
         $pol = Input::get('pol');
        DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$pol.'\'');
 
-        return Redirect::to_action('spendings@simplespending?id='.Input::get('vydavokid'))->with("message", 'Položka bola vymazaná');
+        return Redirect::to_action('spendings@simplespending?id='.Input::get('vydavokid'))
+                            ->with("message", 'Položka bola vymazaná')
+                            ->with('status_class','sprava-uspesna');
     }
 
 
@@ -384,7 +394,10 @@ class Spendings_Controller extends Base_Controller {
         $vydavok_id = Input::get('vydavok');
         DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
         DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
-        return Redirect::to('spendings/zoznam')->with('message', 'Výdavok bol vymazaný!');
+       
+        return Redirect::to('spendings/zoznam')
+            ->with('message', 'Výdavok bol vymazaný!')
+            ->with('status_class','sprava-uspesna');
     }
     
 
@@ -400,7 +413,9 @@ class Spendings_Controller extends Base_Controller {
     			DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
     		}
     	}
-    	return Redirect::to('spendings/zoznam')->with('message', 'Výdavky boli vymazané!');
+    	return Redirect::to('spendings/zoznam')
+                ->with('message', 'Výdavky boli vymazané!')
+                ->with('status_class','sprava-uspesna');
     }
     
 
@@ -536,7 +551,9 @@ class Spendings_Controller extends Base_Controller {
     		->where('id_vydavok', '=', $data['hlavicka-id'])
     		->update($polozky_for_sql);
     		
-    		return Redirect::to('spendings/sablona')->with('message', 'Šablóna bola úspešne zmenená!');
+    		return Redirect::to('spendings/sablona')
+                ->with('message', 'Šablóna bola úspešne zmenená!')
+                ->with('status_class','sprava-uspesna');
     		
     	} else {
 
@@ -550,7 +567,9 @@ class Spendings_Controller extends Base_Controller {
     		
     		$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
     		
-    		return Redirect::to('spendings/sablona')->with('message', 'Šablóna bola úspešne pridaná!');
+    		return Redirect::to('spendings/sablona')
+                ->with('message', 'Šablóna bola úspešne pridaná!')
+                ->with('status_class','sprava-uspesna');
     		
     	}
     	
@@ -562,7 +581,10 @@ class Spendings_Controller extends Base_Controller {
     	$vydavok_id = Input::get('sablona');
     	DB::query('DELETE FROM R_VYDAVOK_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id_vydavok),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie poloziek
     	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
-    	return Redirect::to('spendings/periodicalspending')->with('message', 'Šablóna bola vymazaná!');
+    	
+        return Redirect::to('spendings/periodicalspending')
+                ->with('message', 'Šablóna bola vymazaná!')
+                ->with('status_class','sprava-uspesna');
     	
     }
     
@@ -578,7 +600,9 @@ class Spendings_Controller extends Base_Controller {
 		    	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
     		}
     	}
-    	return Redirect::to('spendings/periodicalspending')->with('message', 'Šablóny boli vymazané!');
+    	return Redirect::to('spendings/periodicalspending')
+                ->with('message', 'Šablóny boli vymazané!')
+                ->with('status_class','sprava-uspesna');
     	
     }
 
@@ -610,7 +634,9 @@ class Spendings_Controller extends Base_Controller {
     	
     	DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
     	
-    	return Redirect::to('spendings/periodicalspending?r')->with('message', 'Výdavok bol úspešne pridaný!');
+    	return Redirect::to('spendings/periodicalspending?r')
+                    ->with('message', 'Výdavok bol úspešne pridaný!')
+                    ->with('status_class','sprava-uspesna');
     	
     }
 
@@ -628,7 +654,9 @@ class Spendings_Controller extends Base_Controller {
         $data_for_sql['t_adresa'] = Input::get('adresa');
         DB::table('D_OBCHODNY_PARTNER')
             ->insert_get_id($data_for_sql);
-        return Redirect::to('spendings/pridanie')->with('message', 'Partner bol pridaný!');
+        return Redirect::to('spendings/pridanie')
+                ->with('message', 'Partner bol pridaný!')
+                ->with('status_class','sprava-uspesna');
 
     }
 }

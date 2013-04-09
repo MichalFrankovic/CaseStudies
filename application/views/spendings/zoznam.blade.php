@@ -1,18 +1,24 @@
 @include('head')
 
-@if (isset($message) )
-    <h3 style="color: #bc4348;">{{ $message }}</h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
 
-
 @include('spendings/sp-submenu')
+
+<?php /*KVOLI ZADÁVANIU DÁTUMOV CEZ JAVASCRIPT ZA VYUŽITIA CSS ŠTÝLU */ ?>
+{{ HTML::script('assets/js/bootstrap-editable.js') }}
+{{ HTML::style('assets/css/bootstrap-editable.css') }}
+
 
 <?php 
 //Adriana Gogoľáková 25/03/2013
 //Kód, ktorý mi zabezpečí, aby mi ostali vybrané kritériá zvolené
 
 $fosoba = Input::get('osoba');
-$fpartner = Input::get('prijemca');
+$fpartner = Input::get('partner');
 $ftyp = Input::get('typ');
 
 //Len pre overenie dosadzovanej hodnoty
@@ -20,8 +26,11 @@ $ftyp = Input::get('typ');
 print_r($fosoba.", ".$fpartner.", ".$ftyp);
 echo "</pre>";*/
 
+    $zdroj2 = Input::get('partner');
+    $osoba2 = Input::get('osoba');
+    $styp2 = Input::get('typ');
+    
 ?>
-
 
 
 {{ Form::open('spendings/filter', 'POST', array('class' => 'side-by-side')); }}
@@ -38,60 +47,47 @@ echo "</pre>";*/
         <input class="span3 datepicker" type="text" name="do" value="{{ $do }}">
     </div>
 
-     <div class="input-prepend">
-        <span class="add-on">   Príjemca - obchodný partner:   </span>
-            <select name="prijemca" class="span3">
-                <option value="all" selected="selected">    -Výber-   </option>
-                    @foreach ($partneri as $partner)
-                    <option value="{{ $partner->id }}" <?php IF ($partner->id == $fpartner) { echo "selected"; }?>> {{ $partner->t_nazov }} </option>
-                    @endforeach
-            </select>
-    </div>
- 
+ <!--Adriana Gogoľáková: Obchodný partner funkčný aj pri filtrovaní--> 
+  <div class="input-prepend">
+        <span class="add-on" style="width:190px;text-align:left;padding-left:10px"> Obchodný partner - príjemca: </span>
+    <select name="partner"  class="span3">
+        <option value="all" selected="selected">  -- VŠETCI --  </option>
+        @foreach ($obch_partneri as $source)
+        <option value="{{ $source->id }}" <?php if($source->id==$zdroj2){echo 'selected="selected"';}?>> {{ $source->t_nazov }}</option>
+        @endforeach
+    </select>
+</div>
 
+<!--Adriana Gogoľáková: Osoba funkčná aj pri filtrovaní-->
+    <div class="input-prepend">
+        <span class="add-on" style="width:190px;text-align:left;padding-left:10px"> Osoba - nákupca: </span>
+    <select name="osoba"  class="span3">
+        <option value="all" selected="selected"> -- VŠETKY -- </option>
+        @foreach ($osoby as $osoba)
+        <option value="{{ $osoba->id }}" <?php if($osoba->id==$osoba2){echo 'selected="selected"';}?>> {{ $osoba->t_meno_osoby }}&nbsp;{{ $osoba->t_priezvisko_osoby }}</option>
+        @endforeach
+    </select>
+ </div>
 
-     <div class="input-prepend">
-            <span class="add-on"> Osoba - nákupca:   </span>
-        <select name="osoba" class="span3">
-            <option value="all" selected="selected">    -Výber-   </option>
-            @foreach ($osoby as $osoba)
-            <option value="{{ $osoba->id }}"    <?php IF ($osoba->id == $fosoba) { echo "selected"; }?>> {{$osoba->t_priezvisko_osoby }}</option>
-            @endforeach
-        </select>
-    </div>
-
-   
+<!--Adriana Gogoľáková: Typ výdavku funkčný aj pri filtrovaní-->  
 <div class="input-prepend">
-            <span class="add-on"> Typ výdavku:   </span>
+            <span class="add-on" style="width:190px;text-align:left;padding-left:10px"> Typ výdavku:   </span>
         <select name="typ" class="span3">
-            <option value="all" selected="selected">    -Výber-   </option>
+            <option value="all" selected="selected">  -- VŠETKY --   </option>
             @foreach ($typyV as $typV)
-            <option value="{{ $typV->id }}"<?php IF ($typV->id == $ftyp) { echo "selected"; }?>> {{$typV->t_nazov_typu_vydavku }}</option>
+            <option value="{{ $typV->id }}"<?php IF ($typV->id == $styp2) { echo "selected"; }?>> {{$typV->t_nazov_typu_vydavku }}</option>
             @endforeach
         </select>
     </div>
 
 
-  <button type="reset" class="btn btn-primary">
-            <i class="icon-remove icon-white"></i>
-                Cancel
-        </button>
 
-        
+<!--Adriana Gogoľáková: Tlačidlá pre filtrovanie a zruzenie filtru-->
 
-<button type="submit" class="btn btn-primary">
-                    <i class="icon-ok icon-white"></i>
-                        Filtrovať
-                 </button>
-
-<a  onClick="history.go(-1)">    
-                <button type="button" class="btn btn-primary">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš filter
-                 </button>
-</a>
-
-   
+    <a class="btn btn-primary" href="{{ URL::to('spendings/zoznam') }}" ><i class="icon-remove icon-white"> </i> Vynulovať filter </a>
+       
+    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"> </i> Zobraziť  </button>
+  
 
 {{ Form::close() }}
 </div>
@@ -137,7 +133,7 @@ echo "</pre>";*/
 
                      
             <td><a class="btn" href="simplespending?id={{ $vydavok->id }}">Upraviť</a>
-                <a class="btn" href="deletespending?vydavok={{ md5($vydavok->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
+                <a class="btn" href="deletespending?vydavok={{ md5($vydavok->id). $secretword}} " onclick="return confirm('Určite chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a></td>
         </tr>
         @endforeach
         </tbody>
