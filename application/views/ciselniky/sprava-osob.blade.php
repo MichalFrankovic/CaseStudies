@@ -1,18 +1,24 @@
 @include('head')
 
-@if (isset($message) )
-<h3 style="color: #bc4348;">{{ $message }}</h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
 
 @include('ciselniky/ciselniky-podmenu')
 
 <?php
 
-if (isset($editovany_zaznam))
+if (isset($editovany_zaznam)) 
  $editacia="ano";
     else $editacia = "nie";
 
 ?>
+
+@if (isset($error) && $error == true)
+    <div class="alert alert-error">{{ $error }}</div>
+@endif
 
 
 <div class="thumbnail" >
@@ -20,11 +26,11 @@ if (isset($editovany_zaznam))
 <?php
 if ($editacia == 'ano') {
      echo "<h2>    Uprav osobu   </h2>";
-     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormOsoby()" method="POST" action="upravitosobu" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravitosobu" accept-charset="UTF-8">';  
  }
    else  {         
     echo "<h2>    Pridaj osobu  </h2>";
-    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormOsoby()" method="POST" action="pridajosobu" accept-charset="UTF-8">';
+    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridajosobu" accept-charset="UTF-8">';
          }
 
 ?>
@@ -35,38 +41,32 @@ if ($editacia == 'ano') {
                                                              ?>">
     
 
-    <div class="input-prepend">
+    <div {{ isset($errors->meno) || (is_array($errors) && isset($errors['meno'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Meno:          </label>
         <input class="span3" type="text" name="meno" value="<?php
-                                                                if (isset($editovany_zaznam[0]->t_meno_osoby))
+                                                                if (isset($menene_meno))
+                                                                echo $menene_meno;
+                                                                
+                                                                elseif (isset($editovany_zaznam[0]->t_meno_osoby))
                                                                     echo ($editovany_zaznam[0]->t_meno_osoby); 
                                                              ?>">
+        {{ isset($errors->meno) || (is_array($errors) && isset($errors['meno'])) ? '<span class="help-inline">'.$errors['meno'].'</span>' : '' }}
     </div>
 
 
        
-    <div class="input-prepend">
+        <div {{ isset($errors->priezvisko) || (is_array($errors) && isset($errors['priezvisko'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Priezvisko:          </label>
         <input class="span3" type="text" name="priezvisko" value="<?php
-                                                                if (isset($editovany_zaznam[0]->t_priezvisko_osoby))
+                                                                if (isset($menene_priezvisko))
+                                                                echo $menene_priezvisko;
+                                                                elseif (isset($editovany_zaznam[0]->t_priezvisko_osoby))
                                                                     echo ($editovany_zaznam[0]->t_priezvisko_osoby); 
                                                              ?>">
+        {{ isset($errors->priezvisko) || (is_array($errors) && isset($errors['priezvisko'])) ? '<span class="help-inline">'.$errors['priezvisko'].'</span>' : '' }}
 
     </div>
 
-<?php
-
-if ($editacia == "nie") {
-
- echo
-    '<div class="input-append">
-        <label class="control-label">    Aktívna:    </label>   
-        <input name="aktivna"  class="span2" type="checkbox" value="A" >     
-    </div>';
-
-
-}
-?>
 
 <?php 
 $id = Input::get('id');
@@ -74,19 +74,17 @@ $znaky = DB::table('D_OSOBA')
 ->where_in('id', array($id))->get(array('id', 'fl_aktivna'));
 
 ?>
+
+
 <div class="input-append">
-        <?php
+        <label class="control-label">    Aktívna:    </label>   
+        
+        <?php if(isset($editovany_zaznam[0]->fl_aktivna) && ($editovany_zaznam[0]->fl_aktivna == 'A'))
+         echo '<input name="aktivna"  class="span2" type="checkbox" value="A" checked>';
+            else echo '<input name="aktivna"  class="span2" type="checkbox" value="A">'; 
+         ?>   
 
-if ($editacia == "ano") {
-
- echo'
-        <label class="control-label">    Aktívna:    </label>';}?>
-        @foreach ($znaky as $znak)   
-        <input name="aktivna"  class="span2" type="checkbox" value="{{ $znak-> fl_aktivna }}"
-        <?php if ($znak->fl_aktivna =="A") { echo "checked"; } ?>/>
-        @endforeach
-    </div>
-
+</div>
 
 
 <?php
@@ -144,7 +142,7 @@ if ($editacia == "ano") {
     <tbody>
         @foreach ($osoby as $osoba)
         <tr>
-            <td><input type="checkbox" name="osoba[]" id="checkbox2" class="spendcheck" value="{{ md5($osoba->id). $secretword}}" /></td>
+            <td style="text-align: center;"> <input type="checkbox" name="osoba[]" id="checkbox2" class="spendcheck" value="{{ md5($osoba->id). $secretword}}" /> </td>
             <td>    {{ $osoba->t_meno_osoby }}          </td>
             <td>    {{ $osoba->t_priezvisko_osoby }}    </td>
             <td>    {{ $osoba->fl_aktivna }}            </td>

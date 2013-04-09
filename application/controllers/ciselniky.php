@@ -17,11 +17,17 @@ class Ciselniky_Controller extends Base_Controller {
 
 public function action_sprava_osob()
     {
+       
+      $subactive = 'podmenu-sprava-osob';
 
-
-        $subactive = 'podmenu-sprava-osob';
-
-        $id = Input::get('id');
+      $x = Input::get('id');
+          if (isset($x)) {
+               $id = Input::get('id');
+                        }
+                          else {
+                            $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+                          }
+        
 
         if (isset($id)) {       
 
@@ -46,6 +52,11 @@ public function action_sprava_osob()
         $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
 
         $view->message = Session::get('message');
+
+        $view->errors = Session::get('errors');
+        $view->error = Session::get('error');
+        $view->menene_meno = Session::get('menene_meno');
+        $view->menene_priezvisko = Session::get('menene_priezvisko');
         
         return $view;
     }
@@ -58,13 +69,46 @@ public function action_pridajosobu()
         $t_priezvisko_osoby = Input::get('priezvisko');
         IF( Input::get('aktivna') == "A") { $fl_aktivna = "A";} else { $fl_aktivna = "N"; }
         $fl_dom = "N";
-        
-        DB::query("INSERT INTO  `web`.`D_OSOBA` (`id` ,`id_domacnost` ,`t_meno_osoby` ,`fl_aktivna` ,`fl_domacnost` ,`t_priezvisko_osoby`)
-                   VALUES (NULL ,  '$id_domacnost',  '$t_meno_osoby',  '$fl_aktivna',  'N',  '$t_priezvisko_osoby');");
-        
-        return Redirect::to('ciselniky/sprava_osob')->with('message', 'Osoba bola pridaná!');
+
+      $view = Redirect::to('ciselniky/sprava_osob');
+
+      if (empty($t_priezvisko_osoby)) 
+      {  
+          $errors['priezvisko'] = 'Zadajte prosím priezvisko osoby. Priezvisko nesmie obsahovať číslice.';
+      }
+
+      if (preg_match('/[0-9]|[0-9]./', $t_priezvisko_osoby))
+      {
+        $errors['priezvisko'] = 'Priezvisko nesmie obsahovať číslice';
+      }  
+
+      if (preg_match('/[0-9]|[0-9]./', $t_meno_osoby))
+      {
+        $errors['meno'] = 'Meno nesmie obsahovať číslice';
+      } 
+
+
+if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+      
+      $view = Redirect::to('ciselniky/sprava_osob')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('menene_meno',$t_meno_osoby)
+                        ->with('menene_priezvisko',$t_priezvisko_osoby);
+                       
+      return $view;
     }
 
+         DB::query("INSERT INTO  `web`.`D_OSOBA` (`id` ,`id_domacnost` ,`t_meno_osoby` ,`fl_aktivna` ,`fl_domacnost` ,`t_priezvisko_osoby`)
+                   VALUES (NULL ,  '$id_domacnost',  '$t_meno_osoby',  '$fl_aktivna',  'N',  '$t_priezvisko_osoby');");
+
+         $view = Redirect::to('ciselniky/sprava_osob')
+                        ->with('message','Osoba bola úspešne pridaná')
+                        ->with('status_class','sprava-uspesna');
+        return $view; 
+       
+    }
 
 public function action_zmazatosobu()
     {
@@ -79,12 +123,16 @@ public function action_zmazatosobu()
 
                 DB::query('DELETE FROM D_OSOBA WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$osoba_id.'\''); //mazanie hlavicky
               
-        return Redirect::to('ciselniky/sprava_osob')->with('message', 'Osoba bola vymazaná!'); 
+        return Redirect::to('ciselniky/sprava_osob')
+                        ->with('message', 'Osoba bola vymazaná!')
+                        ->with('status_class','sprava-uspesna'); 
             }
             catch (Exception $e){
                 $e->getMessage();
                 
-                return Redirect::to('ciselniky/sprava_osob')->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+                return Redirect::to('ciselniky/sprava_osob')
+                ->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+                ->with('status_class','sprava-chyba');;
             }
 
     }
@@ -107,22 +155,28 @@ public function action_multizmazanieosob()
             }
             catch (Exception $e){
                                 $e->getMessage();
-                                return Redirect::to('ciselniky/sprava_osob')->with('message', 'Nemozno zmazat osobu');
+                                return Redirect::to('ciselniky/sprava_osob')
+                                              ->with('message', 'Nemozno zmazat osobu')
+                                              ->with('status_class','sprava-chyba');
                               }           
             }
       }
-    return Redirect::to('ciselniky/sprava_osob')->with('message', 'Osoby boli vymazané.');
+    return Redirect::to('ciselniky/sprava_osob')
+    ->with('message', 'Osoby boli vymazané.')
+    ->with('status_class','sprava-uspesna');
     }
 
 
-      return Redirect::to('ciselniky/sprava_osob')->with('message', 'Nebola zvolená ziadna osoba!');
+      return Redirect::to('ciselniky/sprava_osob')
+                ->with('message', 'Nebola zvolená žiadna osoba!')
+                ->with('status_class','sprava-chyba');
     }
 
 
         public function action_upravitosobu()
         {
 
-        $id = Input::get('id');
+         $id = Input::get('id');
         $t_meno_osoby = Input::get('meno');
         $t_priezvisko_osoby = Input::get('priezvisko');
         $fl_aktivna = Input::get('aktivna');
@@ -131,19 +185,46 @@ public function action_multizmazanieosob()
         }    else 
         $fl_aktivna='N';
           
-        if(($fl_aktivna==(isset($_POST['aktivna']))) OR ($t_meno_osoby==(isset($_POST['meno']))) OR ($t_priezvisko_osoby==(isset($_POST['priezvisko']))))
-        {
-         
+      if (empty($t_priezvisko_osoby)) {  
+      $errors['priezvisko'] = 'Zadaj nové priezvisko osoby';
+    }
+     
+      if (preg_match('/[0-9]|[0-9]./', $t_priezvisko_osoby))
+      {
+        $errors['priezvisko'] = 'Priezvisko nesmie obsahovať číslice';
+      }  
 
-          DB::query("UPDATE D_OSOBA SET t_meno_osoby = '$t_meno_osoby', t_priezvisko_osoby = '$t_priezvisko_osoby', fl_aktivna = '$fl_aktivna' WHERE id = '$id'");
+      if (preg_match('/[0-9]|[0-9]./', $t_meno_osoby))
+      {
+        $errors['meno'] = 'Meno nesmie obsahovať číslice';
+      } 
+
+      
+
+      if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+      
+      $view = Redirect::to('ciselniky/sprava_osob')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('id',$id)
+                        ->with('menene_meno',$t_meno_osoby)
+                        ->with('menene_priezvisko',$t_priezvisko_osoby);
+      return $view;
+    }
+      //Ešte ošetriť aktualizáciu
+      /*if(!($t_meno_osoby==(isset($_POST['meno']))) OR (!($t_priezvisko_osoby==(isset($_POST['priezvisko'])))) OR (!($fl_aktivna==(isset($_POST['aktivna'])))))
+      {  
+       
+        return Redirect::to('ciselniky/sprava_osob')->with('message', 'Žiadne zmeny sa neuskutočnili! ');   
+      }*/
+      
+         DB::query("UPDATE D_OSOBA SET t_meno_osoby = '$t_meno_osoby', t_priezvisko_osoby = '$t_priezvisko_osoby', fl_aktivna = '$fl_aktivna' WHERE id = '$id'");
             
-        return Redirect::to('ciselniky/sprava_osob')->with('message', 'Zmeny osoby boli uložené.');
-        }
-        else
-        {
-         return Redirect::to('ciselniky/sprava_osob')->with('message', 'Žiadne zmeny sa neuskutočnili!');
-         
-        }
+        return Redirect::to('ciselniky/sprava_osob')
+                    ->with('message', 'Zmeny boli uložené.')
+                    ->with('status_class','sprava-uspesna');
+                  
       }
 
 // *********** --- PODSEKCIA 1 (KONIEC) --- FUNKCIE PRE SPRÁVU OSOB ********************************
