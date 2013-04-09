@@ -11,3 +11,21 @@ form.side-by-side > div > label {float:left;width:130px;}
 form.side-by-side > div.submit {margin-left:130px;}
 form.side-by-side > div.captcha input {margin:10px 0 10px 130px;}
 
+.sprava-uspesna{
+		padding: 20px;
+		margin-bottom: 20px;
+		background: rgba(0, 255, 0, .3);
+		color: red;
+    	font-size: 20px;
+    	font-weight: bold;
+		}
+
+
+.sprava-chyba{
+		padding: 20px;
+		margin-bottom: 20px;
+		background: rgba(255, 0, 0, .3);
+		color: red;
+		font-size: 20px;
+		font-weight: bold;
+		}

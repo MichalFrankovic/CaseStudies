@@ -529,7 +529,9 @@ if (!empty($errors)) {
                                        $cena,
                                       '$id_kategoria_parent')");
 
-        $view = Redirect::to('ciselniky/sprava_produktov')->with('message','Produkt bol úspešne pridaný');
+        $view = Redirect::to('ciselniky/sprava_produktov')
+                        ->with('message','Produkt bol úspešne pridaný')
+                        ->with('status_class','sprava-uspesna');
         return $view; 
        
     }
@@ -541,7 +543,10 @@ public function action_zmazatprodukt()
         $produkt_id = Input::get('produkt');
 
         DB::query('DELETE FROM D_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$produkt_id.'\''); //mazanie hlavicky
-        return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkt bol vymazaný!'); 
+        
+        return Redirect::to('ciselniky/sprava_produktov')
+                    ->with('message', 'Produkt bol vymazaný!')
+                    ->with('status_class','sprava-uspesna');
     }
     
 
@@ -558,7 +563,9 @@ public function action_multizmazanie()
         }
       }
 
-      return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Produkty boli vymazané!');
+      return Redirect::to('ciselniky/sprava_produktov')
+                    ->with('message', 'Produkty boli vymazané!')
+                    ->with('status_class','sprava-uspesna');
     }
 
 
@@ -607,7 +614,9 @@ if (!empty($errors)) {
                         id_kategoria_parent = '$idkategoria'  
                     WHERE id = '$id'");
             
-        return Redirect::to('ciselniky/sprava_produktov')->with('message', 'Zmeny boli uložené.');
+        return Redirect::to('ciselniky/sprava_produktov')
+                    ->with('message', 'Zmeny boli uložené.')
+                    ->with('status_class','sprava-uspesna');
       }
 
 // *********** --- PODSEKCIA 4 (KONIEC) --- FUNKCIE PRE SPRÁVU PRODUKTOV ********************************

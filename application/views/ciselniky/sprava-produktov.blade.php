@@ -1,8 +1,11 @@
 @include('head')
 
-@if (isset($message) )
-<h3 style="color: #bc4348;">    {{ $message }}  </h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
+
 
 @include('ciselniky/ciselniky-podmenu')
 
