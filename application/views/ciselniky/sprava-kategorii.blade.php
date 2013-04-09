@@ -1,7 +1,9 @@
 @include('head')
 
-@if (isset($message) )
-<h3 style="color: #bc4348;">{{ $message }}</h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
 
 @include('ciselniky/ciselniky-podmenu')
@@ -19,11 +21,11 @@ if (isset($editovany_zaznam))
 <?php
 if ($editacia == 'ano') {
      echo "<h2>    Uprav kategóriu   </h2>";
-     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormKategorie()" method="POST" action="upravkat" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravkat" accept-charset="UTF-8">';  
  }
    else  {         
     echo "<h2>    Pridaj kategóriu  </h2>";
-    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormKategorie()" method="POST" action="pridajkategoriu" accept-charset="UTF-8">';
+    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridajkategoriu" accept-charset="UTF-8">';
          }
 
 ?>
@@ -35,12 +37,13 @@ if ($editacia == 'ano') {
                                                              ?>">
     
 
-    <div class="input-prepend">
+   <div {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Kategória:          </label>
         <input class="span4" type="text" name="nazov" value="<?php
                                                                 if (isset($editovany_zaznam[0]->t_nazov))
                                                                     echo ($editovany_zaznam[0]->t_nazov); 
                                                              ?>">
+    {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? '<span class="help-inline">'.$errors['nazov'].'</span>' : '' }}
     </div>
 
     <div class="input-prepend">
@@ -111,7 +114,7 @@ if ($editacia == "ano") {
     <tbody>
         @foreach ($kategorie2 as $kat)
         <tr>
-            <td><input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /></td>
+            <td style="text-align: center;"> <input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /> </td>
             <td>    {{ $kat->t_nazov }}              </td> 
             <td>    @foreach ($kategorie as $k)
                         @if($kat->id_kategoria_parent == $k->id)

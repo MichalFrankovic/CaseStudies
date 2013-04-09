@@ -426,6 +426,10 @@ public function action_multizmazaniepartnerov()
                                   ->where('fl_typ','=','K')->get();
 
         $view->message = Session::get('message');
+
+        $view->errors = Session::get('errors');
+        $view->error = Session::get('error');
+
         return $view;
     }
 
@@ -435,11 +439,30 @@ public function action_multizmazaniepartnerov()
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
         $id_kategoria_parent = Input::get('Nadkategoria-id');
-       //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
+       
+
+      if (empty($t_nazov)) {  
+           $errors['nazov'] = 'Zadajte prosím názov kategórie';
+        }
+
+
+      if (!empty($errors)) {
+            $error = 'Opravte chyby vo formulári';
+            
+            $view = Redirect::to('ciselniky/sprava_kategorii')
+                              ->with('error', $error)
+                              ->with('errors',$errors);
+                              
+            return $view;
+          }
+
+        //xxecho "call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')";
        
        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
 
-       return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Kategória bola pridaná!');
+       return Redirect::to('ciselniky/sprava_kategorii')
+              ->with('message', 'Kategória bola pridaná!')
+              ->with('status_class','sprava-uspesna');
     }
 
 
@@ -449,7 +472,9 @@ public function action_multizmazaniepartnerov()
         $kat_id = Input::get('kat');
 
         DB::query('DELETE FROM D_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$kat_id.'\''); //mazanie hlavicky
-        return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Kategória bola vymazaná!'); 
+        return Redirect::to('ciselniky/sprava_kategorii')
+              ->with('message', 'Kategória bola vymazaná!')
+              ->with('status_class','sprava-uspesna'); 
     }
 
 
@@ -466,7 +491,9 @@ public function action_multizmazaniepartnerov()
         }
       }
 
-      return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Kategorie boli vymazané!');
+      return Redirect::to('ciselniky/sprava_kategorii')
+              ->with('message', 'Kategorie boli vymazané!')
+              ->with('status_class','sprava-uspesna');
     }
 
     public function action_upravkat(){ 
@@ -475,14 +502,32 @@ public function action_multizmazaniepartnerov()
         $t_nazov = Input::get('nazov');
         $nadkategoria = Input::get('Nadkategoria-id');
        
+      if (empty($t_nazov)) {  
+          $errors['nazov'] = 'Zadaj nový názov kategórie';
+        }
+        
+
+      if (!empty($errors)) {
+          $error = 'Opravte chyby vo formulári';
           
+          $view = Redirect::to('ciselniky/sprava_kategorii')
+                            ->with('error', $error)
+                            ->with('errors',$errors)
+                            ->with('id',$id);
+                            
+          return $view;
+        }
+
+
         DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
                     SET t_nazov = '$t_nazov',
                         id_kategoria_parent = '$nadkategoria'
                          
                     WHERE id = '$id'");
             
-        return Redirect::to('ciselniky/sprava_kategorii')->with('message', 'Zmeny boli uložené.');
+        return Redirect::to('ciselniky/sprava_kategorii')
+              ->with('message', 'Zmeny boli uložené.')
+              ->with('status_class','sprava-uspesna');
       }
 
 // *********** --- PODSEKCIA 3 (KONIEC) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
