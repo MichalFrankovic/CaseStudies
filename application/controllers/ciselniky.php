@@ -352,7 +352,13 @@ public function action_multizmazaniepartnerov()
     {
        $subactive = 'podmenu-sprava-kategorii';
 
+      $x = Input::get('id');
+          if (isset($x)) {
                $id = Input::get('id');
+                        }
+                          else {
+                            $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+                          }
 
         if (isset($id)) {       // Buď sa stránka načíta normálne alebo sa načíta s editovaným záznamom
 
