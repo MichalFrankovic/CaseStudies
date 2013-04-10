@@ -81,20 +81,9 @@ function validujFormTypyPrijmu()
         }
 
 return false;
-}
+} 
 
 
-function validujFormTypyVydavku()
-{
-    var nazov_typu_vydavku = document.forms["tentoForm"]["nazov_typu_vydavku"];
-    
-     if(notEmpty(nazov_typu_vydavku, "Prosím zadajte názov")){                
-                   
-            return true; 
-        }
-
-return false;
-}
 
 
 

@@ -567,7 +567,7 @@ class Spendings_Controller extends Base_Controller {
     		
     		$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
     		
-    		return Redirect::to('spendings/sablona')
+    		return Redirect::to('spendings/periodicalspending')
                 ->with('message', 'Šablóna bola úspešne pridaná!')
                 ->with('status_class','sprava-uspesna');
     		
