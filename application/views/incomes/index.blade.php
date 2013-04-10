@@ -202,9 +202,9 @@
        
        <!--{{ Form::submit('Zobraziť' , array('class' => 'btn btn-primary','style'=>'width:120px')); }}-->
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Zobraziť	</button>
-    {{ Form::close() }}
-    
+        
  </div>
+ {{ Form::close() }}
 	<h2 class="">Zoznam príjmov</h2>
 	<form id="form1" name="form1" method="get" action="multideleteincomes">
 

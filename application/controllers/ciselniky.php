@@ -760,7 +760,14 @@ if (!empty($errors)) {
 public function action_sprava_typu_prijmu()
     {
        $subactive = 'podmenu-sprava-typu-prijmu';
-       $id = Input::get('id');
+       //$id = Input::get('id');
+       $x = Input::get('id');
+       if (isset($x)) {
+               $id = Input::get('id');
+                      }
+       else {
+               $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+            }
 
        if (isset($id)) {       // Buď sa stránka načíta normálne alebo sa načíta s editovaným záznamom
 
@@ -780,6 +787,9 @@ public function action_sprava_typu_prijmu()
 
         $view->typy = Typyprijmu::where('id_domacnost','=',Auth::user()->id)->get();
         $view->message = Session::get('message');
+        $view->errors = Session::get('errors');
+        $view->error = Session::get('error');
+        $view->zmeneny_nazov = Session::get('zmeneny_nazov');
         return $view;
 
     }
@@ -789,12 +799,25 @@ public function action_pridajtypprijmu()
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov_typu = Input::get('nazov_typu');
-        $errors ='';
         $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->first();
-        if (!empty($duplicate)) {
-            $errors= 'Tento názov typu už je pridaný. ';
-        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+        
+        if(empty($t_nazov_typu)){
+            $errors['t_nazov_typu']='Zadajte prosím názov typu prijmu';
         }
+        if(!empty($duplicate)){
+            $errors['t_nazov_typu']= 'Tento názov typu už je pridaný. ';
+        //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+        }
+        if(!empty($errors)){
+            $error='Opravte chybu vo formuláre';
+
+            $view=Redirect::to('ciselniky/sprava_typu_prijmu')
+                          ->with('error',$error)
+                          ->with('errors',$errors)
+                          ->with('zmeneny_nazov',$t_nazov_typu);
+            return $view;
+        }
+
          else {
        DB::query("INSERT INTO `web`.`D_TYP_PRIJMU` (`t_nazov_typu`, `id_domacnost`) VALUES('$t_nazov_typu', '$id_domacnost');");
 
@@ -839,6 +862,25 @@ public function action_pridajtypprijmu()
 
         $id = Input::get('id');
         $t_nazov_typu = Input::get('nazov_typu');
+        $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->first();
+
+        if(empty($t_nazov_typu)){
+            $errors['t_nazov_typu']='Zadajte prosím názov typu prijmu';
+        }
+        //if(!empty($duplicate)){
+          //  $errors['t_nazov_typu']= 'Tento názov typu už je pridaný. ';
+        //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+        //}
+        if(!empty($errors)){
+            $error='Opravte chybu vo formuláre';
+
+            $view=Redirect::to('ciselniky/sprava_typu_prijmu')
+                          ->with('error',$error)
+                          ->with('errors',$errors)
+                          ->with('id',$id)
+                          ->with('zmeneny_nazov',$t_nazov_typu);
+            return $view;
+        }
                   
         DB::query("UPDATE D_TYP_PRIJMU SET t_nazov_typu = '$t_nazov_typu' WHERE id = '$id'");
             

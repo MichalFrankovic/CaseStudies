@@ -7,6 +7,20 @@
 @include('ciselniky/ciselniky-podmenu')
 
 
+<script type="text/javascript">
+// Zabránenie duplicitným zobrazeniam hodnôt v selectoch na stránkach
+    window.onload = function()
+    {
+        var found = [];
+            $("select option").each(function() 
+                {
+                  if($.inArray(this.value, found) != -1) $(this).remove();
+                  found.push(this.value);
+                });
+    }
+
+</script>
+
 <?php
 
 if (isset($editovany_zaznam))
@@ -16,16 +30,20 @@ if (isset($editovany_zaznam))
 
 ?>
 
+@if (isset($error) && $error == true)
+    <div class="alert alert-error">{{ $error }}</div>
+@endif
+
 <div class="thumbnail" >
 
 <?php
 if ($editacia == 'ano') {
      echo "<h2>    Upravte typ prijmu   </h2>";
-     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyPrijmu()" method="POST" action="upravtypprijmu" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravtypprijmu" accept-charset="UTF-8">';  
  }
    else  {         
     echo "<h2>    Pridajte typ prijmu  </h2>";
-    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyPrijmu()" method="POST" action="pridajtypprijmu" accept-charset="UTF-8">';
+    echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridajtypprijmu" accept-charset="UTF-8">';
          }
 
 ?>
@@ -36,12 +54,15 @@ if ($editacia == 'ano') {
                                                              ?>">
     
 
-    <div class="input-prepend">
+    <div {{ isset($errors->t_nazov_typu) || (is_array($errors) && isset($errors['t_nazov_typu'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Názov typu:          </label>
         <input class="span4" type="text" name="nazov_typu" value="<?php
-                                                                if (isset($editovany_zaznam[0]->t_nazov_typu))
-                                                                    echo ($editovany_zaznam[0]->t_nazov_typu); 
+                                                                if(isset($zmeneny_nazov))
+                                                                   echo $zmeneny_nazov;
+                                                                elseif(isset($editovany_zaznam[0]->t_nazov_typu))
+                                                                       echo ($editovany_zaznam[0]->t_nazov_typu); 
                                                              ?>">
+    {{ isset($errors->t_nazov_typu) || (is_array($errors) && isset($errors['t_nazov_typu'])) ? '<span class="help-inline">'.$errors['t_nazov_typu'].'</span>' : '' }}
     </div>
 
 
@@ -61,10 +82,12 @@ if ($editacia == "ano") {
                  </button>
          ';
     }
-   else {echo ' <button type="reset" class="btn btn-primary">
+   else {echo ' <a href="sprava_typu_prijmu"
+                <button type="button" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i>
                         Zruš
                 </button>
+                </a>
               ';
 
          echo ' <button type="submit" class="btn btn-primary">
