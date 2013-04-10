@@ -45,7 +45,7 @@
         <tr>
             <td>
                 <div>
-                    <input type="submit" class="btn" value="Pridať výdavok" />
+                    <input type="submit" class="btn btn-primary" value="Pridať výdavok" />
                 </div>
             </td>
         </tr>
@@ -73,19 +73,22 @@
         <tbody>
         @foreach ($sablony as $sablona)
         <tr>
-            <td> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
+            <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
             <td>    {{ $sablona->t_poznamka }}                                              </td>
             <td>    {{ $sablona->prijemca }}                                                </td>
             <td>    {{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }} </td>
             <td>    {{ $sablona->kategoria }}                                               </td>
             <td>    {{ $sablona->vl_jednotkova_cena }} €                                    </td>
-            <td><a class="btn" href="sablona?id={{ $sablona->id }}">Upraviť</a>
-                <a class="btn" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}"><i class="icon-remove"></i>Vymazať</a></td>
+            <td style="text-align: center;">
+                <a class="btn btn-primary" href="sablona?id={{ $sablona->id }}"> Upraviť </a>
+                <a class="btn btn-danger" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}">
+                    <i class="icon-remove icon-white"> </i> Vymazať </a>
+            </td>
         </tr>
         @endforeach
         </tbody>
     </table>
-    <a class="btn" href="#" onclick="multizmazanie('sablona[]')"><i class="icon-remove"></i>Vymazať zvolené</a>
+    <a class="btn btn-danger" href="#" onclick="multizmazanie('sablona[]')"><i class="icon-remove icon-white"></i>Vymazať zvolené</a>
 </form>
 
 </div>

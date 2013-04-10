@@ -38,7 +38,7 @@
 </div>
 
 <div class="submit">
-	{{ Form::submit('Pridať') }}
+    <button type='submit' class='btn btn-primary'> Pridať </button>
 <!--	{{ Form::reset('Návrat', array('onclick' => 'document.location.href=\'' . URL::home() . '\';')); }}-->
 </div>
 

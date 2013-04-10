@@ -97,18 +97,20 @@ if ($editacia == "ano") {
     <tbody>
         @foreach ($typy as $typ)
         <tr>
-            <td><input type="checkbox" name="typ[]" id="checkbox2" class="spendcheck" value="{{ md5($typ->id). $secretword}}" /></td>
+            <td style="text-align: center;"> <input type="checkbox" name="typ[]" id="checkbox2" class="spendcheck" value="{{ md5($typ->id). $secretword}}" /></td>
             <td> {{ $typ->t_nazov_typu }} </td>
            
-            <td> <a class="btn" href="sprava_typu_prijmu?id={{ $typ->id }}"> Upraviť </a>
-                 <a class="btn" href="zmazattypprijmu?typ={{ md5($typ->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
-                    <i class="icon-remove"></i>Vymazať</a></td>
+            <td style="text-align: center;"> 
+                <a class="btn btn-primary" href="sprava_typu_prijmu?id={{ $typ->id }}"> Upraviť </a>
+                <a class="btn btn-danger" href="zmazattypprijmu?typ={{ md5($typ->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
+                    <i class="icon-remove icon-white"></i>Vymazať</a>
+            </td>
         </tr>
         @endforeach
     </tbody>
     
   </table>
-<a class="btn" href="#" onclick="multizmazanie('typ[]')"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+<a class="btn btn-danger" href="#" onclick="multizmazanie('typ[]')"> <i class="icon-remove icon-white"> </i> Vymazať zvolené </a>
 </form>
 
 @include('foot')

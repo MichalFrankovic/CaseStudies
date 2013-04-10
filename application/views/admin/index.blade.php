@@ -35,7 +35,7 @@ function checkedAll (form1) {
             <td><div class="input-append">
                 <input name="vyraz" class="span2" type="text"/>
                 <span class="help-inline">'.$errors['name'].'</span>
-		<input type="submit" name="Submit" value="Vyhľadať"/>
+		<input class="btn btn-primary" type="submit" name="Submit" value="Vyhľadať"/>
 <!--		<input type="reset" name="reset" value="Reset"/>-->
             </div></td>            
         </tr>
@@ -59,24 +59,24 @@ function checkedAll (form1) {
         <tbody>
         @foreach ($domacnosti as $domacnost)
         <tr>
-            <td><input type="checkbox" name="polozka[]" value="{{ $domacnost->id }}"/></td>
+            <td style="text-align: center;"><input type="checkbox" name="polozka[]" value="{{ $domacnost->id }}"/></td>
             <td>{{ $domacnost->t_nazov_domacnosti }}</td>
             <td>{{ $domacnost->t_email_login }}</td>
             <td>{{ $domacnost->fl_admin }}</td>
             <td>{{ $domacnost->fl_aktivna }}</td>
             <td>
-		<a class="btn" href="editUser?id={{ $domacnost->id }}">Edit</a>
-                <a class="btn" href="disableUser?id={{ $domacnost->id }}">Aktivuj | Deaktivuj</a>
-                <a class="btn" href="deleteUser?id={{ $domacnost->id }}" onclick="return confirm('Určite chcete zmazať tento záznam?')">Zmaž</a>
+		<a class="btn btn-primary" href="editUser?id={{ $domacnost->id }}"> Uprav </a>
+                <a class="btn btn-inverse" href="disableUser?id={{ $domacnost->id }}"> Aktivuj | Deaktivuj </a>
+                <a class="btn btn-danger" href="deleteUser?id={{ $domacnost->id }}" onclick="return confirm('Určite chcete zmazať tento záznam?')"> Zmaž </a>
             </td>
         </tr>
         @endforeach
         
         </tbody>
         <tr>
-            <td><input type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
-            <td><input type="submit" name="Submit" value="Aktivuj" /> 
-                <input type="submit" name="Submit" value="Deaktivuj" /></td>
+            <td><input class="btn btn-danger" type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
+            <td><input class="btn btn-primary" type="submit" name="Submit" value="Aktivuj" /> 
+                <input class="btn btn-primary" type="submit" name="Submit" value="Deaktivuj" /></td>
         </tr>
     </table>
 </form>

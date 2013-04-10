@@ -241,8 +241,10 @@
 					{{ $income->t_poznamka }}
 					
 				</td>
-				<td><a class="btn btn-primary" href="{{ URL::to('incomes/form?id='.$income->id) }}">Upraviť</a>
-				    <a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove icon-white"></i>Vymazať</a>
+				<td style="text-align: center;">
+					<a class="btn btn-primary" href="{{ URL::to('incomes/form?id='.$income->id) }}"> Upraviť </a>
+				    <a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')">
+				    	<i class="icon-remove icon-white"> </i> Vymazať </a>
 				</td>
 			</tr>
 			@endforeach

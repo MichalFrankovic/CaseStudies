@@ -142,14 +142,16 @@ if ($editacia == "ano") {
 			<td>	{{ $par->fl_typ }}					</td>
             <td>    {{ $par->t_adresa }}          </td>
             
-            <td style="text-align: center;"> <a class="btn" href="sprava_partnerov?id={{ $par->id }}"> Upraviť </a>
-                 <a class="btn" href="zmazatpartnera?id={{ md5($par->id). $secretword}}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')">
-                    <i class="icon-remove"> </i>Vymazať</a>      </td>
+            <td style="text-align: center;"> 
+              <a class="btn btn-primary" href="sprava_partnerov?id={{ $par->id }}"> Upraviť </a>
+              <a class="btn btn-danger" href="zmazatpartnera?id={{ md5($par->id). $secretword}}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')">
+                  <i class="icon-remove icon-white"> </i>Vymazať</a>      
+            </td>
         </tr>
         @endforeach
     </tbody>
   </table>
-<a class="btn" href="#" onclick="multizmazanie('par[]')"> <i class="icon-remove"> </i> Vymazať zvolené </a>
+<a class="btn btn-danger" href="#" onclick="multizmazanie('par[]')"> <i class="icon-remove icon-white"> </i> Vymazať zvolené </a>
 </form>
 
 

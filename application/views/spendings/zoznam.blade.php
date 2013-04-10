@@ -132,13 +132,13 @@ echo "</pre>";*/
             <td>    {{ round($vydavok->suma_vydavku_po_celk_zlave,2) }} EUR </td>
 
                      
-            <td><a class="btn" href="simplespending?id={{ $vydavok->id }}">Upraviť</a>
-                <a class="btn" href="deletespending?vydavok={{ md5($vydavok->id). $secretword}} " onclick="return confirm('Určite chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a></td>
+            <td><a class="btn btn-primary" href="simplespending?id={{ $vydavok->id }}">Upraviť</a>
+                <a class="btn btn-danger" href="deletespending?vydavok={{ md5($vydavok->id). $secretword}} " onclick="return confirm('Určite chcete zmazať tento záznam?')"><i class="icon-remove icon-white"></i>Vymazať</a></td>
         </tr>
         @endforeach
         </tbody>
     </table>
-    <a class="btn" href="#" onclick="multizmazanie('vydavok[]')"><i class="icon-remove"></i>Vymazať zvolené</a>
+    <a class="btn btn-danger" href="#" onclick="multizmazanie('vydavok[]')"><i class="icon-remove icon-white"></i>Vymazať zvolené</a>
 </form>
 
 
