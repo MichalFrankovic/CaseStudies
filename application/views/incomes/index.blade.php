@@ -224,7 +224,7 @@
 		<tbody>
 			@foreach($incomes as $income)
 			<tr>
-				<td><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{$income->id}}" /></td>
+				<td style="text-align: center;"><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{$income->id}}" /></td>
 				<td>{{ $income->t_meno_osoby }}&nbsp;{{ $income->t_priezvisko_osoby }}</td>
 				<td>{{ $income->t_nazov_typu }}</td>
 				<td>					
@@ -241,14 +241,14 @@
 					{{ $income->t_poznamka }}
 					
 				</td>
-				<td><a class="btn" href="{{ URL::to('incomes/form?id='.$income->id) }}">Upraviť</a>
-				    <a class="btn" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove"></i>Vymazať</a>
+				<td><a class="btn btn-primary" href="{{ URL::to('incomes/form?id='.$income->id) }}">Upraviť</a>
+				    <a class="btn btn-danger" href="{{ URL::to('incomes/delete/'.$income->id) }}" onclick="return confirm('Naozaj chcete zmazať tento záznam?')"><i class="icon-remove icon-white"></i>Vymazať</a>
 				</td>
 			</tr>
 			@endforeach
 		</tbody>
 	</table>
-	<a class="btn" href="#" onclick="multizmazanie('income[]')"><i class="icon-remove"></i>Vymazať zvolené</a>
+	<a class="btn btn-danger" href="#" onclick="multizmazanie('income[]')"><i class="icon-remove icon-white"></i>Vymazať zvolené</a>
 	</form>
 @endsection
 

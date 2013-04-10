@@ -157,7 +157,7 @@
 
 
 		<div class="control-group">
-			{{ Form::label(null, 'Typ prijmu', array('class'=>'control-label')) }}
+			{{ Form::label(null, 'Typ príjmu', array('class'=>'control-label')) }}
 		    <div class="controls">
 		     <select name='id_typ_prijmu' class='input-xlarge'>
 			      	@foreach ($typ_prijmu as $typ)
@@ -178,7 +178,13 @@
 	  			<div class="input-prepend">
 				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
 				  	
-				  	<input class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) echo $editacia[0]->d_datum; ?>" name="d_datum"> </input>
+				  	<input class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) {
+																  					$x = $editacia[0]->d_datum;
+																  					$x = date('m/d/Y');
+																  	 				echo $x;
+																  	 			}
+				  	 														?> ">
+				  	</input>
 				</div>
 	  		</div>
 	  	</div>
