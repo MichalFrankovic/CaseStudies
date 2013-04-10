@@ -1,7 +1,9 @@
 @include('head')
 
-@if (isset($message) )
-    <h3 style="color: #bc4348;">{{ $message }}</h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
 
 @include('spendings/sp-submenu')
@@ -11,18 +13,18 @@
     <h4>Parametre:</h4>
 {{ Form::open('spendings/savefromtemplate', 'POST', array('class' => '')); }}
     <table border="0" style="width: 100%;">
-        <tr>
+          <tr>
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Dátum:          </span>
-                    <input class="span3" type="date" name="datum" value="{{ $datum }}" />
+                    <input class="span2" type="date" name="datum" value="{{ $datum }}" />
                 </div>
             </td>
 
             <td>
                 <div class="input-prepend" style="float:left">
                      <span class="add-on">  Názov výdavku:  </span>
-                        <select name="sablona" class="span3">
+                        <select name="sablona" class="span2">
                         @foreach ($sablony as $sablona)
                             <option value="{{ $sablona->id }}"> {{ $sablona->t_poznamka }}  </option>
                         @endforeach
@@ -33,16 +35,21 @@
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Zaplatil:   </span>
-                        <select name="osoba" class="span3">
+                        <select name="osoba" class="span2">
                         @foreach ($osoby as $osoba)
                             <option value="{{ $osoba->id }}">{{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }} </option>
                         @endforeach
                         </select>
                 </div>
             </td>
-        </tr>
 
-        <tr>
+            <td>
+                 <div class="input-prepend">
+                    <label class="add-on">   Suma v €:   </label>
+                            <input class="span2" type="text" name="nazov">
+                </div>
+            </td>
+        </tr>
             <td>
                 <div>
                     <input type="submit" class="btn btn-primary" value="Pridať výdavok" />
@@ -81,7 +88,7 @@
             <td>    {{ $sablona->vl_jednotkova_cena }} €                                    </td>
             <td style="text-align: center;">
                 <a class="btn btn-primary" href="sablona?id={{ $sablona->id }}"> Upraviť </a>
-                <a class="btn btn-danger" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}">
+                <a class="btn btn-danger" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
                     <i class="icon-remove icon-white"> </i> Vymazať </a>
             </td>
         </tr>

@@ -1,18 +1,23 @@
 @include('head')
 
-<script>var js_polozky = {{ $dzejson }}</script>
-<h3 style="color: #bc2834;">{{ $message }}</h3>
+<script>    var js_polozky = {{ $dzejson }} </script>
+
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
+@endif
 
 @include('spendings/sp-submenu')
 
 <h2>Jednoduchý výdavok - editácia</h2>
 
 {{ Form::open('spendings/savespending?update=1', 'POST', array('class' => 'side-by-side')); }}
-
 <input type="hidden" name="hlavicka-id" id="idhidden" value="{{ $vydavky[0]->id }}"/>
 
 <div class="thumbnail">
     <h4>Parametre:</h4>
+    
     <div class="input-prepend" style="float:left;width:295px">
         <span class="add-on"> Dátum:          </span>
         <input name="datum" class="span3 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">

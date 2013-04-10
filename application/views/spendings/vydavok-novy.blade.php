@@ -1,9 +1,15 @@
 @include('head')
 
 <script>    var js_polozky = {{ $dzejson }} </script>
-<h3 style="color: #bc4348;">{{ $message }}  </h3>
+
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
+@endif
 
 @include('spendings/sp-submenu')
+
 
 
 {{ Form::open('spendings/savespending', 'POST', array('class' => 'side-by-side')); }}
