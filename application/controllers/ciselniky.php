@@ -863,7 +863,7 @@ public function action_sprava_typu_vydavku()
                           }
 	   
 
-        if (isset($id)) {      
+        if (isset($id)) {       
 
           $editovany_zaznam = DB::table('D_TYP_VYDAVKU')->where('id', '=', $id)->get();
 

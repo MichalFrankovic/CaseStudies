@@ -81,7 +81,7 @@ function validujFormTypyPrijmu()
         }
 
 return false;
-}
+} 
 
 
 
