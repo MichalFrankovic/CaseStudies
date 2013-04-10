@@ -851,7 +851,7 @@ public function action_pridajtypprijmu()
 // *********** --- PODSEKCIA 6 (ZAČIATOK) --- FUNKCIE PRE SPRÁVU TYPU VÝDAVKU ********************************
     //@Alisher Bek
 
-public function action_sprava_typu_vydavku()
+public function action_sprava_typu_vydavku() 
     {
        $subactive = 'podmenu-sprava-typu-vydavku';
 	    $x = Input::get('id');
