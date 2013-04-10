@@ -854,8 +854,14 @@ public function action_pridajtypprijmu()
 public function action_sprava_typu_vydavku()
     {
        $subactive = 'podmenu-sprava-typu-vydavku';
+	    $x = Input::get('id');
+          if (isset($x)) {
+               $id = Input::get('id');
+                        }
+                          else {
+                            $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+                          }
 	   
-	    $id = Input::get('id');
 
         if (isset($id)) {      
 
@@ -875,8 +881,11 @@ public function action_sprava_typu_vydavku()
           }
 		
         $view->typy = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
+               $view->message = Session::get('message');
 
-        $view->message = Session::get('message');
+$view->errors = Session::get('errors');
+        $view->error = Session::get('error');
+        $view->menene_vydavka = Session::get('menene_vydavka');
         return $view;
     }
 
@@ -886,12 +895,34 @@ public function action_pridajtypvydavku()
         $id_domacnost = Auth::user()->id;
         $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
         
-       
+      $view = Redirect::to('ciselniky/sprava_typu_vydavku');
+
+
+if (empty($t_nazov_typu_vydavku)) 
+{  
+      $errors['typvydavku'] = 'Zadajte prosim typ vydavku!';
+    }
+
+if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+
+      $view = Redirect::to('ciselniky/sprava_typu_vydavku')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('menene_vydavka',$t_nazov_typu_vydavku);
+                 
+      return $view;
+    }
+	
+  
        
       DB::query("INSERT INTO  `web`.`D_TYP_VYDAVKU` (`t_nazov_typu_vydavku`, `id_domacnost`)
                    VALUES ('$t_nazov_typu_vydavku' , '$id_domacnost');");
-        
-       return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku bol pridaný!');
+	  
+	  $view = Redirect::to('ciselniky/sprava_typu_vydavku')
+                          ->with('message','Typ vydavku bol úspešne pridan')
+                          ->with('status_class','sprava-uspesna');
+        return $view; 
     }
   
 public function action_zmazattypvydavku()
@@ -940,7 +971,25 @@ public function action_zmazattypvydavku()
         $id = Input::get('id');
         $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
 
+ $view = Redirect::to('ciselniky/sprava_typu_vydavku');
 
+
+if (empty($t_nazov_typu_vydavku)) {  
+      $errors['typvydavku'] = 'Zadajte prosim typ vydavku!';
+    }
+
+
+  
+ if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+      
+      $view = Redirect::to('ciselniky/sprava_typu_vydavku')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('menene_vydavka',$t_nazov_typu_vydavku);
+                 
+      return $view;
+    }
   
  
 
