@@ -1,25 +1,13 @@
 @include('head')
 
-@if (isset($message) )
-<h3 style="color: #bc4348;"> {{ $message }} </h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
 
 @include('ciselniky/ciselniky-podmenu')
 
-
-<script type="text/javascript">
-// Zabránenie duplicitným zobrazeniam hodnôt v selectoch na stránkach
-    window.onload = function()
-    {
-        var found = [];
-            $("select option").each(function() 
-                {
-                  if($.inArray(this.value, found) != -1) $(this).remove();
-                  found.push(this.value);
-                });
-    }
-
-</script>
 
 <?php
 
@@ -38,11 +26,11 @@ if (isset($editovany_zaznam))
 
 <?php
 if ($editacia == 'ano') {
-     echo "<h2>    Upravte typ prijmu   </h2>";
+     echo "<h2>    Upravte typ príjmu   </h2>";
      echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravtypprijmu" accept-charset="UTF-8">';  
  }
    else  {         
-    echo "<h2>    Pridajte typ prijmu  </h2>";
+    echo "<h2>    Pridajte typ príjmu  </h2>";
     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridajtypprijmu" accept-charset="UTF-8">';
          }
 
@@ -55,7 +43,7 @@ if ($editacia == 'ano') {
     
 
     <div {{ isset($errors->t_nazov_typu) || (is_array($errors) && isset($errors['t_nazov_typu'])) ? ' class="control-group error"' : '' }}>
-        <label class="control-label">    Názov typu:          </label>
+        <label class="control-label">    Názov typu príjmu:          </label>
         <input class="span4" type="text" name="nazov_typu" value="<?php
                                                                 if(isset($zmeneny_nazov))
                                                                    echo $zmeneny_nazov;

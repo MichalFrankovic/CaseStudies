@@ -1,7 +1,9 @@
 @include('head')
 
-@if (isset($message) )
-<h3 style="color: #bc4348;">{{ $message }}</h3>
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
 
 @include('ciselniky/ciselniky-podmenu') 
@@ -21,17 +23,17 @@ if (isset($editovany_zaznam))
 <div class="thumbnail" >
  <?php
 if ($editacia == 'ano') {
-     echo "<h2>    Upravit typ vydavku   </h2>";
+     echo "<h2>    Upraviť typ výdavku   </h2>";
      echo '<form class="side-by-side" name="tentoForm" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyVydavku()" method="POST" action="upravittypvydavku" accept-charset="UTF-8">';  
  }
    else  {         
-    echo "<h2>    Pridajte typ vydavku  </h2>";
+    echo "<h2>    Pridajte typ výdavku  </h2>";
     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyVydavku()" method="POST" action="pridajtypvydavku" accept-charset="UTF-8">';
          }
 
 ?>
     
-      <!--  <label class="control-label">    ID OSOBY:          </label>    -->
+            <!--  <label class="control-label">    ID OSOBY:          </label>    -->
         <input class="span4" type="hidden" name="id" value="<?php
                                                                 if (isset($editovany_zaznam[0]->id))
                                                                     echo ($editovany_zaznam[0]->id); 
@@ -40,9 +42,9 @@ if ($editacia == 'ano') {
     <div{{ isset($errors->typvydavku) || (is_array($errors) && isset($errors['typvydavku'])) ? ' class="control-group error"' : '' }} >
         <label class="control-label">    Názov typu výdavku:          </label>  
        <span style="padding:0px 10px;"> <input class="span3" type="text" name="nazov_typu_vydavku" value="<?php
-	                                                             if (isset($menene_vydavka))
-																 echo $menene_vydavka;
-                                                                elseif (isset($editovany_zaznam[0]->t_nazov_typu_vydavku))
+                                                                 /*if (isset($meneny_vydavok))
+                                                                 echo $meneny_vydavok; */
+                                                                if (isset($editovany_zaznam[0]->t_nazov_typu_vydavku))
                                                                     echo ($editovany_zaznam[0]->t_nazov_typu_vydavku); 
                                                              ?>">
 </span>{{ isset($errors->typvydavku) || (is_array($errors) && isset($errors['typvydavku'])) ? '<span class="help-inline">'.$errors['typvydavku'].'</span>' : '' }}
@@ -81,6 +83,7 @@ if ($editacia == "ano") {
 
 ?>
 
+{{ Form::close() }}
      
 
 </div>
@@ -93,26 +96,31 @@ if ($editacia == "ano") {
     <thead>
         <tr>
             <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
-            <th> Názov 				</th>
+            <th> Názov              </th>
             <th> Výber akcie </th>
         </tr>
     </thead>
     <tbody>
         @foreach ($typy as $typ)
         <tr>
-            <td><input type="checkbox" name="typvydavku[]" id="checkbox2" class="spendcheck" value="{{ md5($typ->id). $secretword}}" /></td>
+            <td style="text-align: center;"> <input type="checkbox" name="typvydavku[]" id="checkbox2" class="spendcheck" value="{{ md5($typ->id). $secretword}}" /> </td>
             <td> {{ $typ->t_nazov_typu_vydavku }} </td>
            
             
-            <td> <a class="btn" href="sprava_typu_vydavku?id={{ $typ->id }}"> Upraviť </a>
-                 <a class="btn" href="zmazattypvydavku?typvydavku={{ md5($typ->id). $secretword}}"  onclick="return confirm('Určite chcete zmazať tento záznam?')">
-                 <i class="icon-remove"></i>Vymazať</a></td>
+            <td style="text-align: center;"> 
+                <a class="btn btn-primary" href="sprava_typu_vydavku?id={{ $typ->id }}"> Upraviť </a>
+                <a class="btn btn-danger" href="zmazattypvydavku?typvydavku={{ md5($typ->id). $secretword}}"  onclick="return confirm('Určite chcete zmazať tento záznam?')">
+                <i class="icon-remove icon-white"> </i> Vymazať </a>
+            </td>
         </tr>
         @endforeach
     </tbody>
     
   </table>
-   <td><button type="submit"  class="btn"     name="Submit"    onclick="multizmazanie('typvydavku[]')" /> <i class="icon-remove"></i>Vymazať zvolené</button></td>
+
+<button class="btn btn-danger" onclick="multizmazanie('typvydavku[]')"> 
+    <i class="icon-remove icon-white"> </i> Vymazať zvolené
+</button>
 
 </form>
 

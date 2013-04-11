@@ -785,7 +785,8 @@ public function action_sprava_typu_prijmu()
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id); 
              }
 
-        $view->typy = Typyprijmu::where('id_domacnost','=',Auth::user()->id)->get();
+        $view->typy = Typyprijmu::where('id_domacnost','=',Auth::user()->id)
+                          ->order_by('t_nazov_typu','ASC')->get();
         $view->message = Session::get('message');
         $view->errors = Session::get('errors');
         $view->error = Session::get('error');
@@ -821,7 +822,9 @@ public function action_pridajtypprijmu()
          else {
        DB::query("INSERT INTO `web`.`D_TYP_PRIJMU` (`t_nazov_typu`, `id_domacnost`) VALUES('$t_nazov_typu', '$id_domacnost');");
 
-       return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol pridaný!');
+       return Redirect::to('ciselniky/sprava_typu_prijmu')
+              ->with('message', 'Typ príjmu bol pridaný!')
+              ->with('status_class','sprava-uspesna');
          }
     }
 
@@ -833,12 +836,16 @@ public function action_pridajtypprijmu()
         $id = Input::get('id');
         try {
             DB::query('DELETE FROM D_TYP_PRIJMU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typ_id.'\''); //mazanie hlavicky
-            return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typ prijmu bol vymazaný!');
+            return Redirect::to('ciselniky/sprava_typu_prijmu')
+                  ->with('message', 'Typ príjmu bol vymazaný')
+                  ->with('status_class','sprava-uspesna');
             }
         catch (Exception $e){
                 $e->getMessage();
                 
-            return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Daný typ prijmu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+            return Redirect::to('ciselniky/sprava_typu_prijmu')
+            ->with('message', 'Daný typ príjmu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+            ->with('status_class','sprava-chyba');
             }
 
     }
@@ -856,7 +863,9 @@ public function action_pridajtypprijmu()
         }
       }
 
-      return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Typy prijmu boli vymazané!');
+      return Redirect::to('ciselniky/sprava_typu_prijmu')
+            ->with('message', 'Typy príjmu boli vymazané')
+            ->with('status_class','sprava-uspesna');
     }
     public function action_upravtypprijmu(){
 
@@ -884,7 +893,9 @@ public function action_pridajtypprijmu()
                   
         DB::query("UPDATE D_TYP_PRIJMU SET t_nazov_typu = '$t_nazov_typu' WHERE id = '$id'");
             
-        return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', 'Zmeny boli uložené.');
+        return Redirect::to('ciselniky/sprava_typu_prijmu')
+                  ->with('message', 'Zmeny boli uložené.')
+                  ->with('status_class','sprava-uspesna');
       }
 // *********** --- PODSEKCIA 5 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
 
@@ -909,25 +920,26 @@ public function action_sprava_typu_vydavku()
 
           $editovany_zaznam = DB::table('D_TYP_VYDAVKU')->where('id', '=', $id)->get();
 
-        $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
-            ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
-			   ->with('editovany_zaznam', $editovany_zaznam);
+          $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
+              ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id)
+			         ->with('editovany_zaznam', $editovany_zaznam);
 			} 
           else {
 			  
 			  
-
           $view = View::make('ciselniky.sprava-typu-vydavku')->with('secretword', md5(Auth::user()->t_heslo))
             ->with('active', 'ciselniky')->with('subactive', $subactive)->with('uid', Auth::user()->id);
 
           }
 		
-        $view->typy = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->typy = DB::table('D_TYP_VYDAVKU')
+                ->order_by('t_nazov_typu_vydavku','ASC')
+              ->where('id_domacnost', '=',Auth::user()->id)->get();
                $view->message = Session::get('message');
 
-$view->errors = Session::get('errors');
+        $view->errors = Session::get('errors');
         $view->error = Session::get('error');
-        $view->menene_vydavka = Session::get('menene_vydavka');
+        $view->meneny_vydavok = Session::get('meneny_vydavok');
         return $view;
     }
 
@@ -942,7 +954,7 @@ public function action_pridajtypvydavku()
 
 if (empty($t_nazov_typu_vydavku)) 
 {  
-      $errors['typvydavku'] = 'Zadajte prosim typ vydavku!';
+      $errors['typvydavku'] = 'Zadajte prosím typ výdavku';
     }
 
 if (!empty($errors)) {
@@ -951,7 +963,7 @@ if (!empty($errors)) {
       $view = Redirect::to('ciselniky/sprava_typu_vydavku')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('menene_vydavka',$t_nazov_typu_vydavku);
+                        ->with('meneny_vydavok',$t_nazov_typu_vydavku);
                  
       return $view;
     }
@@ -962,7 +974,7 @@ if (!empty($errors)) {
                    VALUES ('$t_nazov_typu_vydavku' , '$id_domacnost');");
 	  
 	  $view = Redirect::to('ciselniky/sprava_typu_vydavku')
-                          ->with('message','Typ vydavku bol úspešne pridan')
+                          ->with('message','Typ výdavku bol úspešne pridaný')
                           ->with('status_class','sprava-uspesna');
         return $view; 
     }
@@ -975,14 +987,19 @@ public function action_zmazattypvydavku()
         $id = Input::get('id');
             try {
         DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
-        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typ vydavku bol vymazaný!'); 
+        return Redirect::to('ciselniky/sprava_typu_vydavku')
+                ->with('message', 'Typ výdavku bol vymazaný')
+                ->with('status_class','sprava-uspesna'); 
     }
   catch (Exception $e){
                 $e->getMessage();
-				  return Redirect::to('ciselniky/sprava_osob')->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+				  return Redirect::to('ciselniky/sprava_osob')
+                ->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+                ->with('status_class','sprava-chyba');
             }
 
     }
+
   public function action_multizmazattypy()
     {
       $secretword = md5(Auth::user()->t_heslo);
@@ -1002,7 +1019,9 @@ public function action_zmazattypvydavku()
       }
 	   }
  }
-      return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Typy vydavku boli vymazané!!');
+      return Redirect::to('ciselniky/sprava_typu_vydavku')
+                ->with('message', 'Typy výdavkov boli vymazané')
+                ->with('status_class','sprava-uspesna');
     }
     return Redirect::to('ciselniky/sprava_typu_vydavku');//->with('message', 'Nebola označena ziadna osoba!');
     }
@@ -1017,7 +1036,7 @@ public function action_zmazattypvydavku()
 
 
 if (empty($t_nazov_typu_vydavku)) {  
-      $errors['typvydavku'] = 'Zadajte prosim typ vydavku!';
+      $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
     }
 
 
@@ -1028,18 +1047,20 @@ if (empty($t_nazov_typu_vydavku)) {
       $view = Redirect::to('ciselniky/sprava_typu_vydavku')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('menene_vydavka',$t_nazov_typu_vydavku);
+                        ->with('meneny_vydavok',$t_nazov_typu_vydavku)
+                        ->with('error',$error)
+                        ->with('id',$id);
                  
       return $view;
     }
   
- 
 
         DB::query("UPDATE D_TYP_VYDAVKU SET t_nazov_typu_vydavku = '$t_nazov_typu_vydavku' WHERE id = '$id'");
-  
 
+        return Redirect::to('ciselniky/sprava_typu_vydavku')
+                  ->with('message', 'Zmeny boli uložené')
+                  ->with('status_class','sprava-uspesna');
 
-        return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Zmeny boli uložené.');
 		
   }
 
