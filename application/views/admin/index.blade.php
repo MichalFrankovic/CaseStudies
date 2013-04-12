@@ -66,7 +66,7 @@ function checkedAll (form1) {
             <td>{{ $domacnost->fl_aktivna }}</td>
             <td>
 		<a class="btn btn-primary" href="editUser?id={{ $domacnost->id }}"> Uprav </a>
-                <a class="btn btn-inverse" href="disableUser?id={{ $domacnost->id }}"> Aktivuj | Deaktivuj </a>
+                <a class="btn btn-success" href="disableUser?id={{ $domacnost->id }}"> Aktivuj | Deaktivuj </a>
                 <a class="btn btn-danger" href="deleteUser?id={{ $domacnost->id }}" onclick="return confirm('Určite chcete zmazať tento záznam?')"> Zmaž </a>
             </td>
         </tr>
@@ -75,8 +75,8 @@ function checkedAll (form1) {
         </tbody>
         <tr>
             <td><input class="btn btn-danger" type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
-            <td><input class="btn btn-primary" type="submit" name="Submit" value="Aktivuj" /> 
-                <input class="btn btn-primary" type="submit" name="Submit" value="Deaktivuj" /></td>
+            <td><input class="btn btn-success" type="submit" name="Submit" value="Aktivuj" /> 
+                <input class="btn btn-inverse" type="submit" name="Submit" value="Deaktivuj" /></td>
         </tr>
     </table>
 </form>

@@ -134,7 +134,7 @@
             <input class="span3" type="text" disabled="disabled">
         </div>
         
-{{ Form::close() }}
+
     
     <HR>
 
@@ -144,6 +144,7 @@
     </button>
 
 </div>
+{{ Form::close() }}
 
 
 @include('foot')

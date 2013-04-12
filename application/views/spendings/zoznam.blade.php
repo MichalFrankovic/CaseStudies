@@ -88,9 +88,9 @@ echo "</pre>";*/
        
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"> </i> Zobraziť  </button>
   
-
-{{ Form::close() }}
 </div>
+{{ Form::close() }}
+
 
 
 

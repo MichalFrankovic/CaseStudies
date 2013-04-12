@@ -138,7 +138,7 @@
          <input class="span3" type="text" disabled="disabled" value="{{ number_format(round($vydavky[0]->celkova_zlava,2),2) }}">
     </div>
     
-{{ Form::close() }}
+
 
   <HR>
 
@@ -149,6 +149,7 @@
 
 
 </div>
+{{ Form::close() }}
 
 
 @include('foot')
