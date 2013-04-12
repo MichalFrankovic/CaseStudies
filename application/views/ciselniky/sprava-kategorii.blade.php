@@ -16,6 +16,10 @@ if (isset($editovany_zaznam))
 
 ?>
 
+@if (isset($error) && $error == true)
+    <div class="alert alert-error">{{ $error }}</div>
+@endif
+
 <div class="thumbnail" >
 
 <?php

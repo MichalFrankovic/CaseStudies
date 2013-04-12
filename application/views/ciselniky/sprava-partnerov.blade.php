@@ -1,8 +1,9 @@
 @include('head')
 
-@if (isset($message) )
-<h3 style="color: #bc4348;">{{ $message }}</h3>
-@endif
+@if(Session::get('message'))
+    <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+    </div>@endif
 
 @include('ciselniky/ciselniky-podmenu')
 
@@ -28,6 +29,9 @@ if (isset($editovany_zaznam))
 
 ?>
 
+@if (isset($error) && $error == true)
+    <div class="alert alert-error">{{ $error }}</div>
+@endif
 
 <div class="thumbnail" >
 
@@ -36,12 +40,12 @@ if ($editacia == 'ano')
   {
    
      echo "<h2>    Upraviť partnera   </h2>";
-     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormPartneri()" method="POST" action="upravitpartnera" accept-charset="UTF-8">';  
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravitpartnera" accept-charset="UTF-8">';  
   }
 else
   {         
      echo "<h2>    Pridať partnera    </h2>";
-     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormPartneri()" method="POST" action="pridatpartnera" accept-charset="UTF-8">';
+     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridatpartnera" accept-charset="UTF-8">';
     }
 ?>
     
@@ -49,27 +53,39 @@ else
                                                                     echo ($editovany_zaznam[0]->id); 
                                                          ?>">
     
-    <div class="input-prepend">
+
+  <div {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Názov:          </label>
-        <input class="span4" type="text" name="nazov" value="<?php if (isset($editovany_zaznam[0]->t_nazov))
+        <input class="span4" type="text" name="nazov" value="<?php 
+                                                                if (isset($meneny_nazov))
+                                                                    echo $meneny_nazov;
+
+                                                                elseif (isset($editovany_zaznam[0]->t_nazov))
                                                                     echo ($editovany_zaznam[0]->t_nazov); 
                                                               ?>">
-    </div>
+    {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? '<span class="help-inline">'.$errors['nazov'].'</span>' : '' }}
+  </div>
 
-  <div class="input-prepend">
+
+  <div {{ isset($errors->typ) || (is_array($errors) && isset($errors['typ'])) ? ' class="control-group error"' : '' }}>
       <label class="control-label">    Typ partnera:          </label>
         <select class="span4" type="text" name="typ">
            <?php
-              if (isset($editovany_zaznam[0]->fl_typ)) 
+              if (isset($meneny_typ)) 
+                {
+                  echo ('<option value="'.$meneny_typ.'" selected="selected">'.$meneny_typ.'</option>'); 
+                }
+              elseif (isset($editovany_zaznam[0]->fl_typ)) 
                 {
                   echo ('<option value="'.$editovany_zaznam[0]->fl_typ.'" selected="selected">'.$editovany_zaznam[0]->fl_typ.'</option>'); 
                 }  
              ?>
-    			<option value="Nezaradený">  Vyberte                         </option>
+    			<option value="Vyberte">          Vyberte                         </option>
     			<option value="Príjemca platby">                 Príjemca platby                 </option>
     			<option value="Zdroj príjmu">                    Zdroj príjmu                    </option>
     			<option value="Príjemca platby aj zdroj príjmu"> Príjemca platby aj zdroj príjmu </option>	
         </select>
+    {{ isset($errors->typ) || (is_array($errors) && isset($errors['typ'])) ? '<span class="help-inline">'.$errors['typ'].'</span>' : '' }}
     </div>
   
        
@@ -138,9 +154,9 @@ if ($editacia == "ano") {
         @foreach ($partneri as $par)
         <tr>
             <td style="text-align: center;"><input type="checkbox" name="par[]" id="checkbox2" class="spendcheck" value="{{ md5($par->id). $secretword}}" /></td>
-            <td>    {{ $par->t_nazov }}          </td>
-			<td>	{{ $par->fl_typ }}					</td>
-            <td>    {{ $par->t_adresa }}          </td>
+            <td>    {{ $par->t_nazov }}         </td>
+			      <td>	  {{ $par->fl_typ }}					</td>
+            <td>    {{ $par->t_adresa }}        </td>
             
             <td style="text-align: center;"> 
               <a class="btn btn-primary" href="sprava_partnerov?id={{ $par->id }}"> Upraviť </a>

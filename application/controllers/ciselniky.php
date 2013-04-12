@@ -236,11 +236,19 @@ public function action_multizmazanieosob()
 
 public function action_sprava_partnerov()
     {
-
+    $subactive = 'podmenu-sprava-partnerov';
+        $x = Input::get('id');
+      if (isset($x))
+      {
         $id = Input::get('id');
+      }
+        else 
+        {
+          $id = Session::get('id');     
+        }
 
-        if (isset($id)) { 
-
+        if (isset($id))
+    { 
            $editovany_zaznam = Partner::where('id','=',$id)->get();
 
            $view = View::make('ciselniky.sprava-partnerov')
@@ -248,50 +256,107 @@ public function action_sprava_partnerov()
             ->with('subactive', 'podmenu-sprava-partnerov')
             ->with('secretword', md5(Auth::user()->t_heslo))
             ->with('editovany_zaznam',$editovany_zaznam);
-
-        } else {
-
-       $view = View::make('ciselniky.sprava-partnerov')
-       ->with('active', 'ciselniky')
-       ->with('subactive', 'podmenu-sprava-partnerov')
-       ->with('secretword', md5(Auth::user()->t_heslo));
-
-     }
-
-        $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
-
-        $view->message = Session::get('message');
-
-       return $view;   
     }
-
+      else 
+      {
+        $view = View::make('ciselniky.sprava-partnerov')
+        ->with('active', 'ciselniky')
+        ->with('subactive', 'podmenu-sprava-partnerov')
+        ->with('secretword', md5(Auth::user()->t_heslo));
+      }
+  
+    $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)
+                        ->order_by('t_nazov','ASC')
+                        ->get();
+    $view->message = Session::get('message');
+    $view->errors = Session::get('errors');
+    $view->error = Session::get('error');
+    $view->meneny_nazov = Session::get('meneny_nazov');
+    $view->meneny_typ = Session::get('meneny_typ');
+    $view->meneny_adresa = Session::get('meneny_jednotka');
+  
+    return $view;       
+  }
+  
+  
 public function action_pridatpartnera()
     {
-     $id_domacnost = Auth::user()->id;
-     $t_nazov = Input::get('nazov');
-     $t_adresa = Input::get('adresa');
-     $fl_typ = Input::get('typ');
+    $id_domacnost = Auth::user()->id;
+    $t_nazov = Input::get('nazov');
+    $t_adresa = Input::get('adresa');
+    $fl_typ = Input::get('typ');
+    
+    $view = Redirect::to('ciselniky/sprava_produktov');
 
-   DB::query("INSERT INTO `web`.`D_OBCHODNY_PARTNER` (`id` ,`id_domacnost` ,`t_nazov` ,`t_adresa` ,`fl_typ` )
-   VALUES (NULL , '$id_domacnost', '$t_nazov', '$t_adresa', '$fl_typ');");
+      if (empty($t_nazov)) {  
+      $errors['nazov'] = 'Zadajte prosím názov partnera';
+      }
+
+
+      if ($fl_typ == 'Vyberte') {  
+      $errors['typ'] = 'Vyberte typ partnera';
+      }
+
+
+      if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+     
+      $view = Redirect::to('ciselniky/sprava_partnerov')
+            ->with('error', $error)
+            ->with('errors',$errors)
+            ->with('meneny_nazov',$t_nazov)
+            ->with('meneny_typ',$fl_typ)
+                        ->with('meneny_adresa',$t_adresa);
+        return $view;
+      }
+    DB::query("INSERT INTO `web`.`D_OBCHODNY_PARTNER` (`id` ,`id_domacnost` ,`t_nazov` ,`t_adresa` ,`fl_typ` )
+    VALUES (NULL , '$id_domacnost', '$t_nazov', '$t_adresa', '$fl_typ');");
         
-  return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Partner bol pridaný!');
+    $view = Redirect::to('ciselniky/sprava_partnerov')
+                        ->with('message','Partner bol úspešne pridaný')
+                        ->with('status_class','sprava-uspesna');
+    return $view; 
     }
   
 
 public function action_upravitpartnera()
     {
-     $id = Input::get('id');
-     $t_nazov = Input::get('nazov');
-     $t_adresa = Input::get('adresa');
-     $fl_typ = Input::get('typ');
-
-   DB::query("UPDATE D_OBCHODNY_PARTNER SET t_nazov = '$t_nazov', t_adresa = '$t_adresa', fl_typ = '$fl_typ' WHERE id = '$id'");
+    $id = Input::get('id');
+    $t_nazov = Input::get('nazov');
+    $t_adresa = Input::get('adresa');
+    $fl_typ = Input::get('typ');
   
-   
-   return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Zmeny boli uložené.');
-    } 
+  $view = Redirect::to('ciselniky/sprava_produktov');
+  
+      if (empty($t_nazov)) {  
+      $errors['nazov'] = 'Zadajte prosím nový názov tohto partnera';
+      }
 
+      if ($fl_typ == 'Vyberte') {  
+      $errors['typ'] = 'Vyberte typ partnera';
+      }
+
+      if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+      
+      $view = Redirect::to('ciselniky/sprava_partnerov')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('id',$id);
+                        
+      return $view;
+      }
+  
+
+  DB::query("UPDATE D_OBCHODNY_PARTNER SET t_nazov = '$t_nazov', t_adresa = '$t_adresa', fl_typ = '$fl_typ' WHERE id = '$id'");
+  return Redirect::to('ciselniky/sprava_partnerov')
+                    ->with('message', 'Zmeny boli uložené.')
+                    ->with('status_class','sprava-uspesna');
+
+  
+    } 
+  
+  
 
 public function action_zmazatpartnera()
     {
@@ -302,12 +367,14 @@ public function action_zmazatpartnera()
      {
              DB::query('DELETE FROM D_OBCHODNY_PARTNER WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$id.'\'');
               
-             return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Partner bol vymazaný!');
+             return Redirect::to('ciselniky/sprava_partnerov')
+            ->with('message', 'Partner bol vymazaný!')
+            ->with('status_class','sprava-uspesna');
          }
          catch (Exception $e)
      {
              $e->getMessage();
-             return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Daného partnera nie je možné vymazať, <br />nakolko by bola narušená konzistencia dát v DB');
+             return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Daného partnera nie je možné vymazať');
          }
 
     }
@@ -334,9 +401,11 @@ public function action_multizmazaniepartnerov()
           }
         }
       }
-     return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Partneri boli vymazaní.');
+     return Redirect::to('ciselniky/sprava_partnerov')
+          ->with('message', 'Partneri boli vymazaní.')
+          ->with('status_class','sprava-uspesna');
     }
-     else return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nebola zvolená žiadna osoba!');
+     else return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nebol zvolený žiaden partner!');
     }
 
 
@@ -731,11 +800,8 @@ if (!empty($errors)) {
       $view = Redirect::to('ciselniky/sprava_produktov')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('id',$id)
-                        ->with('meneny_nazov',$t_nazov)
-                        ->with('meneny_cena',$cena)
-                        ->with('meneny_jednotka',$jednotka)
-                        ->with('meneny_kategoria',$idkategoria);
+                        ->with('id',$id);
+                        
       return $view;
     }
 
