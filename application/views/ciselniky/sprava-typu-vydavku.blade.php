@@ -8,4 +8,4 @@
 
 @include('ciselniky/ciselniky-podmenu') 
 
-Kvôli mazaniu commitov
+Kvôli mazaniu commitovvvvvvvvvvvvvvv

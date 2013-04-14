@@ -122,6 +122,6 @@
 		?>
 	</ul>
 
-	Kvôli mazaniu commitov
+	Kvôli mazaniu commitovvvvvvvvvvvvvvvvvv
 
 	@endsection
