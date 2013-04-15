@@ -150,8 +150,8 @@ if ($editacia == "ano") {
         </tr>
     </thead>
 
-    <tbody>
-        @foreach ($partneri as $par)
+    <tbody>       <?php /* To ->results je pridané len kvôli stránkovaniu */ ?>
+        @foreach ($partneri->results as $par)
         <tr>
             <td style="text-align: center;"><input type="checkbox" name="par[]" id="checkbox2" class="spendcheck" value="{{ md5($par->id). $secretword}}" /></td>
             <td>    {{ $par->t_nazov }}         </td>
@@ -167,6 +167,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
+   <?php /* Navigačná lista pre stránkovanie */ echo $partneri->links(); ?>
 <a class="btn btn-danger" href="#" onclick="multizmazanie('par[]')"> <i class="icon-remove icon-white"> </i> Vymazať zvolené </a>
 </form>
 

@@ -265,9 +265,11 @@ public function action_sprava_partnerov()
         ->with('secretword', md5(Auth::user()->t_heslo));
       }
   
+  $per_page = 10;
     $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)
                         ->order_by('t_nazov','ASC')
-                        ->get();
+                        ->paginate($per_page);
+
     $view->message = Session::get('message');
     $view->errors = Session::get('errors');
     $view->error = Session::get('error');
@@ -374,7 +376,9 @@ public function action_zmazatpartnera()
          catch (Exception $e)
      {
              $e->getMessage();
-             return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Daného partnera nie je možné vymazať');
+             return Redirect::to('ciselniky/sprava_partnerov')
+                      ->with('message', 'Daného partnera nie je možné vymazať')
+                      ->with('status_class','sprava-chyba');
          }
 
     }
@@ -397,7 +401,9 @@ public function action_multizmazaniepartnerov()
                  catch (Exception $e)
           {
            $e->getMessage();
-           return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nie je možné zmazať partnera');
+           return Redirect::to('ciselniky/sprava_partnerov')
+                    ->with('message', 'Nie je možné zmazať partnera')
+                    ->with('status_class','sprava-chyba');
           }
         }
       }
@@ -496,9 +502,11 @@ public function action_multizmazaniepartnerov()
                                       ) AS a
                                      
                                    "); */
+    $per_page = 10;
         $view->kategorie2 = Kategoria::where('id_domacnost','=',Auth::user()->id)
                                   ->order_by('t_nazov','ASC')
-                                  ->where('fl_typ','=','K')->get();
+                                  ->where('fl_typ','=','K')
+                                  ->paginate($per_page);
 
         $view->message = Session::get('message');
 
@@ -567,7 +575,7 @@ public function action_multizmazaniepartnerov()
       }
 
       return Redirect::to('ciselniky/sprava_kategorii')
-              ->with('message', 'Kategorie boli vymazané!')
+              ->with('message', 'Kategórie boli vymazané!')
               ->with('status_class','sprava-uspesna');
     }
 
@@ -665,10 +673,12 @@ public function action_sprava_produktov()
        // $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-
+    
+    $per_page = 10;   // Kvôli stránkovaniu
         $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)
                             ->order_by('t_nazov','ASC')
-                            ->where('fl_typ','=','P')->get();
+                            ->where('fl_typ','=','P')
+                            ->paginate($per_page);
 
         $view->message = Session::get('message');
 
@@ -876,7 +886,7 @@ public function action_pridajtypprijmu()
         //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
         }
         if(!empty($errors)){
-            $error='Opravte chybu vo formuláre';
+            $error='Opravte chybu vo formulári';
 
             $view=Redirect::to('ciselniky/sprava_typu_prijmu')
                           ->with('error',$error)

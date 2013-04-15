@@ -115,8 +115,8 @@ if ($editacia == "ano") {
         </tr>
     </thead>
 
-    <tbody>
-        @foreach ($kategorie2 as $kat)
+    <tbody>   <?php /* To ->results je pridané len kvôli stránkovaniu */ ?>
+        @foreach ($kategorie2->results as $kat)
         <tr>
             <td style="text-align: center;"> <input type="checkbox" name="kat[]" id="checkbox2" class="spendcheck" value="{{ md5($kat->id). $secretword}}" /> </td>
             <td>    {{ $kat->t_nazov }}              </td> 
@@ -134,6 +134,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
+  <?php /* Navigačná lista pre stránkovanie */ echo $kategorie2->links(); ?>
 <a class="btn btn-danger" href="#" onclick="multizmazanie('kat[]')"> <i class="icon-remove icon-white"> </i> Vymazať zvolené </a>
 </form>
 

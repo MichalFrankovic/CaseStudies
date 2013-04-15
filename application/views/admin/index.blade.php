@@ -56,8 +56,8 @@ function checkedAll (form1) {
             <th>Nastavenia</th>
         </tr>
         </thead>
-        <tbody>
-        @foreach ($domacnosti as $domacnost)
+        <tbody>  <?php /* To ->results je pridané len kvôli stránkovaniu */ ?>
+        @foreach ($domacnosti->results as $domacnost)
         <tr>
             <td style="text-align: center;"><input type="checkbox" name="polozka[]" value="{{ $domacnost->id }}"/></td>
             <td>{{ $domacnost->t_nazov_domacnosti }}</td>
@@ -73,6 +73,7 @@ function checkedAll (form1) {
         @endforeach
         
         </tbody>
+        <?php /* Navigačná lista pre stránkovanie */ echo $domacnosti->links(); ?>
         <tr>
             <td><input class="btn btn-danger" type="submit" name="Submit" value="Zmaž" onclick="return confirm('Určite chcete zmazať tieto záznamy ?')" /></td>
             <td><input class="btn btn-success" type="submit" name="Submit" value="Aktivuj" /> 

@@ -7,10 +7,13 @@ class Admin_Controller extends Base_Controller {
         return Redirect::to('admin/list');
 	}
 	
+
 	//--- LISTING ---
 	public function action_list() {
+        $per_page = 10;
+        
 	    $view = View::make('admin.index')->with('active', 'admin')->with('subactive', 'admin/users');
-	    $view->domacnosti = DB::table('D_DOMACNOST')->get();
+	    $view->domacnosti = DB::table('D_DOMACNOST')->paginate($per_page);
 	    $view->message = Session::get('message');
 	    
             return $view;			

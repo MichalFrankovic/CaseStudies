@@ -198,8 +198,8 @@ if ($editacia == "ano") {
         </tr>
     </thead>
 
-    <tbody>
-        @foreach ($produkty as $produkt)
+    <tbody>     <?php /* To ->results je pridané len kvôli stránkovaniu */ ?>
+        @foreach ($produkty->results as $produkt)
         <tr>
             <td style="text-align: center;"> <input type="checkbox" name="produkt[]" id="checkbox2" class="spendcheck" value="{{ md5($produkt->id). $secretword}}" /> </td>
             <td>    {{ $produkt->t_nazov }}                      </td>
@@ -219,6 +219,7 @@ if ($editacia == "ano") {
         @endforeach
     </tbody>
   </table>
+   <?php /* Navigačná lista pre stránkovanie */ echo $produkty->links(); ?>
 <a class="btn btn-danger" href="#" onclick="multizmazanie('produkt[]')"> <i class="icon-remove icon-white"> </i> Vymazať zvolené </a>
 </form>
 
