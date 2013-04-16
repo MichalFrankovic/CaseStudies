@@ -89,9 +89,7 @@
 
 	// Inline Editacia 
 	$(document).ready(function(){
-		$('.btn-danger').click(function(){
-			return confirm("Ste si istý, že chcete zmatať tento príjem?");
-		})
+		
 		//editables 
 	    $('.editable-suma').editable({
 			url: base + '/ajaxsave/F_PRIJEM',
