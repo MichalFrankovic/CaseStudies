@@ -528,7 +528,12 @@ class Spendings_Controller extends Base_Controller {
                                    ");
     		 
     		$view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
-    		 
+    		
+            $view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->get();
+
+                //Výdavky: Vydavok (VIEW_F_VYDAVOK)
+            $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
+              
     		return $view;
     		
     	}
