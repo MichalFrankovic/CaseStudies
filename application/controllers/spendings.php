@@ -251,14 +251,16 @@ class Spendings_Controller extends Base_Controller {
                                     end,
                                     ' ',
                                     a.nazov
-                                    ) nazov
+                                    ) nazov,
+                                    a.cena
                                     from
                                     (
                                     select
                                     kategoria.id id,
                                     kategoria.id id_kategoria,
                                     kategoria.t_nazov nazov,
-                                    kategoria.fl_typ typ
+                                    kategoria.fl_typ typ,
+                                    kategoria.vl_zakladna_cena cena
                                     from D_KATEGORIA_A_PRODUKT kategoria
                                     where kategoria.fl_typ = 'K'
                                     and kategoria.id_domacnost = ". Auth::user()->id ."
@@ -269,7 +271,8 @@ class Spendings_Controller extends Base_Controller {
                                     produkt.id id,
                                     produkt.id_kategoria_parent id_kategoria,
                                     produkt.t_nazov nazov,
-                                    produkt.fl_typ typ
+                                    produkt.fl_typ typ,
+                                    produkt.vl_zakladna_cena cena
                                     from D_KATEGORIA_A_PRODUKT produkt
                                     where produkt.fl_typ = 'P'
                                     and produkt.id_domacnost = ". Auth::user()->id ."
@@ -659,4 +662,61 @@ class Spendings_Controller extends Base_Controller {
                 ->with('status_class','sprava-uspesna');
 
     }
+
+
+    public function action_reporting() {
+
+        $view = View::make('spendings.report')
+            ->with('active', 'vydavky')
+            ->with('subactive','spendings/reporting');
+
+      $level = Input::get('level');
+      $zaciatok = Input::get('od');
+      $koniec = Input::get('do');
+
+      // Takýto formát mi treba do DB: = '"2013-03-31"';
+
+        if (isset($zaciatok)) 
+            { 
+                $zaciatok = date('Y-m-d', strtotime($zaciatok));
+            }
+        
+            else 
+                {   // V prípade že nie je zadaný chcem selektovať od úplneho začiatku - hodnota bude 1970-01-01
+                   $zaciatok = date('Y-m-d', strtotime($zaciatok)); 
+                }
+
+
+        if (isset($koniec)) 
+            { 
+                $koniec = date('Y-m-d', strtotime($koniec));  
+            }
+        
+            else 
+                {
+                    // Toto zbehne iba pri prvom zobrazení alebo ak sa vymaže celé pole do
+                    $today = date("Y-m-d");
+                    $koniec = $today;   
+                }
+            
+     
+        $view->otazka = DB::query("SELECT dkap.t_nazov, dkap.id_kategoria_parent, sum(`vl_jednotkova_cena` * `num_mnozstvo`) as suma_vydavkov
+                                    FROM F_VYDAVOK fv
+                                    join R_VYDAVOK_KATEGORIA_A_PRODUKT rv
+                                    join D_KATEGORIA_A_PRODUKT dkap
+                                    join D_DOMACNOST dd
+                                    WHERE fv.id = rv.id_vydavok and dkap.id = rv.id_kategoria_a_produkt and dd.id = dkap.id_domacnost = ". Auth::user()->id ." and dkap.id_domacnost and dkap.id_kategoria_parent IS NULL
+                                    and d_datum >=  '".$zaciatok."' AND d_datum <=  '".$koniec."'
+                                    GROUP BY dkap.t_nazov, dkap.id, dkap.id_kategoria_parent");
+
+        if ($zaciatok == '1970-01-01') $zaciatok='';    // kvôli tomu, aby fungoval datepicker vo view
+        
+        return $view->with('zaciatok',$zaciatok)
+                    ->with('koniec',$koniec);
+
+    }
+
+
+   
+
 }
