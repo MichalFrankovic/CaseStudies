@@ -101,7 +101,7 @@ if ($editacia == "ano") {
         </tr>
     </thead>
     <tbody>
-        @foreach ($typy as $typ)
+        @foreach ($typy as $typ) 
         <tr>
             <td style="text-align: center;"> <input type="checkbox" name="typvydavku[]" id="checkbox2" class="spendcheck" value="{{ md5($typ->id). $secretword}}" /> </td>
             <td> {{ $typ->t_nazov_typu_vydavku }} </td>
@@ -118,9 +118,8 @@ if ($editacia == "ano") {
     
   </table>
 
-<button class="btn btn-danger" onclick="multizmazanie('typvydavku[]')"> 
-    <i class="icon-remove icon-white"> </i> Vymazať zvolené
-</button>
+<a class="btn btn-danger" href="#" onclick="multizmazanie('typvydavku[]')"> <i class="icon-remove icon-white"> </i> Vymazať zvolené </a>
+
 
 </form>
 

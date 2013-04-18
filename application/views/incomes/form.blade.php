@@ -1,4 +1,9 @@
 @layout('layouts.base')
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
+@endif
 
 @section('styles')
 	<style type="text/css">
@@ -41,51 +46,10 @@
 			weekStart:	1
 		});
 		// Zmena osoby
-		$('[name=id_osoba]').change(function(){
-			var id = $(this).val()
-			if(id == 0){
-				resetSourceList();
-				return;
-			}
-
-			$.ajax({
-				type:	'GET',
-				url:	'ajaxload/incomesources/' + $(this).val(),
-				success:	function(response){
-					$('[name=id_zdroj_prijmu]').html( response );
-				}
-			})
-		});
-
-		// Zmena zdroja prijmu
-		$('[name=id_zdroj_prijmu]').change(function(evt){
-			var $source = $('[value='+$(this).val()+']', this);
-			// change type
-			$('[name=typ] option').removeAttr('selected');
-			$('[name=typ] [value='+$source.attr('data-type')+']').attr('selected', 'selected');
-			//
-			var $sum = $('[name=vl_suma_prijmu]');
-			// if($sum.val() == ''){
-				$sum.val( $source.attr('data-sum'));
-			// }
-		});
-	});
+		
 
 	// Validacia
-	$(document).ready(function(){
-		$("#income-create").submit(function(evt) {
-		    $.validity.start();
-		    	$('[name=id_osoba], [name=d_datum], [name=vl_suma_prijmu], [name=id_zdroj_prijmu]').require();
-		    	$('[name=vl_suma_prijmu]').match('number').greaterThan(0);
-		    	$('[name=d_datum]').lessThanOrEqualTo(new Date());
-
-			var result = $.validity.end();
-			
-			if(!result.valid){
-				evt.preventDefault();
-			}
-		});
-	});
+	
 	</script>
 @endsection
 
@@ -128,7 +92,9 @@
 		</div>
 	@endif
 
-
+@if (isset($error) && $error == true)
+    <div class="alert alert-error">{{ $error }}</div>
+@endif
 
 @if ($uprava == 'ano')
 	<form class="form-horizontal well" id="income-create" method="POST" action="form?editacia=ano&id={{ $editacia[0]->id }}" accept-charset="UTF-8">
@@ -138,7 +104,7 @@
 	<form class="form-horizontal well" id="income-create" method="POST" action="{{ URL::to('incomes/form?editacia=nie') }}" accept-charset="UTF-8">
 @endif
 
-		<div class="control-group">
+		<div class="control-group" >
 			{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
 		    <div class="controls">
 		      	
@@ -178,7 +144,7 @@
 	  			<div class="input-prepend">
 				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
 				  	
-				  	<input class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) {
+				  	<input name="datum" class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) {
 																  					$x = $editacia[0]->d_datum;
 																  					$x = date('m/d/Y');
 																  	 				echo $x;
@@ -190,15 +156,19 @@
 	  	</div>
 		
 
-		<div class="control-group">
+		<div <?php if(!isset($error)) echo 'class="control-group"';?>  {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? ' class="control-group error"' : '' }}>
 			{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
 			<div class="controls">
-				<div class="input-prepend">
+				<div class="input-prepend" >
 				  	<span class="add-on" value=''>€</span>
 				  	
-				  	<input class="input-small" type="text" value="<?php if (isset($editacia[0]->vl_suma_prijmu)) echo $editacia[0]->vl_suma_prijmu; ?>" name="vl_suma_prijmu"> </input>
+				  	<input class="input-small" type="text" value="<?php if (isset($meneny_suma))
+                                                                 echo $meneny_suma;
+																 elseif (isset($editacia[0]->vl_suma_prijmu)) echo $editacia[0]->vl_suma_prijmu; ?>" name="vl_suma_prijmu"> </input>
 				</div>
+                {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? '<span class="help-inline">'.$errors['vl_suma_prijmu'].'</span>' : '' }}
             </div>
+            
         </div>
 
 		
@@ -229,14 +199,41 @@
 			</div>
 		</div>
       
-        
- <button type="reset" class="btn btn-primary" style="margin-left:110px" >
- 	<i class="icon-remove icon-white"> </i>	Zruš	
- </button>
+  <?php     
+if ($uprava == "ano") {
+     echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
+                <button type="button" class="btn btn-primary" style="margin-left:110px">
+                    <i class="icon-remove icon-white"></i>
+                        Zruš
+                 </button>
+           </a>';
 
- <button type="submit" class="btn btn-primary"style="margin:5px">
- 	<i class="icon-ok icon-white"> </i> <?php if ($uprava == 'nie') echo 'Ulož príjem'; else echo 'Aktualizuj príjem'; ?>
- </button>
+    echo '       <button type="submit" class="btn btn-primary" style="margin-left:1px">
+                    <i class="icon-ok icon-white"></i>
+                        Aktualizuj
+                 </button>
+         ';
+    }      
+      
+  else {
+         echo ' <button type="reset" class="btn btn-primary" style="margin-left:110px">
+                    <i class="icon-remove icon-white"></i>
+                        Zruš
+                </button>
+              ';
+
+         echo ' <button type="submit" class="btn btn-primary" style="margin-left:1px">
+                    <i class="icon-ok icon-white"></i>
+                        Pridaj
+                </button>
+              ';
+
+        }
+
+?>    
+      
+ 	
+ 
 
 	{{ Form::close() }}
 

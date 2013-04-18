@@ -1024,7 +1024,7 @@ public function action_pridajtypvydavku()
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
-        
+        $duplicate = DB::table('D_TYP_VYDAVKU')->where('t_nazov_typu_vydavku', '=', $t_nazov_typu_vydavku)->first();
       $view = Redirect::to('ciselniky/sprava_typu_vydavku');
 
 
@@ -1032,9 +1032,12 @@ if (empty($t_nazov_typu_vydavku))
 {  
       $errors['typvydavku'] = 'Zadajte prosím typ výdavku';
     }
-
+if(!empty($duplicate)){
+            $errors['typvydavku']= 'Dajte iny názov, ten už existuje. ';
+        //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+        }
 if (!empty($errors)) {
-      $error = 'Opravte chyby vo formulári';
+      $error = 'Opravte chyby vo formulári!';
 
       $view = Redirect::to('ciselniky/sprava_typu_vydavku')
                         ->with('error', $error)
@@ -1069,29 +1072,29 @@ public function action_zmazattypvydavku()
     }
   catch (Exception $e){
                 $e->getMessage();
-				  return Redirect::to('ciselniky/sprava_osob')
-                ->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+				  return Redirect::to('ciselniky/sprava_typu_vydavku')
+                ->with('message', 'Dany typ prijmu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
                 ->with('status_class','sprava-chyba');
             }
-
-    }
-
-  public function action_multizmazattypy()
+	}
+   public function action_multizmazattypy()
     {
       $secretword = md5(Auth::user()->t_heslo);
       $typvydavku_ids = Input::get('typvydavku');
-        if (count($typvydavku_ids) > 0){
+      if (count($typvydavku_ids) > 0){
       if (is_array($typvydavku_ids))
       {
         foreach ($typvydavku_ids as $typvydavku_id)
 		 {
             try
         {
-          DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\''); 
-        }
+          DB::query('DELETE FROM D_TYP_VYDAVKU WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$typvydavku_id.'\'');  
+		 }
 		catch (Exception $e){
                                 $e->getMessage();
-                                return Redirect::to('ciselniky/sprava_typu_vydavku')->with('message', 'Nemozno zmazat osobu');
+                               return Redirect::to('ciselniky/sprava_typu_vydavku')
+                ->with('message', 'Dany typ vudavku nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+                ->with('status_class','sprava-chyba');
       }
 	   }
  }
@@ -1099,34 +1102,32 @@ public function action_zmazattypvydavku()
                 ->with('message', 'Typy výdavkov boli vymazané')
                 ->with('status_class','sprava-uspesna');
     }
-    return Redirect::to('ciselniky/sprava_typu_vydavku');//->with('message', 'Nebola označena ziadna osoba!');
-    }
-
+	}
   public function action_upravittypvydavku()
   { 
 
         $id = Input::get('id');
         $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
+        $duplicate = DB::table('D_TYP_VYDAVKU')->where('t_nazov_typu_vydavku', '=', $t_nazov_typu_vydavku)->first();
 
- $view = Redirect::to('ciselniky/sprava_typu_vydavku');
 
 
 if (empty($t_nazov_typu_vydavku)) {  
       $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
     }
 
-
-  
+//if(!empty($duplicate)){
+  //         $errors['typvydavku']= 'Zmente na iny názov, ten už existuje. ';
+//}
  if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
       
       $view = Redirect::to('ciselniky/sprava_typu_vydavku')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('meneny_vydavok',$t_nazov_typu_vydavku)
-                        ->with('error',$error)
-                        ->with('id',$id);
-                 
+                        ->with('id',$id)
+                        ->with('meneny_vydavok',$t_nazov_typu_vydavku);
+
       return $view;
     }
   

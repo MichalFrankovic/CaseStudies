@@ -123,9 +123,15 @@ class Incomes_Controller extends Base_Controller {
 			->with('typ_prijmu',$typ_prijmu)
 			->with('zdroj_prijmu',$zdroj_prijmu)
 			->with('uprava',$uprava);
+			
+	    $view->errors = Session::get('errors');
+        $view->error = Session::get('error');
+        $view->meneny_suma = Session::get('meneny_suma');
     		return $view;
 
 	}
+	
+
 	
 
 	public function action_filter()
@@ -177,11 +183,25 @@ class Incomes_Controller extends Base_Controller {
 	
 	$idecko = Input::get('id');	
 	$editacia = Input::get('editacia');
+	$suma=Input::get('vl_suma_prijmu');
 
+if (empty($suma)) 
+{  
+      $errors['vl_suma_prijmu'] = 'Zadajte prosím sumu';
+    }
+	if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
+
+      $view = Redirect::to('incomes/form')
+                        ->with('error', $error)
+                        ->with('errors',$errors)
+                        ->with('meneny_suma',$suma);
+						return $view;
+    }  
 		$data = array(
 			'id_osoba'	        => Input::get('id_osoba'),
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
-			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
+			'd_datum'			=> date('Y-m-d', strtotime(Input::get('datum'))),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
 			'id_obchodny_partner'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),
@@ -224,8 +244,6 @@ class Incomes_Controller extends Base_Controller {
 
 	}
 	
-
-
 
 	/**
 	 * Zobraz zoznam partnerov
