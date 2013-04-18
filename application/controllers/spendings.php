@@ -722,6 +722,23 @@ class Spendings_Controller extends Base_Controller {
     }
 
 
-   
+    public function action_vyber_cenu_pre_produkt() {
+
+        $id=$_GET['id'];
+
+        $suma = DB::query("SELECT vl_zakladna_cena AS cena
+                           FROM D_KATEGORIA_A_PRODUKT 
+                           WHERE id= '".$id."'");
+
+        
+        return $suma[0]->cena;
+
+
+    }
+
+
+
+
+
 
 }
