@@ -28,6 +28,7 @@ class Incomes_Controller extends Base_Controller {
 			'typy'			=> Prijem::get_typy(),
 			'persons'		=> Prijem::get_person(),
 			'partners'		=> Prijem::get_partners(),
+			'reports'		=> Prijem::get_reports(),
 		);
 		
 		return View::make('incomes.index', $viewData)

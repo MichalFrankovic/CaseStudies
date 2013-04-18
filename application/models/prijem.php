@@ -68,7 +68,32 @@ class Prijem extends Eloquent
 			));
     }
 
+	public static function get_reports()
+	{
+		$od=Input::get('od');
+    	$do=Input::get('do');
+    	$familyMembers = DB::table('D_OSOBA')
+			->where('id_domacnost', '=', Auth::user()->id)
+			->get(array('id'));
+		foreach($familyMembers as &$fM)
+		{
+			$fM = $fM->id;
+		}
+		$query = DB::table(static::$table.' as P')
+    		->join('D_TYP_PRIJMU as T', 'P.id_typ_prijmu', '=', 'T.id')
+    		->join('D_OSOBA as O', 'P.id_osoba', '=', 'O.id')
+    		->where_in('P.id_osoba', $familyMembers)
+    		->order_by('P.d_datum', 'DESC');
 
+		return $query->get(array(
+    			'P.id',
+    			'P.vl_suma_prijmu',
+    			'P.d_datum',
+    			'O.t_meno_osoby',
+    			'O.t_priezvisko_osoby',
+    			'T.t_nazov_typu'
+			));
+	}
 
 
     /**

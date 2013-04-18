@@ -70,7 +70,8 @@
 		if ($uprava == 'ano') {
 			$tabs = array(
 				'index'	=> 'Výpis príjmov',
-				'form'	=> 'Uprav príjem', 
+				'form'	=> 'Uprav príjem',
+				'report' => 'Report', 
 				);
 		}
 
