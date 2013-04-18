@@ -947,15 +947,15 @@ public function action_pridajtypprijmu()
 
         $id = Input::get('id');
         $t_nazov_typu = Input::get('nazov_typu');
-        $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->first();
+        $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->where('id','!=',$id)->first();
 
         if(empty($t_nazov_typu)){
             $errors['t_nazov_typu']='Zadajte prosím názov typu prijmu';
         }
-        //if(!empty($duplicate)){
-          //  $errors['t_nazov_typu']= 'Tento názov typu už je pridaný. ';
-        //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
-        //}
+        if(!empty($duplicate)){
+            $errors['t_nazov_typu']= 'Tento názov typu už je pridaný. ';
+        
+        }
         if(!empty($errors)){
             $error='Opravte chybu vo formuláre';
 
