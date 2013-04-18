@@ -128,6 +128,7 @@
 		$tabs = array(
 			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
+			'report' => 'Report',
 			
 			
 		);
