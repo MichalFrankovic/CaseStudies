@@ -23,6 +23,24 @@
       </div>
 
       <div class="input-prepend">
+         <label class="control-label">   Zaplatil:   </label>
+             <select name="osoba" class="span4">
+             @foreach ($osoby as $osoba)
+             <option value="{{ $osoba->id }}">{{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }} </option>
+            @endforeach
+             </select>
+      </div>
+
+      <div class="input-prepend">
+        <label class="control-label">   Typ výdavku:   </label>
+        <select name="typ-vydavku" class="span4">
+            @foreach ($typy_vydavkov as $typ)
+            <option value="{{ $typ->id }}"  @if ($vydavky[0]->id_typ_vydavku == $typ->id) selected="selected" @endif> {{ $typ->t_nazov_typu_vydavku }} </option>
+            @endforeach
+        </select>
+    </div>
+
+      <div class="input-prepend">
         <label class="control-label">    Pravidelnosť:    </label>      
           <select class="span4" name="pravidelnost">
               <option value="A">Pravidelný</option>
