@@ -1,12 +1,12 @@
 @include('head')
 
-@include('spendings/sp-submenu')
+@include('reporting/reporting-submenu')
 
 {{ HTML::style('assets/css/bootstrap-editable.css') }}
 {{ HTML::script('assets/js/bootstrap-editable.js') }}
 
 
-<form class="side-by-side" name="tentoForm" id="aktualnyformular"  method="POST" action="reporting" accept-charset="UTF-8">  
+<form class="side-by-side" name="tentoForm" id="aktualnyformular"  method="POST" action="report_vydavky" accept-charset="UTF-8">  
 <div class="thumbnail" >
     <h2> Reporting </h2>
 
@@ -67,3 +67,6 @@
 	@endforeach
 
 </TABLE>
+
+
+@include('foot')

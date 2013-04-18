@@ -128,9 +128,7 @@
 		$tabs = array(
 			'index'	=> 'Výpis príjmov',
 			'form'	=> 'Nový príjem',
-			'report' => 'Report',
-			
-			
+					
 		);
 		foreach($tabs as $key => $title){
 			$class = '';

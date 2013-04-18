@@ -50,6 +50,7 @@ Route::filter('pattern: incomes/*', 'auth');
 Route::filter('pattern: savings/*', 'auth');
 Route::filter('pattern: settings/*', 'auth');
 Route::filter('pattern: ciselniky/*', 'auth');
+Route::filter('pattern: reporting/*', 'auth');
 
 
 Route::get('about', 'home@index');

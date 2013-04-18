@@ -41,32 +41,11 @@ $(document).ready(function(){
 
 @section('content')
 
-<ul class="nav nav-tabs">
-        <?php
-        $tabs = array(
-            'index' => 'Výpis príjmov',
-            'form'  => 'Nový príjem',
-            'report' => 'Report',
-
-            
-            
-        );
-        foreach($tabs as $key => $title){
-            $class = '';
-            $url   = URL::to('incomes/'.$key);
-            if(URI::segment(2) === $key){
-                $class = 'class="active"';
-            } else if(!URI::segment(2) && $key === 'index'){
-                $class = 'class="active"';
-            }
-            echo "<li {$class}><a href='{$url}'>{$title}</a></li>";
-        }
-        ?>
-    </ul>
+@include('reporting.reporting-submenu')
 
 <div class="whole" id="1" style="float:left;width:100%;">
 
-{{ Form::open('incomes/report', 'get', array('class' => 'side-by-side')); }}
+{{ Form::open('reporting/report_prijmy', 'get', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
     <h4>Filter</h4>
 
@@ -122,7 +101,7 @@ $(document).ready(function(){
     <input class="span2" type="text" name="do" value="">
 </div>-->
        <!-- {{ Form::reset('Vynulovať filter' , array('class' => 'btn','style'=>'width:120px')); }}-->
-    <a class="btn btn-primary" href="{{ URL::to('incomes/index') }}" ><i class="icon-remove icon-white"></i>Vymazuj filter</a>
+    <a class="btn btn-primary" href="{{ URL::to('reporting/report_prijmy') }}" ><i class="icon-remove icon-white"></i>Vymaž filter</a>
        
        <!--{{ Form::submit('Zobraziť' , array('class' => 'btn btn-primary','style'=>'width:120px')); }}-->
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Aplikuj filter	</button>

@@ -132,17 +132,6 @@ class Incomes_Controller extends Base_Controller {
 
 	}
 	
-	public function get_report(){
-
-		$viewData = array(
-			'typy'			=> Prijem::get_typy(),
-			'persons'		=> Prijem::get_person(),
-			);
-		$view = View::make('incomes.report',$viewData);
-
-		return $view;
-	}
-	
 
 	public function action_filter()
 	{
