@@ -1,6 +1,24 @@
 @include('head')
 
-<script>    var js_polozky = {{ $dzejson }} </script>
+<script>    var js_polozky = {{ $dzejson }}
+
+    function daco() {
+
+        $('select#abc').each(function()
+        {
+        var x = $('option:selected',$(this)).attr('value');
+        //alert('ID vybraného produktu je: ' +x);
+
+        $.get('vyber_cenu_pre_produkt?id='+x,
+            function(data) {
+                $('input#cena').val(data);
+                //alert('Cena produktu vybraná z databázy pre tento produkt je: ' +data);
+                });
+        });
+
+    }
+
+</script>
 
 @if(Session::get('message'))
         <div class="information {{ Session::get('status_class') }}">
@@ -73,7 +91,7 @@
         <tr>
             <td><a class="btn" href=""><i class="icon-remove"></i></a></td>
             <td>
-                <select name="polozka-id[]" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
+                <select id="abc" name="polozka-id[]" onchange="daco()" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
                     @foreach ($polozky as $polozka)
                     <option value="{{ $polozka->id }}"> {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
                     @endforeach
@@ -81,7 +99,7 @@
             </td>
             <td>
                 <div class="input-append">
-                    <input name="cena[]" class="span2" type="text" value="" />
+                    <input id="cena" name="cena[]" class="span2" type="text" value="" />
                     <span class="add-on">€</span>
                 </div>
             </td>
@@ -138,7 +156,7 @@
     
     <HR>
 
-     <button type="submit" class="btn btn-danger">
+     <button type="submit" class="btn btn-primary">
         <i class=" icon-edit icon-white"></i>
             Ulož výdavok
     </button>
