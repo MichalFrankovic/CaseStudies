@@ -109,9 +109,7 @@
     </button>
 
     <div style="margin-top:15px;">
-        <a href="../ciselniky/sprava_produktov">
-            <button class="btn btn-mini btn-primary" type="button">  Pridaj nový produkt  </button>
-        </a>
+        <button class="btn btn-mini btn-primary" type="button" onClick="window.navigate('../ciselniky/sprava_produktov')">  Pridaj nový produkt  </button>
     </div>
     
     <HR>
