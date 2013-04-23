@@ -210,7 +210,7 @@ document.getElementById("aktualnyformular").reset();
 // -----------------------------------------------------------------------------------
 
 $(function() {
-    $( ".datepicker" ).datepicker();
+    //$( ".datepicker" ).datepicker();
 });
 
 // -----------------------------------------------------------------------------------
@@ -248,9 +248,9 @@ function pridaj_riadok_do_vydavkov()
         <td>\
         <input name="zlava[]" class="span1" type="text" value="0" />\
     <select name="typ-zlavy[]" class="span2">\
-    <option value="0" selected="selected">Bez z&lcaron;avy</option>\
-    <option value="P" >Z&lcaron;ava v %</option>\
-    <option value="A" >Z&lcaron;ava v EUR</option>\
+    <option value="0" selected="selected">Bez zlavy</option>\
+    <option value="P" >Zlava v %</option>\
+    <option value="A" >Zlava v EUR</option>\
 </select>\
 </td></tr>');
 }

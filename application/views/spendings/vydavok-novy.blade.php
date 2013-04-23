@@ -1,25 +1,5 @@
 @include('head')
 
-<script>    var js_polozky = {{ $dzejson }}
-
-    function daco() {
-
-        $('select#abc').each(function()
-        {
-        var x = $('option:selected',$(this)).attr('value');
-        //alert('ID vybraného produktu je: ' +x);
-
-        $.get('vyber_cenu_pre_produkt?id='+x,
-            function(data) {
-                $('input#cena').val(data);
-                //alert('Cena produktu vybraná z databázy pre tento produkt je: ' +data);
-                });
-        });
-
-    }
-
-</script>
-
 @if(Session::get('message'))
         <div class="information {{ Session::get('status_class') }}">
             {{ Session::get('message') }}
@@ -91,7 +71,7 @@
         <tr>
             <td><a class="btn" href=""><i class="icon-remove"></i></a></td>
             <td>
-                <select id="abc" name="polozka-id[]" onchange="daco()" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
+                <select name="polozka-id[]" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
                     @foreach ($polozky as $polozka)
                     <option value="{{ $polozka->id }}"> {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
                     @endforeach
@@ -99,7 +79,7 @@
             </td>
             <td>
                 <div class="input-append">
-                    <input id="cena" name="cena[]" class="span2" type="text" value="" />
+                    <input name="cena[]" class="span2" type="text" value="" />
                     <span class="add-on">€</span>
                 </div>
             </td>
@@ -112,9 +92,9 @@
             <td>
                 <input name="zlava[]" class="span1" type="text" value="0" />
                 <select name="typ-zlavy[]" class="span2">
-                    <option value="0" > Bez zľavy   </option>
-                    <option value="P">  Zľava v %   </option>
-                    <option value="A">  Zľava v EUR </option>
+                    <option value="0" > Bez zlavy   </option>
+                    <option value="P">  Zlava v %   </option>
+                    <option value="A">  Zlava v EUR </option>
                 </select>
             </td>
         </tr>
@@ -124,8 +104,14 @@
         <i class=" icon-edit icon-white"></i>
             Pridaj položku
     </button>
-   
-     <HR>
+
+    <div style="margin-top:15px;">
+        <a href="../ciselniky/sprava_produktov">
+            <button class="btn btn-mini btn-primary" type="button">  Pridaj nový produkt  </button>
+        </a>
+    </div>
+
+    <HR>
 
     <h4> Celková zľava   </h4>
         <div class="input-prepend" style="float:left; width:185px;">
@@ -164,5 +150,26 @@
 </div>
 {{ Form::close() }}
 
+<script>
+
+    var js_polozky = {{ $dzejson }}
+
+    $('table#tbl-vydavky').on('change', 'select.span4', function(){
+
+        var x = $('option:selected',$(this)).attr('value');
+        var sel = $(this);
+        //alert('ID vybraného produktu je: ' +x);
+
+        $.get('vyber_cenu_pre_produkt?id='+x,
+            function(data) {    
+
+    //console.log( $('input.span2', sel.closest('tr')) );
+
+                $('input.span2', sel.closest('tr')).val(data);
+                //alert('Cena produktu vybraná z databázy pre tento produkt je: ' +data);
+                });
+    });
+
+</script>
 
 @include('foot')

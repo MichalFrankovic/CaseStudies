@@ -177,6 +177,11 @@ if ($editacia == "ano") {
 
 ?>
 
+    <div style="margin-top:15px;">
+        <a href="../spendings/simplespending">
+            <button class="btn btn-mini btn-primary" type="button">  Jednoduchý výdavok  </button>
+        </a>
+    </div>
 
 {{ Form::close() }}
    
