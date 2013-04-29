@@ -5,10 +5,13 @@
 {{ HTML::style('assets/css/bootstrap-editable.css') }}
 {{ HTML::script('assets/js/bootstrap-editable.js') }}
 
+<style type="text/css">
+td {text-align: center !important;}
+</style>
 
 <form class="side-by-side" name="tentoForm" id="aktualnyformular"  method="POST" action="report_vydavky" accept-charset="UTF-8">  
 <div class="thumbnail" >
-    <h2> Reporting </h2>
+    <h4> Reporting výdavkov </h4>
 
     <div class="input-prepend">
 		<span class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Zvoľ level: </span>
@@ -40,31 +43,141 @@
 																	?>">
 	</div>
 
-       
+
+	<div class="input-prepend">
+		<span class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Zobrazenie: </span>
+
+		<select name='zobrazovanie' class="span3"> 
+			<option value='celkove'> Celkové		</option>
+			<option value='mesacne' <?php if ($zobrazovanie == 'mesacne') echo "selected='selected'"; ?>> Po mesiacoch 	</option>
+
+		</select>	
+	</div>
+
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Zobraziť	</button>
         
  </div>
  {{ Form::close() }}
 
+<?php
+if ($zobrazovanie == 'celkove') {
 
+echo "<TABLE class='table table-bordered table-striped side-by-side'>
+		<THEAD>
+		<TR>
+			<TH style='width:250px'> Názov kategórie	</TH>
+			<TH> Suma výdavkov							</TH>
+		</TR>
+	</THEAD>";
+
+		foreach ($select1 as $key => $value) {
+			echo '<tr>
+					<td> '.$value->t_nazov.' 	   	 </td>
+					<td> '.$value->suma_vydavkov.' € </td>
+				  </tr>
+				';
+		}
+
+}
+
+if ($zobrazovanie == 'mesacne') {
+
+echo "
 <TABLE class='table table-bordered table-striped side-by-side'>
 	<THEAD>
 		<TR>
-			<TH>  		</TH> 
 			<TH> Názov	</TH>
-			<TH> Suma	</TH>
+			<TH> Január	</TH>
+			<TH> Február	</TH>
+			<TH> Marec	</TH>
+			<TH> Apríl	</TH>
+			<TH> Máj	</TH>
+			<TH> Jún	</TH>
+			<TH> Júl	</TH>
+			<TH> August	</TH>
+			<TH> September	</TH>
+			<TH> Október	</TH>
+			<TH> November	</TH>
+			<TH> December	</TH>
 		</TR>
-	</THEAD>
+	</THEAD>";
 
-	<?php $i=0; ?>
-	@foreach ($otazka as $kategoria)
-		<tr>
-			<td width='70px' style="text-align: right;"> <?php $i++; echo "Kategória ".$i. ":";  ?> </td>
-			<td width='200px'> {{ $kategoria->t_nazov }} 			</td>
-			<td width='400px'> {{ $kategoria->suma_vydavkov }} 	€	</td>
-		</tr>
+ $i=0; 
 
-	@endforeach
+	$data = array();
+
+	foreach ($select2 as $row) {
+		$data[ $row->nazov_kategorie ][] = $row;
+		}
+
+	$op = array();
+
+	foreach ($data as $daco) {
+
+			$januar=0;
+			$februar=0;
+			$marec=0;
+			$april=0;
+			$maj=0;
+			$jun=0;
+			$jul=0;
+			$august=0;
+			$september=0;
+			$oktober=0;
+			$november=0;
+			$december=0;
+
+		foreach ($daco as $x) {
+			
+				//echo $x->suma_vydavkov;
+				//echo "<BR>";
+				$op[$i]['suma'] = $x->suma_vydavkov;
+				$op[$i]['kategoria'] = $x->nazov_kategorie;
+				$op[$i]['mesiac'] = $x->mesiac;
+
+				if (($x->mesiac) == 'January') $januar = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'February') $februar = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'March') $marec = $x->suma_vydavkov;
+				if (($x->mesiac) == 'April') $april = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'May') $maj = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'June') $jun = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'July') $jul = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'August') $august = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'September') $september = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'October') $oktober = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'November') $november = $x->suma_vydavkov; 
+				if (($x->mesiac) == 'December') $december = $x->suma_vydavkov; 
+
+				$i++;
+				}
+				
+			/*	echo "<pre>";
+				var_dump($op);
+				echo "</pre>"; */
+
+			//	<td>'.$op[$i-1]['mesiac']. '</td>
+
+				echo '<tr>
+						<td>'.$op[$i-1]['kategoria'].'	</td>
+						<td> '.$januar.' €				</td>
+						<td> '.$februar.' €				</td>
+						<td> '.$marec.' €				</td>
+						<td> '.$april.' €				</td>
+						<td> '.$maj.' €					</td>
+						<td> '.$jun.' €					</td>
+						<td> '.$jul.' €					</td>
+						<td> '.$august.' €				</td>
+						<td> '.$september.' €			</td>
+						<td> '.$oktober.' €				</td>
+						<td> '.$november.' €			</td>
+						<td> '.$december.' €			</td>
+
+					  </tr>';
+	}
+		//echo $data['BYVANIE'][1]->mesiac;
+}
+
+?>
 
 </TABLE>
 

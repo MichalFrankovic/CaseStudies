@@ -19,6 +19,9 @@ public function action_report_vydavky() {
       $level = Input::get('level');
       $zaciatok = Input::get('od');
       $koniec = Input::get('do');
+      $zobrazovanie = Input::get('zobrazovanie');
+
+      if (!isset($zobrazovanie)) $zobrazovanie = 'celkove';
 
       // Takýto formát mi treba do DB: = '"2013-03-31"';
 
@@ -46,19 +49,31 @@ public function action_report_vydavky() {
                 }
             
      
-        $view->otazka = DB::query("SELECT dkap.t_nazov, dkap.id_kategoria_parent, sum(`vl_jednotkova_cena` * `num_mnozstvo`) as suma_vydavkov
+        $view->select1 = DB::query("SELECT dkap.t_nazov, dkap.id_kategoria_parent, sum(`vl_jednotkova_cena` * `num_mnozstvo`) as suma_vydavkov
                                     FROM F_VYDAVOK fv
                                     join R_VYDAVOK_KATEGORIA_A_PRODUKT rv
                                     join D_KATEGORIA_A_PRODUKT dkap
                                     join D_DOMACNOST dd
                                     WHERE fv.id = rv.id_vydavok and dkap.id = rv.id_kategoria_a_produkt and dd.id = dkap.id_domacnost = ". Auth::user()->id ." and dkap.id_domacnost and dkap.id_kategoria_parent IS NULL
                                     and d_datum >=  '".$zaciatok."' AND d_datum <=  '".$koniec."'
-                                    GROUP BY dkap.t_nazov, dkap.id, dkap.id_kategoria_parent");
+                                    GROUP BY dkap.t_nazov, dkap.id, dkap.id_kategoria_parent"); 
+
+
+        $view->select2 = DB::query("SELECT MONTHNAME(d_datum) as mesiac, dkap.t_nazov as nazov_kategorie, sum(`vl_jednotkova_cena` * `num_mnozstvo`) as suma_vydavkov
+                                    FROM F_VYDAVOK fv
+                                    join R_VYDAVOK_KATEGORIA_A_PRODUKT rv
+                                    join D_KATEGORIA_A_PRODUKT dkap
+                                    join D_DOMACNOST dd
+                                    WHERE fv.id = rv.id_vydavok and dkap.id = rv.id_kategoria_a_produkt and dd.id = dkap.id_domacnost and dkap.id_domacnost = ". Auth::user()->id ." and dkap.id_kategoria_parent IS NULL and MONTHNAME(d_datum) IS NOT NULL
+                                    and d_datum >=  '".$zaciatok."' AND d_datum <=  '".$koniec."'
+                                    GROUP BY MONTH(d_datum), dkap.t_nazov");
+
 
         if ($zaciatok == '1970-01-01') $zaciatok='';    // kvôli tomu, aby fungoval datepicker vo view
         
         return $view->with('zaciatok',$zaciatok)
-                    ->with('koniec',$koniec);
+                    ->with('koniec',$koniec)
+                    ->with('zobrazovanie',$zobrazovanie);
 
     }
 

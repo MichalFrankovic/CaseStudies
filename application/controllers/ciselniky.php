@@ -601,17 +601,28 @@ public function action_multizmazaniepartnerov()
           return $view;
         }
 
+    if ($nadkategoria == '') {
 
-        DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
-                    SET t_nazov = '$t_nazov',
-                        id_kategoria_parent = '$nadkategoria'
-                         
-                    WHERE id = '$id'");
+            DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
+                        SET t_nazov = '$t_nazov',
+                            id_kategoria_parent = NULL
+                             
+                        WHERE id = '$id'");
+        }
+
+        else {
+
+           DB::query("UPDATE D_KATEGORIA_A_PRODUKT 
+                        SET t_nazov = '$t_nazov',
+                            id_kategoria_parent = '$nadkategoria'
+                             
+                        WHERE id = '$id'");
+             }
             
         return Redirect::to('ciselniky/sprava_kategorii')
-              ->with('message', 'Zmeny boli uložené.')
+              ->with('message', 'Zmeny boli uložené')
               ->with('status_class','sprava-uspesna');
-      }
+  }
 
 // *********** --- PODSEKCIA 3 (KONIEC) --- FUNKCIE PRE SPRÁVU KATEGÓRIÍ ********************************
 
