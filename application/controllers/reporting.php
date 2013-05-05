@@ -68,6 +68,10 @@ public function action_report_vydavky() {
                                     and d_datum >=  '".$zaciatok."' AND d_datum <=  '".$koniec."'
                                     GROUP BY MONTH(d_datum), dkap.t_nazov");
 
+        $view->vsetkykategorie = DB::query("SELECT t_nazov
+                                            FROM D_KATEGORIA_A_PRODUKT
+                                            WHERE id_kategoria_parent IS NULL
+                                            AND id_domacnost = ". Auth::user()->id ." ");
 
         if ($zaciatok == '1970-01-01') $zaciatok='';    // kvôli tomu, aby fungoval datepicker vo view
         

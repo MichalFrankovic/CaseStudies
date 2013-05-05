@@ -62,23 +62,49 @@ td {text-align: center !important;}
 <?php
 if ($zobrazovanie == 'celkove') {
 
-echo "<TABLE class='table table-bordered table-striped side-by-side'>
-		<THEAD>
-		<TR>
-			<TH style='width:250px'> Názov kategórie	</TH>
-			<TH> Suma výdavkov							</TH>
-		</TR>
-	</THEAD>";
+	$pocet = 0;
+	echo "<TABLE class='table table-bordered table-striped side-by-side'>
+			<THEAD>
+			<TR>
+				<TH style='width:250px'> Názov kategórie	</TH>
+				<TH> Suma výdavkov							</TH>
+			</TR>
+		</THEAD>";
 
-		foreach ($select1 as $key => $value) {
-			echo '<tr>
-					<td> '.$value->t_nazov.' 	   	 </td>
-					<td> '.$value->suma_vydavkov.' € </td>
-				  </tr>
-				';
+			foreach ($select1 as $key => $value) {
+				echo '<tr>
+						<td> '.$value->t_nazov.' 	   	 </td>
+						<td> '.$value->suma_vydavkov.' € </td>
+					  </tr>
+					';
+				$pocet++;
+			}
+
+
+		// Vypísanie aj prázdnych kategórií
+		$z=0;
+		foreach ($vsetkykategorie as $key => $value) {
+			$porovnaj1 = $vsetkykategorie[$z]->t_nazov;
+			$dopln = 0;
+
+				foreach ($select1 as $key => $value) {
+					$porovnaj2 = $value->t_nazov;
+					
+					if ($porovnaj1 == $porovnaj2) {}
+						else {$dopln++;}	// Nezhoduje sa ani v 1 prípade
+				}
+
+				if ($dopln == $pocet) echo '
+							<tr>
+								<td>'.$porovnaj1.'	</td>
+								<td> 0 €			</td>
+							</tr>';
+				
+		$z++;
 		}
 
 }
+
 
 if ($zobrazovanie == 'mesacne') {
 
@@ -106,6 +132,7 @@ echo "
 
 	$data = array();
 
+$pocet=0;
 	foreach ($select2 as $row) {
 		$data[ $row->nazov_kategorie ][] = $row;
 		}
@@ -149,11 +176,12 @@ echo "
 				if (($x->mesiac) == 'December') $december = $x->suma_vydavkov; 
 
 				$i++;
+				  $pocet++;
 				}
 				
-			/*	echo "<pre>";
+				/*echo "<pre>";
 				var_dump($op);
-				echo "</pre>"; */
+				echo "</pre>";*/ 
 
 			//	<td>'.$op[$i-1]['mesiac']. '</td>
 
@@ -173,8 +201,47 @@ echo "
 						<td> '.$december.' €			</td>
 
 					  </tr>';
+
+
+					
 	}
 		//echo $data['BYVANIE'][1]->mesiac;
+
+
+// Vypísanie aj prázdnych kategórií
+	$z=0;
+	foreach ($vsetkykategorie as $key => $value) {
+		$porovnaj1 = $vsetkykategorie[$z]->t_nazov;
+		$dopln = 0;
+
+			for ($i=0; $i < $pocet ; $i++) { 
+				$porovnaj2 = $op[$i]['kategoria'];
+				
+
+				if ($porovnaj1 == $porovnaj2) {}
+					else {$dopln++;}	// Nezhoduje sa ani v 1 prípade
+			}
+
+			if ($dopln == $pocet) echo '
+						<tr>
+							<td>'.$porovnaj1.'	</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+							<td> 0 €			</td>
+						</tr>';
+			
+	$z++;
+	}
+
 }
 
 ?>
