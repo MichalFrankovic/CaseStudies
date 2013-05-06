@@ -13,7 +13,7 @@
 {{ Form::open('spendings/savespending', 'POST', array('class' => 'side-by-side')); }}
 <input type="hidden" name="hlavicka-id" id="hidden" value="N"/>
 
-<div class="thumbnail">
+<div class="thumbnail" style="margin-bottom:20px;">
     <h4>Parametre:</h4>
 
     <div class="input-prepend" style="float:left;width:295px">
@@ -71,7 +71,7 @@
         <tr>
             <td><a class="btn" href=""><i class="icon-remove"></i></a></td>
             <td>
-                <select name="polozka-id[]" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
+                <select name="polozka-id[]" class="span4">
                     @foreach ($polozky as $polozka)
                     <option value="{{ $polozka->id }}"> {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
                     @endforeach
@@ -79,7 +79,7 @@
             </td>
             <td>
                 <div class="input-append">
-                    <input name="cena[]" class="span2" type="text" value="" />
+                    <input id="cena" name="cena[]" class="span2" type="text" value="" />
                     <span class="add-on">€</span>
                 </div>
             </td>
@@ -101,24 +101,23 @@
     </table>
 
     <button type="button" class="btn btn-primary" onclick="pridaj_riadok_do_vydavkov()">
-        <i class=" icon-edit icon-white"></i>
+        <i class=" icon-plus icon-white"></i>
             Pridaj položku
     </button>
 
-    <div style="margin-top:15px;">
-        <button class="btn btn-mini btn-primary" type="button" onClick="window.navigate('../ciselniky/sprava_produktov')">  Pridaj nový produkt  </button>
+    <div style="margin-top:15px; text-align:right;">
+        <a href="../ciselniky/sprava_produktov" class="btn btn-mini btn-warning"> Pridaj nový produkt </a>
     </div>
+</div>
+    
 
-    <HR>
-
-    <h4> Celková zľava   </h4>
-        <div class="input-prepend" style="float:left; width:185px;">
+        <div class="input-prepend">
             <span class="add-on">Hodnota zľavy: </span>
-            <input name="celkova-zlava" class="span1" type="text" value="0" />
+            <input name="celkova-zlava" class="span2" type="text" value="0" />
         </div>
 
         <div class="input-prepend">
-            <span class="add-on">Typ zľavy: </span>
+            <span class="add-on" style="width:93px;text-align:left;">Typ zľavy: </span>
             <select name="celkovy-typ-zlavy" class="span2">
                 <option value="0" >Bez zľavy</option>
                 <option value="P" >Zľava v %</option>
@@ -128,30 +127,28 @@
        
         <div class="input-prepend">
             <span class="add-on">Celková suma: </span>
-            <input class="span3" type="text"  disabled="disabled">
+            <input id="total" class="span2" type="text"  disabled="disabled">
         </div>
 
         <div class="input-prepend">
             <span class="add-on">Celková zľava: </span>
-            <input class="span3" type="text" disabled="disabled">
+            <input class="span2" type="text" disabled="disabled">
         </div>
-        
 
-    
-    <HR>
 
-     <button type="submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary">
         <i class=" icon-edit icon-white"></i>
             Ulož výdavok
     </button>
 
-</div>
+
 {{ Form::close() }}
 
 <script>
 
     var js_polozky = {{ $dzejson }}
 
+// Vypisovanie ceny pre produkt vybraný zo selectu
     $('table#tbl-vydavky').on('change', 'select.span4', function(){
 
         var x = $('option:selected',$(this)).attr('value');
@@ -166,6 +163,19 @@
                 $('input.span2', sel.closest('tr')).val(data);
                 //alert('Cena produktu vybraná z databázy pre tento produkt je: ' +data);
                 });
+    });
+
+
+// Spočítavanie celkovej ceny (total) pridaných produktov
+    $('table#tbl-vydavky').live('change', function() {
+        var total = 0;
+
+          $('input#cena').each(function () {
+            var pripocitaj = $(this).val();
+            total = (total-0) + (pripocitaj-0);
+          });
+
+          $('#total').val(total+" €");   // Zapíše sa do inputu s id názvom total
     });
 
 </script>

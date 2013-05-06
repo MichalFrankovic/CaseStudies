@@ -112,15 +112,15 @@ echo "
 <TABLE class='table table-bordered table-striped side-by-side'>
 	<THEAD>
 		<TR>
-			<TH> Názov	</TH>
-			<TH> Január	</TH>
+			<TH> Názov kategórie </TH>
+			<TH> Január		</TH>
 			<TH> Február	</TH>
-			<TH> Marec	</TH>
-			<TH> Apríl	</TH>
-			<TH> Máj	</TH>
-			<TH> Jún	</TH>
-			<TH> Júl	</TH>
-			<TH> August	</TH>
+			<TH> Marec		</TH>
+			<TH> Apríl		</TH>
+			<TH> Máj		</TH>
+			<TH> Jún		</TH>
+			<TH> Júl		</TH>
+			<TH> August		</TH>
 			<TH> September	</TH>
 			<TH> Október	</TH>
 			<TH> November	</TH>

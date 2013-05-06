@@ -229,13 +229,13 @@ function pridaj_riadok_do_vydavkov()
     $('#tbl-vydavky').append('<tr>\
         <td><input type="hidden" name="vydavok-id[]" id="hidden" value="N"/></td>\
     <td>\
-        <select name="polozka-id[]" class="span4" style="font-family: Courier, \'Courier New\', monospace;" >\
+        <select name="polozka-id[]" class="span4">\
     '+tmptext+'\
         </select>\
     </td>\
         <td>\
         <div class="input-append">\
-            <input name="cena[]" class="span2" type="text"/>\
+            <input id="cena" name="cena[]" class="span2" type="text"/>\
             <span class="add-on">€</span>\
         </div>\
     </td>\

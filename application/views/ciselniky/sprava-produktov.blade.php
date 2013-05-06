@@ -35,7 +35,7 @@ if (isset($editovany_zaznam))
     <div class="alert alert-error">{{ $error }}</div>
 @endif
 
-<div class="thumbnail" >
+<div class="thumbnail" style="padding-bottom:0px;">
 
 <?php
 if ($editacia == 'ano') {
@@ -177,8 +177,8 @@ if ($editacia == "ano") {
 
 ?>
 
-    <div style="margin-top:15px;"> 
-        <button class="btn btn-mini btn-primary" type="button" onClick="window.navigate('../spendings/simplespending')">  Jednoduchý výdavok  </button>
+    <div style="margin-top:25px;">
+        <a href="../spendings/simplespending" class="btn btn-mini btn-warning"> Jednoduchý výdavok </a>
     </div>
 
 {{ Form::close() }}
