@@ -148,7 +148,7 @@
 				  	
 				  	<input name="datum" class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) {
 																  					$x = $editacia[0]->d_datum;
-																  					$x = date('m/d/Y');
+																  					$x = date('d.m.Y');
 																  	 				echo $x;
 																  	 			}
 				  	 														?> ">

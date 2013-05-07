@@ -72,9 +72,15 @@ public function action_pridajosobu()
 
       $view = Redirect::to('ciselniky/sprava_osob');
 
+      $duplicate = DB::query("SELECT * FROM D_OSOBA WHERE t_meno_osoby = '$t_meno_osoby' AND t_priezvisko_osoby = '$t_priezvisko_osoby'");
+      if (!empty($duplicate)) {
+        $errors['meno'] = 'Takáto osoba je už zaregistrovaná';
+        $errors['priezvisko'] = '';
+      }
+
       if (empty($t_priezvisko_osoby)) 
       {  
-          $errors['priezvisko'] = 'Zadajte prosím priezvisko osoby. Priezvisko nesmie obsahovať číslice.';
+          $errors['priezvisko'] = 'Zadajte prosím priezvisko osoby, priezvisko nesmie obsahovať číslice';
       }
 
       if (preg_match('/[0-9]|[0-9]./', $t_priezvisko_osoby))
@@ -124,14 +130,14 @@ public function action_zmazatosobu()
                 DB::query('DELETE FROM D_OSOBA WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$osoba_id.'\''); //mazanie hlavicky
               
         return Redirect::to('ciselniky/sprava_osob')
-                        ->with('message', 'Osoba bola vymazaná!')
+                        ->with('message', 'Osoba bola vymazaná')
                         ->with('status_class','sprava-uspesna'); 
             }
             catch (Exception $e){
                 $e->getMessage();
                 
                 return Redirect::to('ciselniky/sprava_osob')
-                ->with('message', 'Danú osobu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+                ->with('message', 'Danú osobu nie je možné vymazať, nakoľko by bola narušená konzistencia dát v DB')
                 ->with('status_class','sprava-chyba');;
             }
 
@@ -156,19 +162,19 @@ public function action_multizmazanieosob()
             catch (Exception $e){
                                 $e->getMessage();
                                 return Redirect::to('ciselniky/sprava_osob')
-                                              ->with('message', 'Nemozno zmazat osobu')
+                                              ->with('message', 'Nemožno zmazať osobu')
                                               ->with('status_class','sprava-chyba');
                               }           
             }
       }
     return Redirect::to('ciselniky/sprava_osob')
-    ->with('message', 'Osoby boli vymazané.')
+    ->with('message', 'Osoby boli vymazané')
     ->with('status_class','sprava-uspesna');
     }
 
 
       return Redirect::to('ciselniky/sprava_osob')
-                ->with('message', 'Nebola zvolená žiadna osoba!')
+                ->with('message', 'Nebola zvolená žiadna osoba')
                 ->with('status_class','sprava-chyba');
     }
 
@@ -184,10 +190,16 @@ public function action_multizmazanieosob()
         $fl_aktivna = 'A';
         }    else 
         $fl_aktivna='N';
-          
+        
+      $duplicate = DB::query("SELECT * FROM D_OSOBA WHERE t_meno_osoby = '$t_meno_osoby' AND t_priezvisko_osoby = '$t_priezvisko_osoby'");
+      if (!empty($duplicate)) {
+        $errors['meno'] = 'Takáto osoba je už zaregistrovaná';
+        $errors['priezvisko'] = '';
+      }
+
       if (empty($t_priezvisko_osoby)) {  
       $errors['priezvisko'] = 'Zadaj nové priezvisko osoby';
-    }
+      }
      
       if (preg_match('/[0-9]|[0-9]./', $t_priezvisko_osoby))
       {
@@ -222,7 +234,7 @@ public function action_multizmazanieosob()
          DB::query("UPDATE D_OSOBA SET t_meno_osoby = '$t_meno_osoby', t_priezvisko_osoby = '$t_priezvisko_osoby', fl_aktivna = '$fl_aktivna' WHERE id = '$id'");
             
         return Redirect::to('ciselniky/sprava_osob')
-                    ->with('message', 'Zmeny boli uložené.')
+                    ->with('message', 'Zmeny boli uložené')
                     ->with('status_class','sprava-uspesna');
                   
       }
@@ -290,6 +302,11 @@ public function action_pridatpartnera()
     
     $view = Redirect::to('ciselniky/sprava_produktov');
 
+      $duplicate = Partner::where('t_nazov', '=', $t_nazov)->first();
+      if (!empty($duplicate)) {
+        $errors['nazov'] = 'Takýto obchodný partner je už zaregistrovaný';
+      }
+
       if (empty($t_nazov)) {  
       $errors['nazov'] = 'Zadajte prosím názov partnera';
       }
@@ -330,6 +347,11 @@ public function action_upravitpartnera()
   
   $view = Redirect::to('ciselniky/sprava_produktov');
   
+      $duplicate = Partner::where('t_nazov', '=', $t_nazov)->first();
+      if (!empty($duplicate)) {
+        $errors['nazov'] = 'Takýto obchodný partner je už zaregistrovaný';
+      }
+
       if (empty($t_nazov)) {  
       $errors['nazov'] = 'Zadajte prosím nový názov tohto partnera';
       }
@@ -352,7 +374,7 @@ public function action_upravitpartnera()
 
   DB::query("UPDATE D_OBCHODNY_PARTNER SET t_nazov = '$t_nazov', t_adresa = '$t_adresa', fl_typ = '$fl_typ' WHERE id = '$id'");
   return Redirect::to('ciselniky/sprava_partnerov')
-                    ->with('message', 'Zmeny boli uložené.')
+                    ->with('message', 'Zmeny boli uložené')
                     ->with('status_class','sprava-uspesna');
 
   
@@ -411,7 +433,7 @@ public function action_multizmazaniepartnerov()
           ->with('message', 'Partneri boli vymazaní.')
           ->with('status_class','sprava-uspesna');
     }
-     else return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nebol zvolený žiaden partner!');
+     else return Redirect::to('ciselniky/sprava_partnerov')->with('message', 'Nebol zvolený žiaden partner');
     }
 
 
@@ -523,6 +545,10 @@ public function action_multizmazaniepartnerov()
         $t_nazov = Input::get('nazov');
         $id_kategoria_parent = Input::get('Nadkategoria-id');
        
+      $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)->where('fl_typ','=','K')->first();
+      if (!empty($duplicate)) {
+        $errors['nazov'] = 'Kategória so zadaným názvom je už zaregistrovaná';
+      }
 
       if (empty($t_nazov)) {  
            $errors['nazov'] = 'Zadajte prosím názov kategórie';
@@ -544,7 +570,7 @@ public function action_multizmazaniepartnerov()
        DB::query("call kategoria_insert('$id_kategoria_parent', $id_domacnost, '$t_nazov')");
 
        return Redirect::to('ciselniky/sprava_kategorii')
-              ->with('message', 'Kategória bola pridaná!')
+              ->with('message', 'Kategória bola pridaná')
               ->with('status_class','sprava-uspesna');
     }
 
@@ -556,7 +582,7 @@ public function action_multizmazaniepartnerov()
 
         DB::query('DELETE FROM D_KATEGORIA_A_PRODUKT WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$kat_id.'\''); //mazanie hlavicky
         return Redirect::to('ciselniky/sprava_kategorii')
-              ->with('message', 'Kategória bola vymazaná!')
+              ->with('message', 'Kategória bola vymazaná')
               ->with('status_class','sprava-uspesna'); 
     }
 
@@ -575,7 +601,7 @@ public function action_multizmazaniepartnerov()
       }
 
       return Redirect::to('ciselniky/sprava_kategorii')
-              ->with('message', 'Kategórie boli vymazané!')
+              ->with('message', 'Kategórie boli vymazané')
               ->with('status_class','sprava-uspesna');
     }
 
@@ -585,6 +611,11 @@ public function action_multizmazaniepartnerov()
         $t_nazov = Input::get('nazov');
         $nadkategoria = Input::get('Nadkategoria-id');
        
+      $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)->where('fl_typ','=','K')->first();
+      if (!empty($duplicate)) {
+        $errors['nazov'] = 'Kategória so zadaným názvom je už zaregistrovaná';
+      }
+
       if (empty($t_nazov)) {  
           $errors['nazov'] = 'Zadaj nový názov kategórie';
         }
@@ -714,25 +745,29 @@ public function action_pridajprodukt()
         $id_kategoria_parent = Input::get('kategoria-id');
         $t_merna_jednotka = Input::get('jednotka');
      
- $view = Redirect::to('ciselniky/sprava_produktov');
+    $view = Redirect::to('ciselniky/sprava_produktov');
                     
+    $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)->where('fl_typ','=','P')->first();
+    if (!empty($duplicate)) {
+          $errors['nazov'] = 'Produkt so zadaným názvom je už zaregistrovaný';
+        }
 
-if (empty($t_nazov)) {  
-      $errors['nazov'] = 'Zadajte prosím názov produktu';
-    }
-
-
-if (!preg_match('/[0-9]|[0-9]./', $cena)){
-        $errors['cena'] = 'Cena musí obsahovať číslo';
-    } 
-
-
-if ($id_kategoria_parent == 'Nezaradený') {  
-      $errors['kategoria'] = 'Vyber kategóriu, v ktorej sa produkt nachádza';
-    }
+    if (empty($t_nazov)) {  
+          $errors['nazov'] = 'Zadajte prosím názov produktu';
+        }
 
 
-if (!empty($errors)) {
+    if (!preg_match('/[0-9]|[0-9]./', $cena)){
+            $errors['cena'] = 'Cena musí obsahovať číslo';
+        } 
+
+
+    if ($id_kategoria_parent == 'Nezaradený') {  
+          $errors['kategoria'] = 'Vyber kategóriu, v ktorej sa produkt nachádza';
+        }
+
+
+    if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
       
       $view = Redirect::to('ciselniky/sprava_produktov')
@@ -791,31 +826,35 @@ public function action_multizmazanie()
     }
 
 
-
-    public function action_upravprodukt(){ 
+public function action_upravprodukt(){ 
 
         $id = Input::get('id');
         $t_nazov = Input::get('nazov');
         $cena = Input::get('cena');
         $jednotka = Input::get('jednotka');
         $idkategoria = Input::get('kategoria-id');
-          
-if (empty($t_nazov)) {  
-      $errors['nazov'] = 'Zadaj nový názov produktu';
-    }
+
+    $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)->where('fl_typ','=','P')->first();
+    if (!empty($duplicate)) {
+          $errors['nazov'] = 'Produkt so zadaným názvom je už zaregistrovaný';
+        }     
+
+    if (empty($t_nazov)) {  
+          $errors['nazov'] = 'Zadaj nový názov produktu';
+        }
 
 
-if (!preg_match('/[0-9]|[0-9]./', $cena)){
-        $errors['cena'] = 'Zadaj aktuálnu cenu';
-    } 
+    if (!preg_match('/[0-9]|[0-9]./', $cena)){
+            $errors['cena'] = 'Zadaj aktuálnu cenu';
+        } 
 
 
-if ($idkategoria == 'Nezaradený') {  
-      $errors['kategoria'] = 'Vyber kategóriu, v ktorej sa produkt nachádza';
-    }
+    if ($idkategoria == 'Nezaradený') {  
+          $errors['kategoria'] = 'Vyber kategóriu, v ktorej sa produkt nachádza';
+        }
 
 
-if (!empty($errors)) {
+    if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
       
       $view = Redirect::to('ciselniky/sprava_produktov')
@@ -890,12 +929,14 @@ public function action_pridajtypprijmu()
         $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->first();
         
         if(empty($t_nazov_typu)){
-            $errors['t_nazov_typu']='Zadajte prosím názov typu prijmu';
+            $errors['t_nazov_typu']='Zadajte prosím názov typu príjmu';
         }
+
         if(!empty($duplicate)){
-            $errors['t_nazov_typu']= 'Tento názov typu už je pridaný. ';
+            $errors['t_nazov_typu']= 'Tento názov typu už je pridaný';
         //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
         }
+
         if(!empty($errors)){
             $error='Opravte chybu vo formulári';
 
@@ -910,7 +951,7 @@ public function action_pridajtypprijmu()
        DB::query("INSERT INTO `web`.`D_TYP_PRIJMU` (`t_nazov_typu`, `id_domacnost`) VALUES('$t_nazov_typu', '$id_domacnost');");
 
        return Redirect::to('ciselniky/sprava_typu_prijmu')
-              ->with('message', 'Typ príjmu bol pridaný!')
+              ->with('message', 'Typ príjmu bol pridaný')
               ->with('status_class','sprava-uspesna');
          }
     }
@@ -931,7 +972,7 @@ public function action_pridajtypprijmu()
                 $e->getMessage();
                 
             return Redirect::to('ciselniky/sprava_typu_prijmu')
-            ->with('message', 'Daný typ príjmu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+            ->with('message', 'Daný typ príjmu nie je možné vymazať, nakoľko by bola narušená konzistencia dát v DB')
             ->with('status_class','sprava-chyba');
             }
 
@@ -961,12 +1002,13 @@ public function action_pridajtypprijmu()
         $duplicate = Typyprijmu::where('t_nazov_typu', '=', $t_nazov_typu)->where('id','!=',$id)->first();
 
         if(empty($t_nazov_typu)){
-            $errors['t_nazov_typu']='Zadajte prosím názov typu prijmu';
+            $errors['t_nazov_typu']='Zadajte prosím názov typu príjmu';
         }
+
         if(!empty($duplicate)){
-            $errors['t_nazov_typu']= 'Tento názov typu už je pridaný. ';
-        
+            $errors['t_nazov_typu']= 'Tento názov typu už je pridaný';
         }
+
         if(!empty($errors)){
             $error='Opravte chybu vo formuláre';
 
@@ -981,7 +1023,7 @@ public function action_pridajtypprijmu()
         DB::query("UPDATE D_TYP_PRIJMU SET t_nazov_typu = '$t_nazov_typu' WHERE id = '$id'");
             
         return Redirect::to('ciselniky/sprava_typu_prijmu')
-                  ->with('message', 'Zmeny boli uložené.')
+                  ->with('message', 'Zmeny boli uložené')
                   ->with('status_class','sprava-uspesna');
       }
 // *********** --- PODSEKCIA 5 (KONIEC) --- FUNKCIE PRE SPRÁVU TYPU PRÍJMU ********************************
@@ -1039,16 +1081,18 @@ public function action_pridajtypvydavku()
       $view = Redirect::to('ciselniky/sprava_typu_vydavku');
 
 
-if (empty($t_nazov_typu_vydavku)) 
-{  
-      $errors['typvydavku'] = 'Zadajte prosím typ výdavku';
-    }
-if(!empty($duplicate)){
-            $errors['typvydavku']= 'Dajte iny názov, ten už existuje. ';
-        //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+    if (empty($t_nazov_typu_vydavku)) 
+    {  
+          $errors['typvydavku'] = 'Zadajte prosím typ výdavku';
         }
-if (!empty($errors)) {
-      $error = 'Opravte chyby vo formulári!';
+
+    if(!empty($duplicate)){
+                $errors['typvydavku']= 'Zadajte iný názov, tento už existuje';
+            //return Redirect::to('ciselniky/sprava_typu_prijmu')->with('message', $errors);
+            }
+
+    if (!empty($errors)) {
+      $error = 'Opravte chyby vo formulári';
 
       $view = Redirect::to('ciselniky/sprava_typu_vydavku')
                         ->with('error', $error)
@@ -1058,8 +1102,6 @@ if (!empty($errors)) {
       return $view;
     }
 	
-  
-       
       DB::query("INSERT INTO  `web`.`D_TYP_VYDAVKU` (`t_nazov_typu_vydavku`, `id_domacnost`)
                    VALUES ('$t_nazov_typu_vydavku' , '$id_domacnost');");
 	  
@@ -1084,7 +1126,7 @@ public function action_zmazattypvydavku()
   catch (Exception $e){
                 $e->getMessage();
 				  return Redirect::to('ciselniky/sprava_typu_vydavku')
-                ->with('message', 'Dany typ prijmu nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+                ->with('message', 'Dany typ príjmu nie je možné vymazať, nakoľko by bola narušená konzistencia dát v DB')
                 ->with('status_class','sprava-chyba');
             }
 	}
@@ -1104,7 +1146,7 @@ public function action_zmazattypvydavku()
 		catch (Exception $e){
                                 $e->getMessage();
                                return Redirect::to('ciselniky/sprava_typu_vydavku')
-                ->with('message', 'Dany typ vudavku nie je možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB')
+                ->with('message', 'Dany typ vudavku nie je možné vymazať, nakoľko by bola narušená konzistencia dát v DB')
                 ->with('status_class','sprava-chyba');
       }
 	   }
@@ -1121,16 +1163,15 @@ public function action_zmazattypvydavku()
         $t_nazov_typu_vydavku = Input::get('nazov_typu_vydavku');
         $duplicate = DB::table('D_TYP_VYDAVKU')->where('t_nazov_typu_vydavku', '=', $t_nazov_typu_vydavku)->first();
 
+    if (empty($t_nazov_typu_vydavku)) {  
+          $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
+        }
 
-
-if (empty($t_nazov_typu_vydavku)) {  
-      $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
+    if(!empty($duplicate)){
+          $errors['typvydavku']= 'Zadajte iný názov, tento už existuje';
     }
 
-//if(!empty($duplicate)){
-  //         $errors['typvydavku']= 'Zmente na iny názov, ten už existuje. ';
-//}
- if (!empty($errors)) {
+     if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
       
       $view = Redirect::to('ciselniky/sprava_typu_vydavku')
@@ -1142,7 +1183,6 @@ if (empty($t_nazov_typu_vydavku)) {
       return $view;
     }
   
-
         DB::query("UPDATE D_TYP_VYDAVKU SET t_nazov_typu_vydavku = '$t_nazov_typu_vydavku' WHERE id = '$id'");
 
         return Redirect::to('ciselniky/sprava_typu_vydavku')
@@ -1157,6 +1197,4 @@ if (empty($t_nazov_typu_vydavku)) {
 
 
  
-
-	  } 
-
+}
