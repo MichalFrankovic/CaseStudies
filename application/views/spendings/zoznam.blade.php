@@ -44,7 +44,7 @@ echo "</pre>";*/
 
     <div class="input-prepend">
         <span class="add-on">   Do:         </span>
-        <input class="span3 datepicker" type="text" name="do" value="<?php $x=$do; $x = date('m/d/Y'); echo $x;?>">
+        <input class="span3 datepicker" type="text" name="do" value="<?php $x=$do; $x = date('d.m.Y'); echo $x;?>">
     </div>
 
  <!--Adriana Gogoľáková: Obchodný partner funkčný aj pri filtrovaní--> 

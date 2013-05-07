@@ -29,7 +29,7 @@ td {text-align: center !important;}
         																if ($zaciatok == '') { }
         																	else {
 																				$date = new DateTime($zaciatok);
-																				echo $date->format('m/d/Y'); 
+																				echo $date->format('d.m.Y'); 
 																				}
 																	?>">
     </div>
@@ -39,7 +39,7 @@ td {text-align: center !important;}
 	    <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum do: </span>
 	    <input class="span3 datepicker" type="text" name="do" value="<?php 
 																		$date = new DateTime($koniec);
-																		echo $date->format('m/d/Y'); 
+																		echo $date->format('d.m.Y'); 
 																	?>">
 	</div>
 

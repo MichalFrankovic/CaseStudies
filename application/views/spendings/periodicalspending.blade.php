@@ -17,7 +17,7 @@
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Dátum:          </span>
-                    <input class="span2" type="date" name="datum" value="{{ $datum }}" />
+                    <input class="span2" type="date" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
                 </div>
             </td>
 
