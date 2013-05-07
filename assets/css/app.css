@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
-.wrapper {width:960px;margin:0 auto;}
-.head {position:relative;height:70px;}
-.head h1 {font-family:Georgia,serif;font-size:30px;font-weight:bold;}
+.wrapper {width:960px;margin:0 auto; background-color: white; padding-right: 10px; padding-left: 10px;}
+.head {position:relative;height:70px; width:860px;margin:0 auto; }
+.head h1 {font-family:Impact;font-size:30px;font-weight:bold;}
 .head small {position:absolute;top:35px;left:4px;color:#888;font-size:14px;}
 .head .user {position:absolute;top:10px;right:10px;}
 .footer {border-top:1px #aaa solid;clear:both;margin:30px 0 10px 0;text-align:center;font-size:12px;color:#888;padding:5px;}
@@ -12,20 +12,32 @@ form.side-by-side > div.submit {margin-left:130px;}
 form.side-by-side > div.captcha input {margin:10px 0 10px 130px;}
 
 .sprava-uspesna{
-		padding: 20px;
+		color:#468847;background-color:#dff0d8;border-color:#d6e9c6;
 		margin-bottom: 20px;
-		background: rgba(0, 255, 0, .3);
-		color: red;
-    	font-size: 20px;
-    	font-weight: bold;
+		padding: 10px;
+		font-weight: bold;
+		font-size: 17px;
 		}
 
 
 .sprava-chyba{
-		padding: 20px;
+		color:#b94a48;background-color:#f2dede;border-color:#eed3d7;
 		margin-bottom: 20px;
-		background: rgba(255, 0, 0, .3);
-		color: red;
-		font-size: 20px;
+		padding: 10px;
 		font-weight: bold;
+		font-size: 17px;
 		}
+
+html {
+	/*background: none repeat scroll 0% 0% rgb(241, 241, 241); */
+    /*background: url("http://localhost/CaseStudies/application/x.jpg") no-repeat scroll center 0 #4AB74E; */
+}
+
+
+.logo{
+	position:absolute;
+	left:350px;
+	top:0px;
+	z-index:-1;
+	width: 50px;
+}

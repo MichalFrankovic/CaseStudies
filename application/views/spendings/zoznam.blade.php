@@ -51,7 +51,7 @@ echo "</pre>";*/
   <div class="input-prepend">
         <span class="add-on" style="width:190px;text-align:left;padding-left:10px"> Obchodný partner - príjemca: </span>
     <select name="partner"  class="span3">
-        <option value="all" selected="selected">  -- VŠETCI --  </option>
+        <option value="all" selected="selected">   VŠETCI   </option>
         @foreach ($obch_partneri as $source)
         <option value="{{ $source->id }}" <?php if($source->id==$zdroj2){echo 'selected="selected"';}?>> {{ $source->t_nazov }}</option>
         @endforeach
@@ -62,7 +62,7 @@ echo "</pre>";*/
     <div class="input-prepend">
         <span class="add-on" style="width:190px;text-align:left;padding-left:10px"> Osoba - nákupca: </span>
     <select name="osoba"  class="span3">
-        <option value="all" selected="selected"> -- VŠETKY -- </option>
+        <option value="all" selected="selected">  VŠETCI    </option>
         @foreach ($osoby as $osoba)
         <option value="{{ $osoba->id }}" <?php if($osoba->id==$osoba2){echo 'selected="selected"';}?>> {{ $osoba->t_meno_osoby }}&nbsp;{{ $osoba->t_priezvisko_osoby }}</option>
         @endforeach
@@ -73,7 +73,7 @@ echo "</pre>";*/
 <div class="input-prepend">
             <span class="add-on" style="width:190px;text-align:left;padding-left:10px"> Typ výdavku:   </span>
         <select name="typ" class="span3">
-            <option value="all" selected="selected">  -- VŠETKY --   </option>
+            <option value="all" selected="selected">  VŠETKY </option>
             @foreach ($typyV as $typV)
             <option value="{{ $typV->id }}"<?php IF ($typV->id == $styp2) { echo "selected"; }?>> {{$typV->t_nazov_typu_vydavku }}</option>
             @endforeach

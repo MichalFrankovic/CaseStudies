@@ -4,6 +4,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Výdavkovač</title>
+	<LINK REL="icon" HREF="{{ URL::to('../application/obrazky/ziarovka.ico') }}" TYPE="image/x-icon">
+	
 	<meta name="viewport" content="width=device-width">
 	{{ HTML::style('assets/css/bootstrap.min.css') }}
     {{ HTML::style('assets/css/jquery-ui-1.9.2.custom.css') }}
@@ -14,30 +16,35 @@
 	{{ HTML::script('assets/js/jquery-ui-1.9.2.custom.js') }}
 	@yield('scripts')
 	{{ HTML::script('assets/js/app.js') }}
+
+	<style type="">
+		.navbar-inner{background-image:url({{ URL::to('../application/obrazky/modra.jpg') }}) !important; border: 1px !important;
+	</style>
+
 </head>
 <body>
-	<div class="wrapper">
-		<div id="head">
-			<div class="head">
+
+	<div id="head">
+		<div class="head">
+				<img class="logo" src="{{ URL::to('../application/obrazky/money.png') }}" width="100" height="140" />
 				
-				<h1>{{ HTML::link('', 'Výdavkovač'); }}</h1>
+				<h1>{{ HTML::link('', 'VÝDAVKOVAČ'); }}</h1>
 				<small>Systém na správu výdavkov pre jednotlivcov a rodiny</small>
 				
-				@if (!Auth::guest())
-					<div class="user btn-group">
-						dasd
-					    <button class="btn" title="{{ Auth::user()->t_email_login }}"><i class="icon-user"></i> {{ Auth::user()->t_nazov_domacnosti }}</button>
-					    <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+			@if (!Auth::guest())
+				<div class="user btn-group">
+					<button class="btn" title="{{ Auth::user()->t_email_login }}"><i class="icon-user"></i> {{ Auth::user()->t_nazov_domacnosti }}</button>
+					<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 					    <ul class="dropdown-menu">
 					    	<li><a href="{{ URL::to('user/password') }}"><i class="icon-edit"></i> Zmeniť heslo</a></li>
 					    	<li><a href="{{ URL::to('user/logout') }}" onclick="if(!confirm('Naozaj odhlásiť?'))return false;"><i class="icon-off"></i> Odhlásiť sa</a></li>
 					    </ul>
-				    </div>
-				@endif
-			</div>
+				</div>
+			@endif
+		</div>
 				
 		
-			
+	<div class="wrapper">
 			<div class="navbar">
 				<div class="navbar-inner">
 					<ul class="nav">
@@ -62,5 +69,5 @@
 			    </div>
 			</div>
 			
-		</div>
+		
 		<div id="content">
