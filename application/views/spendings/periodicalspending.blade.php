@@ -8,22 +8,24 @@
 
 @include('spendings/sp-submenu')
 
+{{ HTML::style('assets/css/bootstrap-editable.css') }}
+{{ HTML::script('assets/js/bootstrap-editable.js') }}
 
 <div class="thumbnail">
-    <h4>Parametre:</h4>
+    <h4> Parametre: </h4>
 {{ Form::open('spendings/savefromtemplate', 'POST', array('class' => '')); }}
     <table border="0" style="width: 100%;">
           <tr>
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Dátum:          </span>
-                    <input class="span2" type="date" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
+                    <input class="span2 datepicker" type="date" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
                 </div>
             </td>
 
             <td>
                 <div class="input-prepend" style="float:left">
-                     <span class="add-on">  Názov výdavku:  </span>
+                     <span class="add-on">  Názov šablóny:  </span>
                         <select name="sablona" class="span2">
                         @foreach ($sablony as $sablona)
                             <option value="{{ $sablona->id }}"> {{ $sablona->t_poznamka }}  </option>
@@ -50,54 +52,53 @@
                 </div>
             </td>
         </tr>
-            <td>
-                <div>
-                    <input type="submit" class="btn btn-primary" value="Pridať výdavok" />
-                </div>
-            </td>
-        </tr>
 
     </table>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="icon-edit icon-white"></i>
+            Uložiť ako výdavok
+    </button>
+        
+</div>
 {{ Form::close() }}
 
 <HR>
 
-
-<h4 class="">Zoznam šablón výdavkov</h4>
+<h4> Zoznam šablón výdavkov: </h4>
 <form id="form1" name="form1" method="post" action="zmazsablony">
     <table class="table table-bordered table-striped">
         <thead>
-        <tr>
-            <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" />    </th>
-            <th>    Názov           </th>
-            <th>    Príjemca platby </th>
-            <th>    Pravidelnosť    </th>
-            <th>    Kategória       </th>
-            <th>    Suma v €        </th>
-            <th>    Výber akcie     </th>
-        </tr>
+            <tr>
+                <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" />    </th>
+                <th>    Názov           </th>
+                <th>    Príjemca platby </th>
+                <th>    Pravidelnosť    </th>
+                <th>    Kategória       </th>
+                <th>    Suma v €        </th>
+                <th>    Výber akcie     </th>
+            </tr>
         </thead>
         <tbody>
-        @foreach ($sablony as $sablona)
-        <tr>
-            <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
-            <td>    {{ $sablona->t_poznamka }}                                              </td>
-            <td>    {{ $sablona->prijemca }}                                                </td>
-            <td>    {{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }} </td>
-            <td>    {{ $sablona->kategoria }}                                               </td>
-            <td>    {{ $sablona->vl_jednotkova_cena }} €                                    </td>
-            <td style="text-align: center;">
-                <a class="btn btn-primary" href="sablona?id={{ $sablona->id }}"> Upraviť </a>
-                <a class="btn btn-danger" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
-                    <i class="icon-remove icon-white"> </i> Vymazať </a>
-            </td>
-        </tr>
-        @endforeach
+            @foreach ($sablony as $sablona)
+            <tr>
+                <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
+                <td>    {{ $sablona->t_poznamka }}                                              </td>
+                <td>    {{ $sablona->prijemca }}                                                </td>
+                <td>    {{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }} </td>
+                <td>    {{ $sablona->kategoria }}                                               </td>
+                <td>    {{ $sablona->vl_jednotkova_cena }} €                                    </td>
+                <td style="text-align: center;">
+                    <a class="btn btn-primary" href="sablona?id={{ $sablona->id }}"> Upraviť </a>
+                    <a class="btn btn-danger" href="zmazsablonu?sablona={{ md5($sablona->id). $secretword}}" onclick="return confirm('Určite chcete zmazať tento záznam?')">
+                        <i class="icon-remove icon-white"> </i> Vymazať </a>
+                </td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
     <a class="btn btn-danger" href="#" onclick="multizmazanie('sablona[]')"><i class="icon-remove icon-white"></i>Vymazať zvolené</a>
 </form>
 
-</div>
 
 @include('foot')

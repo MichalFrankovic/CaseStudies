@@ -1,21 +1,29 @@
 @include('head')
-@if (isset($message) )
-    <h3 style="color: #bc8f8f;">{{ $message }}</h3>
+
+@if(Session::get('message'))
+        <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+        </div>
 @endif
+
+<style type="text/css">
+  form.side-by-side > div > label {float:left;width:180px;}
+</style>
 
 @include('spendings/sp-submenu')
 
-<h2>Šablóna výdavkov - pridaj novú</h2>
+<h3> Parametre novej šablóny výdavkov: </h3>
 
 {{ Form::open('spendings/ulozsablonu', 'POST', array('class' => 'side-by-side','name' => 'tentoForm', 'id' => 'aktualnyformular')); }}
-      <div class="input-prepend">
-        <label class="control-label">    Názov výdavku:  </label>         
-          <input class="span4" type="text" name="nazov">
+      <div {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? ' class="control-group error"' : '' }}>
+        <label class="control-label">    Názov šablóny:  </label>         
+          <input class="span3" type="text" name="nazov">
+        {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? '<span class="help-inline">'.$errors['nazov'].'</span>' : '' }}
       </div>
 
       <div class="input-prepend">
-        <label class="control-label">   Príjemca platby:  </label>
-            <select name="partner" class="span4">
+        <label class="control-label">   Príjemca platby - partner: </label>
+            <select name="partner" class="span3">
               @foreach ($partneri as $partner)
               <option value="{{ $partner->id }}"> {{ $partner->t_nazov }}</option>
               @endforeach
@@ -23,8 +31,8 @@
       </div>
 
       <div class="input-prepend">
-         <label class="control-label">   Zaplatil:   </label>
-             <select name="osoba" class="span4">
+         <label class="control-label">   Zaplatil - osoba:      </label>
+             <select name="osoba" class="span3">
              @foreach ($osoby as $osoba)
              <option value="{{ $osoba->id }}">{{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }} </option>
             @endforeach
@@ -32,25 +40,25 @@
       </div>
 
       <div class="input-prepend">
-        <label class="control-label">   Typ výdavku:   </label>
-        <select name="typ-vydavku" class="span4">
+        <label class="control-label">   Typ výdavku:     </label>
+        <select name="typ-vydavku" class="span3">
             @foreach ($typy_vydavkov as $typ)
-            <option value="{{ $typ->id }}"  @if ($vydavky[0]->id_typ_vydavku == $typ->id) selected="selected" @endif> {{ $typ->t_nazov_typu_vydavku }} </option>
+            <option value="{{ $typ->id }}"> {{ $typ->t_nazov_typu_vydavku }} </option>
             @endforeach
         </select>
     </div>
 
       <div class="input-prepend">
         <label class="control-label">    Pravidelnosť:    </label>      
-          <select class="span4" name="pravidelnost">
-              <option value="A">Pravidelný</option>
-              <option value="N">Nepravidelný</option>
+          <select class="span3" name="pravidelnost">
+              <option value="A">  Pravidelný    </option>
+              <option value="N">  Nepravidelný  </option>
           </select>
       </div>
 
       <div class="input-prepend">
-        <label class="control-label">    Kategória:         </label>
-            <select name="polozka-id" class="span4" style="font-family: Courier, 'Courier New', monospace;" >
+        <label class="control-label">    Kategória alebo produkt:  </label>
+            <select name="polozka-id" class="span3">
                     @foreach ($polozky as $polozka)
                         <option value="{{ $polozka->id }}"> {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
                    @endforeach
@@ -58,20 +66,21 @@
       </div>
 
       <div class="input-prepend">
-         <label class="control-label">    Hodnota výdavku:  </label>
-          <input name="hodnota" class="span4" type="text">
+         <label class="control-label">    Hodnota výdavku:         </label>
+          <input name="hodnota" class="span2" type="text">
+          <span class="add-on" value=''>€</span>
       </div>
       
 
 
       <button type="reset" class="btn btn-primary">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
+            <i class="icon-remove icon-white"></i>
+                Zruš
       </button>
 
       <button type="submit" class="btn btn-primary">
             <i class="icon-ok icon-white"></i>
-                Pridaj
+                Pridaj šablónu
       </button>
 
 {{ Form::close() }}

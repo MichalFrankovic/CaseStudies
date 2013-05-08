@@ -199,7 +199,7 @@ class Spendings_Controller extends Base_Controller {
         
         $view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
         		"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
-        		"where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).")");
+        		"where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).") ORDER BY v.t_poznamka");
         
         return $view;
     }
@@ -424,12 +424,20 @@ class Spendings_Controller extends Base_Controller {
 
     public function action_sablona() {
     	
+        $idecko_z_ulozenia = Session::get('id');
+
     	$id = Input::get('id');
-    	
-    	if (isset($id)) {
+        
+    	if (isset($id) || isset($idecko_z_ulozenia)) 
+        {
     		
     		$view = View::make('spendings.sablona-editacia')->with('active', 'vydavky')->with('subactive', 'spendings/sablona');
     		
+            if (isset($idecko_z_ulozenia)) 
+                {   
+                    $id = $idecko_z_ulozenia;
+                }
+
     		$view->message = Session::get('message');
     		
     		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
@@ -474,11 +482,12 @@ class Spendings_Controller extends Base_Controller {
 
             $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
     		
-    		$view->editovana_sablona = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria " .
-    				"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
-    				"where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).") and v.id = '".$id."'");
+    		$view->editovana_sablona = DB::query("SELECT v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov AS prijemca,kp.t_nazov AS kategoria, v.id_osoba, v.id_typ_vydavku " .
+    				"FROM F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
+    				"WHERE v.id = vkp.id_vydavok AND v.id_obchodny_partner = op.id AND vkp.id_kategoria_a_produkt = kp.id AND v.fl_sablona = 'A' AND v.id_osoba in (".implode(",", $id_osob).") AND v.id = '".$id."'");
     		
-    		
+    		$view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->get();
+
     		return $view;
     		
     	} else {
@@ -542,13 +551,42 @@ class Spendings_Controller extends Base_Controller {
     public function action_ulozsablonu() {
     	
     	$data = Input::All();
+
+        // $data_for_sql sa zapíše do F_VYDAVOK:
     	$data_for_sql['t_poznamka'] =  $data['nazov'];
     	$data_for_sql['id_obchodny_partner'] =  $data['partner'];
     	$data_for_sql['fl_pravidelny'] =  $data['pravidelnost'];
+        $data_for_sql['id_osoba'] =  $data['osoba'];
+        $data_for_sql['id_typ_vydavku'] =  $data['typ-vydavku'];
     	
     	$polozky_for_sql['id_kategoria_a_produkt'] = $data['polozka-id'];
     	$polozky_for_sql['vl_jednotkova_cena'] = $data['hodnota'];
     	
+        if (empty($data_for_sql['t_poznamka'])) {  
+          $errors['nazov'] = 'Zadajte prosím názov šablóny';
+        }
+
+        if (!empty($errors)) {
+          $error = 'Opravte chyby vo formulári';
+          
+            if (isset($data['hlavicka-id'])) // Editácia
+                {
+                    $view = Redirect::to('spendings/sablona')
+                                        ->with('error', $error)
+                                        ->with('errors',$errors)
+                                        ->with('id',$data['hlavicka-id']);     
+                } 
+                 else 
+                    { // Nový záznam
+                     $view = Redirect::to('spendings/sablona')
+                                        ->with('error', $error)
+                                        ->with('errors',$errors);
+                    }
+
+            return $view;
+        }
+
+        // Aktualizácia šablóny:
     	if (isset($data['update'])) {
     		
     		$aktualizacia = DB::table('F_VYDAVOK')
@@ -560,26 +598,29 @@ class Spendings_Controller extends Base_Controller {
     		->update($polozky_for_sql);
     		
     		return Redirect::to('spendings/sablona')
-                ->with('message', 'Šablóna bola úspešne zmenená!')
+                ->with('message', 'Šablóna bola úspešne zmenená')
                 ->with('status_class','sprava-uspesna');
     		
-    	} else {
-
-    		$data_for_sql['fl_sablona'] = 'A';
-    		
-    		$osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
-    		$data_for_sql['id_osoba'] = $osoby[0]->id;
-    		$idvydavku = DB::table('F_VYDAVOK')->insert_get_id($data_for_sql);
-    		
-    		$polozky_for_sql['id_vydavok'] = $idvydavku;
-    		
-    		$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
-    		
-    		return Redirect::to('spendings/periodicalspending')
-                ->with('message', 'Šablóna bola úspešne pridaná!')
-                ->with('status_class','sprava-uspesna');
-    		
-    	}
+    	} 
+        // Pridanie novej šablóny:
+            else {
+        		$data_for_sql['fl_sablona'] = 'A';
+        		
+            /* 
+        		$osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        		$data_for_sql['id_osoba'] = $osoby[0]->id; 
+            */
+        		$idvydavku = DB::table('F_VYDAVOK')->insert_get_id($data_for_sql);
+        		
+        		$polozky_for_sql['id_vydavok'] = $idvydavku;
+        		
+        		$idvydavku2 = DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
+        		
+        		return Redirect::to('spendings/periodicalspending')
+                    ->with('message', 'Šablóna bola úspešne pridaná')
+                    ->with('status_class','sprava-uspesna');
+        		
+        	}
     	
     }
     
@@ -591,7 +632,7 @@ class Spendings_Controller extends Base_Controller {
     	DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
     	
         return Redirect::to('spendings/periodicalspending')
-                ->with('message', 'Šablóna bola vymazaná!')
+                ->with('message', 'Šablóna bola vymazaná')
                 ->with('status_class','sprava-uspesna');
     	
     }
@@ -609,7 +650,7 @@ class Spendings_Controller extends Base_Controller {
     		}
     	}
     	return Redirect::to('spendings/periodicalspending')
-                ->with('message', 'Šablóny boli vymazané!')
+                ->with('message', 'Šablóny boli vymazané')
                 ->with('status_class','sprava-uspesna');
     	
     }
@@ -642,8 +683,8 @@ class Spendings_Controller extends Base_Controller {
     	
     	DB::table('R_VYDAVOK_KATEGORIA_A_PRODUKT')->insert($polozky_for_sql);
     	
-    	return Redirect::to('spendings/periodicalspending?r')
-                    ->with('message', 'Výdavok bol úspešne pridaný!')
+    	return Redirect::to('spendings/zoznam')
+                    ->with('message', 'Výdavok bol úspešne pridaný')
                     ->with('status_class','sprava-uspesna');
     	
     }
@@ -663,7 +704,7 @@ class Spendings_Controller extends Base_Controller {
         DB::table('D_OBCHODNY_PARTNER')
             ->insert_get_id($data_for_sql);
         return Redirect::to('spendings/pridanie')
-                ->with('message', 'Partner bol pridaný!')
+                ->with('message', 'Partner bol pridaný')
                 ->with('status_class','sprava-uspesna');
 
     }
