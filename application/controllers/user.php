@@ -52,7 +52,7 @@ class User_Controller extends Base_Controller {
 				
 				if (Auth::user()->fl_aktivna != 'A') {	//inactive account
 					
-					$view->error = 'Váš účet bol zablokovaný';
+					$view->error = 'Váš účet bol označený ako neaktívny';
 					
 				} else {
 					
