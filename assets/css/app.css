@@ -14,7 +14,7 @@ form.side-by-side > div.captcha input {margin:10px 0 10px 130px;}
 .sprava-uspesna{
 		color:#468847;background-color:#dff0d8;border-color:#d6e9c6;
 		margin-bottom: 20px;
-		padding: 10px;
+		padding: 15px;
 		font-weight: bold;
 		font-size: 17px;
 		}
@@ -23,7 +23,7 @@ form.side-by-side > div.captcha input {margin:10px 0 10px 130px;}
 .sprava-chyba{
 		color:#b94a48;background-color:#f2dede;border-color:#eed3d7;
 		margin-bottom: 20px;
-		padding: 10px;
+		padding: 15px;
 		font-weight: bold;
 		font-size: 17px;
 		}

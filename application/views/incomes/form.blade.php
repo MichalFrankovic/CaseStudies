@@ -1,6 +1,7 @@
 @layout('layouts.base')
+
 @if(Session::get('message'))
-        <div class="information {{ Session::get('status_class') }}">
+        <div class=" {{ Session::get('status_class') }}">
             {{ Session::get('message') }}
         </div>
 @endif
@@ -11,21 +12,10 @@
 		margin-left: 180px; 
 	}
 	</style>
+
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
 	{{ HTML::style('assets/css/jquery.validity.css') }}
-	<style>
-		.information{
-			padding: 20px;
-			margin-bottom: 20px;
-			
-		}
-		.information.success{
-			background: rgba(0, 255, 0, .3);
-		}
-		.information.error{
-			background: rgba(255, 0, 0, .3);
-		}
-	</style>
+	
 @endsection
 
 @section('scripts')
@@ -89,7 +79,7 @@
 	</ul>
 
 	@if(Session::get('status'))
-		<div class="information {{ Session::get('status_class') }}">
+		<div class=" {{ Session::get('status_class') }} ">
 			{{ Session::get('status') }}
 		</div>
 	@endif
@@ -146,12 +136,9 @@
 	  			<div class="input-prepend">
 				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
 				  	
-				  	<input name="datum" class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) {
-																  					$x = $editacia[0]->d_datum;
-																  					$x = date('d.m.Y');
-																  	 				echo $x;
-																  	 			}
-				  	 														?> ">
+				  	<input name="datum" class="datepicker input-small" type="text" value="@if (isset($editacia[0]->d_datum)) 
+																  							{{ date('d.m.Y', strtotime($editacia[0]->d_datum)) }}
+				  	 																	  @endif ">
 				  	</input>
 				</div>
 	  		</div>

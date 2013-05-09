@@ -3,18 +3,7 @@
 @section('styles')
 	
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
-	<style>
-		.information{
-			padding: 20px;
-			margin-bottom: 20px;
-		}
-		.information.success{
-			background: rgba(0, 255, 0, .3);
-		}
-		.information.error{
-			background: rgba(255, 0, 0, .3);
-		}
-	</style>
+	
 @endsection
 
 @section('scripts')
@@ -144,7 +133,7 @@
 	</ul>
 
 	@if(Session::get('status'))
-		<div class="information {{ Session::get('status_class') }}">
+		<div class=" {{ Session::get('status_class') }} ">
 			{{ Session::get('status') }}
 		</div>
 	@endif

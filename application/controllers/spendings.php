@@ -343,7 +343,7 @@ class Spendings_Controller extends Base_Controller {
             }
             //return Redirect::to_action('spendings@simplespending?id='.$data['hlavicka-id'])->with("message", 'Výdavok bol aktualizovaný');
             return Redirect::to('spendings/zoznam')
-                        ->with('message', 'Výdavok bol úspešne aktualizovaný!')
+                        ->with('message', 'Výdavok bol úspešne aktualizovaný')
                         ->with('status_class','sprava-uspesna');
 
         /*
@@ -371,7 +371,7 @@ class Spendings_Controller extends Base_Controller {
                     }
 
                 return Redirect::to('spendings/zoznam')
-                        ->with('message', 'Výdavok bol úspešne pridaný!')
+                        ->with('message', 'Výdavok bol úspešne pridaný')
                         ->with('status_class','sprava-uspesna');
 
                 }
@@ -399,7 +399,7 @@ class Spendings_Controller extends Base_Controller {
         DB::query('DELETE FROM F_VYDAVOK WHERE CONCAT(md5(id),\''.$secretword.'\') = \''.$vydavok_id.'\''); //mazanie hlavicky
        
         return Redirect::to('spendings/zoznam')
-            ->with('message', 'Výdavok bol vymazaný!')
+            ->with('message', 'Výdavok bol vymazaný')
             ->with('status_class','sprava-uspesna');
     }
     
@@ -417,7 +417,7 @@ class Spendings_Controller extends Base_Controller {
     		}
     	}
     	return Redirect::to('spendings/zoznam')
-                ->with('message', 'Výdavky boli vymazané!')
+                ->with('message', 'Výdavky boli vymazané')
                 ->with('status_class','sprava-uspesna');
     }
     

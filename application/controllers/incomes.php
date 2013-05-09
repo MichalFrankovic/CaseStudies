@@ -215,11 +215,11 @@ if (empty($suma))
 			{
 				return Redirect::to('incomes')
 					->with('status', 'Nový Príjem bol úspešne uložený')
-					->with('status_class', 'success');
+					->with('status_class', 'sprava-uspesna');
 			} else {
 				return Redirect::to('incomes')
 					->with('status', 'Pri ukladaní došlo k chybe')
-					->with('status_class', 'error');
+					->with('status_class', 'sprava-chyba');
 			}
 
 		} else { /*$aktualizacia = DB::table('F_PRIJEM')
@@ -238,7 +238,7 @@ if (empty($suma))
 
 				return Redirect::to('incomes')
 					->with('status', 'Údaje boli aktualizované')
-					->with('status_class', 'success');
+					->with('status_class', 'sprava-uspesna');
 				}
 
 	}
@@ -276,11 +276,11 @@ if (empty($suma))
 		{
 			return Redirect::to('incomes/index')
 				->with('status', 'Príjem bol odstránený')
-				->with('status_class', 'success');
+				->with('status_class', 'sprava-uspesna');
 		} else {
 			return Redirect::to('incomes/index')
 				->with('status', 'Pri vykonávaní operácie došlo k chybe')
-				->with('status_class', 'error');
+				->with('status_class', 'sprava-chyba');
 		}
 	}
 
@@ -305,12 +305,12 @@ if (empty($suma))
       if($deleted > 0){
       return Redirect::to('incomes/index')
       		->with('status', 'Prijmy boli vymazané!')
-      		->with('status_class', 'success');
+      		->with('status_class', 'sprava-uspesna');
       }
       else{
       return Redirect::to('incomes/index')
 			->with('status', 'Pri vykonávaní operácie došlo k chybe')
-			->with('status_class', 'error');
+			->with('status_class', 'sprava-chyba');
       }
     }
 }
