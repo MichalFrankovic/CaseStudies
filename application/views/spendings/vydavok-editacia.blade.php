@@ -8,6 +8,10 @@
 
 @include('spendings/sp-submenu')
 
+<?php /*KVOLI ZADÁVANIU DÁTUMOV CEZ JAVASCRIPT ZA VYUŽITIA CSS ŠTÝLU */ ?>
+{{ HTML::script('assets/js/bootstrap-editable.js') }}
+{{ HTML::style('assets/css/bootstrap-editable.css') }}
+
 <h2>Jednoduchý výdavok - editácia</h2>
 
 {{ Form::open('spendings/savespending?update=1', 'POST', array('class' => 'side-by-side')); }}
@@ -17,8 +21,8 @@
     <h4>Parametre:</h4>
     
     <div class="input-prepend" style="float:left;width:295px">
-        <span class="add-on"> Dátum:          </span>
-        <input name="datum" class="span3 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">
+        <span class="add-on" style="width:83px"> Dátum:          </span>
+        <input name="datum" class="span2 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }}">
     </div>
 
     <div class="input-prepend" style="float:left;width:350px">
@@ -49,7 +53,7 @@
     </div>
 
     <div class="input-prepend">
-            <span class="add-on"> Poznámka:   </span>
+            <span class="add-on" style="width:83px"> Poznámka:   </span>
             <input name="poznamka" class="span10" type="text" value="{{ $vydavky[0]->t_poznamka }}">
     </div>
 
@@ -132,7 +136,7 @@
 
     <div class="input-prepend">
          <span class="add-on">  Celková suma:         </span>
-         <input id="total" class="span2" type="text"  disabled="disabled" value="{{ number_format(round($vydavky[0]->suma_vydavku_po_celk_zlave,2),2) }}">
+         <input id="total" class="span2" type="text"  disabled="disabled" value="{{ $vydavky[0]->suma_vydavku_po_celk_zlave }} €">
     </div>
 
     <div class="input-prepend">

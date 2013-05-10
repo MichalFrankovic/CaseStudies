@@ -8,7 +8,9 @@
 
 @include('spendings/sp-submenu')
 
-
+<?php /*KVOLI ZADÁVANIU DÁTUMOV CEZ JAVASCRIPT ZA VYUŽITIA CSS ŠTÝLU */ ?>
+{{ HTML::script('assets/js/bootstrap-editable.js') }}
+{{ HTML::style('assets/css/bootstrap-editable.css') }}
 
 {{ Form::open('spendings/savespending', 'POST', array('class' => 'side-by-side')); }}
 <input type="hidden" name="hlavicka-id" id="hidden" value="N"/>
@@ -17,8 +19,8 @@
     <h4>Parametre:</h4>
 
     <div class="input-prepend" style="float:left;width:295px">
-        <span class="add-on">   Dátum:            </span>
-        <input name="datum" class="span3 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y') }}">
+        <span class="add-on" style="width:83px">   Dátum:            </span>
+        <input name="datum" class="span2 datepicker" type="text" placeholder="Deň.Mesiac.Rok" value="{{ date('d.m.Y') }}">
     </div>
 
     <div class="input-prepend" style="float:left;width:350px">
@@ -49,7 +51,7 @@
     </div>
 
     <div class="input-prepend">
-        <span class="add-on">   Poznámka:   </span>
+        <span class="add-on" style="width:83px">   Poznámka:   </span>
         <input name="poznamka" class="span10" type="text" value="">
     </div>
 
