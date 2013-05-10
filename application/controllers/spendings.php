@@ -185,7 +185,13 @@ class Spendings_Controller extends Base_Controller {
 
     public function action_periodicalspending()
     {
-        $view = View::make('spendings.periodicalspending')->with('active', 'vydavky')->with('subactive', 'spendings/periodicalspending')->with('secretword', md5(Auth::user()->t_heslo));
+        $view = View::make('spendings.periodicalspending')
+            ->with('active', 'vydavky')
+            ->with('subactive', 'spendings/periodicalspending')
+            ->with('secretword', md5(Auth::user()->t_heslo));
+
+        $view->errors = Session::get('errors');
+        $view->error = Session::get('error');
 
         $view->message = Session::get('message');
         
@@ -658,6 +664,20 @@ class Spendings_Controller extends Base_Controller {
     public function action_savefromtemplate() {
     	
     	$data = Input::All();
+
+        if (($data['sablona']) == 'nic') 
+        {
+
+          $errors['nazov'] = 'Zadajte prosím názov šablóny';
+        
+          $error = 'Nevybral si žiadnu šablónu';
+          
+          $view = Redirect::to('spendings/periodicalspending')
+                    ->with('error', $error)
+                    ->with('errors',$errors);
+
+            return $view;
+        }
     	
     	$sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena " .
     			"from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp ".
@@ -718,9 +738,21 @@ class Spendings_Controller extends Base_Controller {
                            FROM D_KATEGORIA_A_PRODUKT 
                            WHERE id= '".$id."'");
 
-        
         return $suma[0]->cena;
 
+    }
+
+
+    public function action_vyber_cenu_pre_sablonu() {
+
+        $id=$_GET['id'];
+
+        $suma = DB::query("SELECT vkp.vl_jednotkova_cena AS cena
+                FROM F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp, D_TYP_VYDAVKU tv, D_OSOBA o 
+                WHERE v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.id_typ_vydavku = tv.id and v.id_osoba = o.id and v.fl_sablona = 'A' 
+                    AND v.id= '".$id."'");
+
+        return $suma[0]->cena;
 
     }
 

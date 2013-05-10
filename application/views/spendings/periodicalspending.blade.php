@@ -6,10 +6,34 @@
         </div>
 @endif
 
+<script>    
+
+    function daco() {
+
+        $('select#abc').each(function()
+        {
+        var x = $('option:selected',$(this)).attr('value');
+        //alert('ID vybranej šablóny je: ' +x);
+
+        $.get('vyber_cenu_pre_sablonu?id='+x,
+            function(data) {
+                $('input#cena').val(data);
+                //alert('Cena vybraná z databázy pre túto šablónu je: ' +data);
+                });
+        });
+
+    }
+
+</script> 
+
 @include('spendings/sp-submenu')
 
 {{ HTML::style('assets/css/bootstrap-editable.css') }}
 {{ HTML::script('assets/js/bootstrap-editable.js') }}
+
+@if (isset($error) && $error == true)
+    <div class="alert alert-error">{{ $error }}</div>
+@endif
 
 <div class="thumbnail">
     <h4> Parametre: </h4>
@@ -24,9 +48,11 @@
             </td>
 
             <td>
-                <div class="input-prepend" style="float:left">
+                <div {{ (is_array($errors) && isset($errors['nazov'])) ? ' class="control-group error input-prepend" style="float:left"' : 'class="input-prepend" style="float:left"' }}>
+                
                      <span class="add-on">  Názov šablóny:  </span>
-                        <select name="sablona" class="span2">
+                        <select id="abc" onchange="daco()" name="sablona" class="span2">
+                            <option value="nic">    Vyber šablónu   </option>
                         @foreach ($sablony as $sablona)
                             <option value="{{ $sablona->id }}"> {{ $sablona->t_poznamka }}  </option>
                         @endforeach
@@ -48,7 +74,7 @@
             <td>
                  <div class="input-prepend">
                     <label class="add-on">   Suma v €:   </label>
-                            <input class="span2" type="text" name="nazov">
+                            <input id="cena" class="span2" type="text" name="nazov">
                 </div>
             </td>
         </tr>
