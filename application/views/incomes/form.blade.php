@@ -136,9 +136,9 @@
 	  			<div class="input-prepend">
 				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
 				  	
-				  	<input name="datum" class="datepicker input-small" type="text" value="@if (isset($editacia[0]->d_datum)) 
-																  							{{ date('d.m.Y', strtotime($editacia[0]->d_datum)) }}
-				  	 																	  @endif ">
+				  	<input name="datum" class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) 
+																  							echo date('d.m.Y', strtotime($editacia[0]->d_datum));
+				  	 																	  ?>">
 				  	</input>
 				</div>
 	  		</div>
