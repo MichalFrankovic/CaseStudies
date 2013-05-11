@@ -42,8 +42,8 @@ if ($editacia == 'ano') {
     <div{{ isset($errors->typvydavku) || (is_array($errors) && isset($errors['typvydavku'])) ? ' class="control-group error"' : '' }} >
         <label class="control-label">    Názov typu výdavku:          </label>  
        <span style="padding:0px 10px;"> <input class="span3" type="text" name="nazov_typu_vydavku" value="<?php
-                                                                 /*if (isset($meneny_vydavok))
-                                                                 echo $meneny_vydavok; */
+                                                                if (isset($meneny_vydavok))
+                                                                 echo $meneny_vydavok; 
                                                                 if (isset($editovany_zaznam[0]->t_nazov_typu_vydavku))
                                                                     echo ($editovany_zaznam[0]->t_nazov_typu_vydavku); 
                                                              ?>">
