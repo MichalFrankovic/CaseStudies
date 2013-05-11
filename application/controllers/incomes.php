@@ -202,10 +202,10 @@ class Incomes_Controller extends Base_Controller {
 	$d_datum=Input::get('datum');
 
 if ($id_osoba == 'Nezaradený') {  
-      $errors['id_osoba'] = 'Vyberte prosim osobu';
+      $errors['id_osoba'] = 'Vyberte prosím osobu';
     }	
 if ($id_typ_prijmu == 'Nezaradený') {  
-      $errors['id_typ_prijmu'] = 'Vyberte prosim typ prijmu';
+      $errors['id_typ_prijmu'] = 'Vyberte prosím typ príjmu';
     }
 if (empty($d_datum)) {  
            $errors['d_datum'] = 'Zadajte prosím datum';
@@ -215,10 +215,12 @@ if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu))
 {  
       $errors['vl_suma_prijmu'] = 'Suma musí obsahovať číslo';
     }
+
 if ($id_obchodny_partner == 'Nezaradený') 
 {  
-      $errors['id_obchodny_partner'] = 'Vyberte prosim zdroj prijmu';
+      $errors['id_obchodny_partner'] = 'Vyberte prosím zdroj príjmu';
     }
+    
 	if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
 

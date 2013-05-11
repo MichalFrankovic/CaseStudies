@@ -8,10 +8,20 @@
 
 @section('styles')
 	<style type="text/css">
-	.btn.btn-primary{ 
-		margin-top: 15px;
-		margin-left: 180px; 
-	}
+		.btn.btn-primary{ 
+			margin-top: 15px;
+			margin-left: 180px; 
+		}
+
+		.input-prepend,.tlacidla,.input-xxlarge 
+		{
+			margin-bottom: 10px !important;
+			margin-left: 40px !important;
+		}
+
+		.control-group, .error {margin-bottom: 0px !important;}
+
+		.input-prepend {vertical-align: inherit !important;}
 	</style>
 
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
@@ -223,7 +233,8 @@
 <div>
     <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" title="Poznámka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
 </div>
-     
+
+<div class="tlacidla">
  <?php     
 if ($uprava == "ano") {
      echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
@@ -256,6 +267,7 @@ if ($uprava == "ano") {
         }
 
 ?>    
+</div>
       
 
  
