@@ -143,7 +143,7 @@
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
 		<span style="padding:px 600px 0px;"><select name='id_osoba' class='input-xlarge'>
 			    
-             <option value="Nezaradený" selected="selected">Vyber</option>
+             <option value="Nezaradený" selected="selected">Vyberte</option>
 
 			      	@foreach ($osoby as $osoba)
 			      	<option value="{{ $osoba->id }}"  @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
@@ -165,7 +165,7 @@
 
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Typ príjmu: </span>
 		<span style="padding:px 600px 0px;"><select name='id_typ_prijmu' class='input-xlarge'>
-             <option value="Nezaradený" selected="selected"> Vyber </option>
+             <option value="Nezaradený" selected="selected"> Vyberte </option>
 
 			      	@foreach ($typ_prijmu as $typ)
 			      	<option value="{{ $typ->id }}" @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
@@ -215,7 +215,7 @@
 		<span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Zdroj príjmu: </span>
 		<span style="padding:px 600px 0px;">
 			<select name='id_zdroj_prijmu' class='input-xlarge'>
-                <option value="Nezaradený" selected="selected"> Vyber </option>
+                <option value="Nezaradený" selected="selected"> Vyberte </option>
 			      	@foreach ($zdroj_prijmu as $zdroj)
 			      	<option value="{{ $zdroj->id }}" @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
 	                                                selected="selected" @endif > {{$zdroj->t_nazov}} 
