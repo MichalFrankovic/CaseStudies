@@ -1167,9 +1167,9 @@ public function action_zmazattypvydavku()
           $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
         }
 
-    if(!empty($duplicate)){
-          $errors['typvydavku']= 'Zadajte iný názov, tento už existuje';
-    }
+    //if(!empty($duplicate)){
+          //$errors['typvydavku']= 'Zadajte iný názov, tento už existuje';
+   // }
 
      if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
