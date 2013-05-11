@@ -193,7 +193,7 @@ class Incomes_Controller extends Base_Controller {
 	$d_datum=Input::get('datum');
 
 if ($id_osoba == 'Nezaradený') {  
-      $errors['id_osoba'] = 'Vyberte prosim zdroj prijmu';
+      $errors['id_osoba'] = 'Vyberte prosim osobu';
     }	
 if ($id_typ_prijmu == 'Nezaradený') {  
       $errors['id_typ_prijmu'] = 'Vyberte prosim typ prijmu';
