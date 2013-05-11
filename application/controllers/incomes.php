@@ -74,11 +74,20 @@ class Incomes_Controller extends Base_Controller {
 	 */
 	public function get_form()
 	{	
-		$idprijmu = Input::get('id');
+		
+		 $x = Input::get('id');
+          if (isset($x)) {
+               $id = Input::get('id');
+                        }
+                          else {
+                            $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+                        }
 
-		if (isset($idprijmu))
+
+		if (isset($id))
 		{
-
+			$idprijmu=$id;
+			
 			$view = View::make('incomes.form')
 							->with('active', 'prijmy')
 							->with('subactive', 'incomes/form')
@@ -220,7 +229,8 @@ if ($id_obchodny_partner == 'Nezaradený')
                         ->with('meneny_typ',$id_typ_prijmu)
                         ->with('meneny_suma',$vl_suma_prijmu)
                         ->with('meneny_zdroj',$id_obchodny_partner)
-					    ->with('meneny_datum',$d_datum);
+					    ->with('meneny_datum',$d_datum)
+					    ->with('id',$idecko);
 
 						return $view;
     }  

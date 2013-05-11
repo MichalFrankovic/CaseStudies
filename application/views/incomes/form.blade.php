@@ -8,7 +8,8 @@
 
 @section('styles')
 	<style type="text/css">
-	.btn.btn-primary{
+	.btn.btn-primary{ 
+		margin-top: 15px;
 		margin-left: 180px; 
 	}
 	</style>
@@ -125,11 +126,12 @@
 		}
 	);
 </script>
+
 <div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->id_osoba) || (is_array($errors) && isset($errors['id_osoba'])) ? ' class="control-group error"' : '' }}>
-<div class="input-prepend">
+	<div class="input-prepend">
 
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
-<span style="padding:px 600px 0px;"><select name='id_osoba' class='input-xlarge'>
+		<span style="padding:px 600px 0px;"><select name='id_osoba' class='input-xlarge'>
 			    
              <option value="Nezaradený" selected="selected">Vyber</option>
 
@@ -141,17 +143,19 @@
 			      	
 			      	@endforeach
 			     </select>
-                 </div>
-{{ isset($errors->id_osoba) || (is_array($errors) && isset($errors['id_osoba'])) ? '<span class="help-inline">'.$errors['id_osoba'].'</span>' : '' }}
-	  	</div>
+    </div>
+
+	{{ isset($errors->id_osoba) || (is_array($errors) && isset($errors['id_osoba'])) ? '<span class="help-inline">'.$errors['id_osoba'].'</span>' : '' }}
+
+</div>
 
 
-		<div   {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? ' class="control-group error"' : '' }}>
-        <div class="input-prepend">
+<div   {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? ' class="control-group error"' : '' }}>
+    <div class="input-prepend">
 
-        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Typ prijmu: </span>
-<span style="padding:px 600px 0px;"><select name='id_typ_prijmu' class='input-xlarge'>
-             <option value="Nezaradený" selected="selected">Vyber</option>
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Typ príjmu: </span>
+		<span style="padding:px 600px 0px;"><select name='id_typ_prijmu' class='input-xlarge'>
+             <option value="Nezaradený" selected="selected"> Vyber </option>
 
 			      	@foreach ($typ_prijmu as $typ)
 			      	<option value="{{ $typ->id }}" @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
@@ -161,45 +165,47 @@
 			      	
 			      	@endforeach
 			 </select>
-             </div>
-                           {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? '<span class="help-inline">'.$errors['id_typ_prijmu'].'</span>' : '' }}
+    </div>
 
-	  	</div> 
+    {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? '<span class="help-inline">'.$errors['id_typ_prijmu'].'</span>' : '' }}
+
+</div> 
 
 
-        <div class="input-prepend">
-				  	<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"><i class="icon-calendar"></i>Datum</span>
+<div class="input-prepend">
+	<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Dátum <i class="icon-calendar" style="margin-left:20px;"> </i> </span>
 				  	
-<input  name="datum" class="datepicker input-small" type="text"  value="<?php if (isset($editacia[0]->d_datum)) {
+	<input  name="datum" class="datepicker input-small" type="text"  value="<?php if (isset($editacia[0]->d_datum)) {
 																  					$x = $editacia[0]->d_datum;
-																  					$x = date('m/d/Y');
+																  					$x = date('m.d.Y');
 																  	 				echo $x;
 																  	 			}
 				  	 														?> ">
-				  	</input>
-				</div>
+	</input>
+</div>
 	  	
 		
 
-		<div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? ' class="control-group error"' : '' }}>
+<div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? ' class="control-group error"' : '' }}>
 
-				<div class="input-prepend" >
-				  	<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;">Suma €</span>
+	<div class="input-prepend" >
+		<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Suma € </span>
 				  	
-				  	<input class="input-small" type="text" value="<?php if (isset($meneny_suma))
+			<input class="input-small" type="text" value="<?php if (isset($meneny_suma))
                                                                  echo $meneny_suma;
 																 elseif (isset($editacia[0]->vl_suma_prijmu)) echo $editacia[0]->vl_suma_prijmu; ?>" name="vl_suma_prijmu"> </input>
-				</div>
+	</div>
                 
-                {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? '<span class="help-inline" style="display:inline" >'.$errors['vl_suma_prijmu'].'</span>' : '' }}
+    {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? '<span class="help-inline" style="display:inline" >'.$errors['vl_suma_prijmu'].'</span>' : '' }}
 </div>
-		
-		<div  <?php if(!isset($error)) echo 'class="control-group"';?>  {{ isset($errors->id_obchodny_partner) || (is_array($errors) && isset($errors['id_obchodny_partner'])) ? ' class="control-group error"' : '' }}>				
-        <div class="input-prepend" >
-<span class="add-on" style="width:80px;text-align:left;padding-left:10px">Zdroj prijmu: </span>
-		      <span style="padding:px 600px 0px;"><select name='id_zdroj_prijmu' class='input-xlarge'>
-                      <option value="Nezaradený" selected="selected">Vyber</option>
 
+		
+<div  <?php if(!isset($error)) echo 'class="control-group"';?>  {{ isset($errors->id_obchodny_partner) || (is_array($errors) && isset($errors['id_obchodny_partner'])) ? ' class="control-group error"' : '' }}>				
+    <div class="input-prepend" >
+		<span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Zdroj príjmu: </span>
+		<span style="padding:px 600px 0px;">
+			<select name='id_zdroj_prijmu' class='input-xlarge'>
+                <option value="Nezaradený" selected="selected"> Vyber </option>
 			      	@foreach ($zdroj_prijmu as $zdroj)
 			      	<option value="{{ $zdroj->id }}" @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
 	                                                selected="selected" @endif > {{$zdroj->t_nazov}} 
@@ -207,21 +213,17 @@
 			      	</option>
 			      	
 			      	@endforeach
-			     </select>
-                 		</div>
+			</select>
+    </div>
 
 	{{ isset($errors->id_obchodny_partner) || (is_array($errors) && isset($errors['id_obchodny_partner'])) ? '<span class="help-inline">'.$errors['id_obchodny_partner'].'</span>' : '' }}
 
-		    </div>
+</div>
 			
-		
-			
-		
-		<div class="">
-
-                <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" title="Poznamka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
-      </div>
-      <br />
+<div>
+    <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" title="Poznámka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
+</div>
+     
  <?php     
 if ($uprava == "ano") {
      echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
