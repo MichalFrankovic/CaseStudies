@@ -8,9 +8,9 @@
 
 <script>    
 
-    function daco() {
+function daco() {
 
-        $('select#abc').each(function()
+    $('select#abc').each(function()
         {
         var x = $('option:selected',$(this)).attr('value');
         //alert('ID vybranej šablóny je: ' +x);
@@ -20,14 +20,22 @@
                 $('input#cena').val(data);
                 //alert('Cena vybraná z databázy pre túto šablónu je: ' +data);
                 });
-        });
+        
+        // Osoba, ktorá je uvedená v šablóne:  --- JSON FORMÁT už z PHP funkcie---
+        $.get('vyber_osobu_pre_sablonu?id='+x,
+            function(osoba) {
 
-    }
+               $('select#zaplatil').append("<option value='"+osoba.id+"' selected='selected'>"+ osoba.meno + " "+ osoba.priezvisko +" </option>");
+                }, "json");
+    });  
+
+}
 
 </script> 
 
 @include('spendings/sp-submenu')
 
+<?php /*KVOLI ZADÁVANIU DÁTUMOV CEZ JAVASCRIPT ZA VYUŽITIA CSS ŠTÝLU */ ?>
 {{ HTML::style('assets/css/bootstrap-editable.css') }}
 {{ HTML::script('assets/js/bootstrap-editable.js') }}
 
@@ -63,7 +71,7 @@
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Zaplatil:   </span>
-                        <select name="osoba" class="span2">
+                        <select id="zaplatil" name="osoba" class="span2">
                         @foreach ($osoby as $osoba)
                             <option value="{{ $osoba->id }}">{{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }} </option>
                         @endforeach

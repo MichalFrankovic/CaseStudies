@@ -757,6 +757,29 @@ class Spendings_Controller extends Base_Controller {
     }
 
 
+     public function action_vyber_osobu_pre_sablonu() {
+
+        $id=$_GET['id'];
+
+        $osoba = DB::query("SELECT o.id AS id, o.t_meno_osoby AS meno, o.t_priezvisko_osoby AS priezvisko
+                FROM F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp, D_TYP_VYDAVKU tv, D_OSOBA o 
+                WHERE v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.id_typ_vydavku = tv.id and v.id_osoba = o.id and v.fl_sablona = 'A' 
+                    AND v.id= '".$id."'");
+
+        /*$vysledok['meno'] = $osoba[0]->meno;
+        $vysledok['priezvisko'] = $osoba[0]->priezvisko;
+        return $vysledok;*/
+
+        $meno = $osoba[0]->meno;
+        $priezvisko = $osoba[0]->priezvisko;
+        $id = $osoba[0]->id;
+
+        echo json_encode(array("meno"=>$meno,
+                               "priezvisko"=>$priezvisko,
+                               "id"=>$id
+                        ));
+
+    }
 
 
 
