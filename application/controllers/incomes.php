@@ -127,8 +127,12 @@ class Incomes_Controller extends Base_Controller {
 			
 	    $view->errors = Session::get('errors');
         $view->error = Session::get('error');
+ $view->meneny_osoba = Session::get('meneny_osoba');
+        $view->meneny_typ = Session::get('meneny_typ');
         $view->meneny_suma = Session::get('meneny_suma');
-    		return $view;
+		$view->meneny_zdroj = Session::get('meneny_zdroj');    		
+		$view->meneny_datum = Session::get('meneny_datum');    		
+		return $view;
 
 	}
 	
@@ -182,11 +186,29 @@ class Incomes_Controller extends Base_Controller {
 	
 	$idecko = Input::get('id');	
 	$editacia = Input::get('editacia');
-	$suma=Input::get('vl_suma_prijmu');
+	$id_osoba=Input::get('id_osoba');
+	$id_typ_prijmu=Input::get('id_typ_prijmu');
+	$vl_suma_prijmu=Input::get('vl_suma_prijmu');
+	$id_obchodny_partner=Input::get('id_zdroj_prijmu');
+	$d_datum=Input::get('datum');
 
-if (empty($suma)) 
+if ($id_osoba == 'Nezaradený') {  
+      $errors['id_osoba'] = 'Vyberte prosim zdroj prijmu';
+    }	
+if ($id_typ_prijmu == 'Nezaradený') {  
+      $errors['id_typ_prijmu'] = 'Vyberte prosim typ prijmu';
+    }
+if (empty($d_datum)) {  
+           $errors['d_datum'] = 'Zadajte prosím datum';
+        }	
+
+if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu)) 
 {  
-      $errors['vl_suma_prijmu'] = 'Zadajte prosím sumu';
+      $errors['vl_suma_prijmu'] = 'Suma musí obsahovať číslo';
+    }
+if ($id_obchodny_partner == 'Nezaradený') 
+{  
+      $errors['id_obchodny_partner'] = 'Vyberte prosim zdroj prijmu';
     }
 	if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
@@ -194,7 +216,12 @@ if (empty($suma))
       $view = Redirect::to('incomes/form')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('meneny_suma',$suma);
+                        ->with('meneny_osoba',$id_osoba)
+                        ->with('meneny_typ',$id_typ_prijmu)
+                        ->with('meneny_suma',$vl_suma_prijmu)
+                        ->with('meneny_zdroj',$id_obchodny_partner)
+					    ->with('meneny_datum',$d_datum);
+
 						return $view;
     }  
 		$data = array(
