@@ -43,7 +43,7 @@
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Dátum:          </span>
-                    <input class="span2 datepicker" type="date" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
+                    <input class="span2 datepicker" type="text" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
                 </div>
             </td>
 
@@ -74,7 +74,7 @@
             <td>
                  <div class="input-prepend">
                     <label class="add-on">   Suma v €:   </label>
-                            <input id="cena" class="span2" type="text" name="nazov">
+                            <input id="cena" class="span2" type="text" name="suma">
                 </div>
             </td>
         </tr>
@@ -113,7 +113,7 @@
                 <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
                 <td>    {{ $sablona->t_poznamka }}                                              </td>
                 <td>    {{ $sablona->prijemca }}                                                </td>
-                <td>    {{ $sablona->t_priezvisko_osoby }}                                      </td>
+                <td>    {{ $sablona->t_meno_osoby }} {{ $sablona->t_priezvisko_osoby }}         </td>
                 <td>    {{ $sablona->t_nazov_typu_vydavku }}                                    </td>
                 <td>    {{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }} </td>
                 <td>    {{ $sablona->kategoria }}                                               </td>

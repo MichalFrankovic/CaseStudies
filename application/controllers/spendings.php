@@ -203,7 +203,7 @@ class Spendings_Controller extends Base_Controller {
 
         $view->datum = date("Y-m-d");
         
-        $view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria,o.t_priezvisko_osoby,tv.t_nazov_typu_vydavku ".
+        $view->sablony = DB::query("select v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov as prijemca,kp.t_nazov as kategoria,o.t_meno_osoby,o.t_priezvisko_osoby,tv.t_nazov_typu_vydavku ".
                 "from F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp, D_TYP_VYDAVKU tv, D_OSOBA o ".
                 "where v.id = vkp.id_vydavok and v.id_obchodny_partner = op.id and vkp.id_kategoria_a_produkt = kp.id and v.id_typ_vydavku = tv.id and v.id_osoba = o.id and v.fl_sablona = 'A' and v.id_osoba in (".implode(",", $id_osob).")");
         
@@ -695,7 +695,7 @@ class Spendings_Controller extends Base_Controller {
     	$idvydavku = DB::table('F_VYDAVOK')->insert_get_id($data_for_sql);
     	
     	$polozky_for_sql['id_kategoria_a_produkt'] = $sablony[0]->id_kategoria_a_produkt;
-    	$polozky_for_sql['vl_jednotkova_cena'] = $sablony[0]->vl_jednotkova_cena;
+    	$polozky_for_sql['vl_jednotkova_cena'] = $data['suma'];
     	$polozky_for_sql['num_mnozstvo'] = 1;
     	$polozky_for_sql['vl_zlava'] = 0;
     	$polozky_for_sql['fl_typ_zlavy'] = '0';
