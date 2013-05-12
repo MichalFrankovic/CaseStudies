@@ -8,10 +8,20 @@
 
 @section('styles')
 	<style type="text/css">
-	.btn.btn-primary{ 
-		margin-top: 15px;
-		margin-left: 180px; 
-	}
+		.btn.btn-primary{ 
+			margin-top: 15px;
+			margin-left: 180px; 
+		}
+
+		.input-prepend,.tlacidla,.input-xxlarge 
+		{
+			margin-bottom: 10px !important;
+			margin-left: 40px !important;
+		}
+
+		.control-group, .error {margin-bottom: 0px !important;}
+
+		.input-prepend {vertical-align: inherit !important;}
 	</style>
 
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
@@ -132,18 +142,15 @@
 
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
 		<span style="padding:px 600px 0px;"><select name='id_osoba' class='input-xlarge'>
-         
-             <option value="Nezaradený" selected="selected">Vyberte</option>
+			    
+             <option value="Nezaradený" selected="selected">Vyber</option>
 
 			      	@foreach ($osoby as $osoba)
-                   
-			      	<option value="{{ $osoba->id }}"
-                    @if ((isset($meneny_osoba)) AND ($osoba->id == $meneny_osoba))
-	                                                selected="selected" @endif 
- @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
+			      	<option value="{{ $osoba->id }}"  @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
 	                                                selected="selected" @endif > {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby}}
 
 			      	</option>
+			      	
 			      	@endforeach
 			     </select>
     </div>
@@ -158,13 +165,10 @@
 
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Typ príjmu: </span>
 		<span style="padding:px 600px 0px;"><select name='id_typ_prijmu' class='input-xlarge'>
-             <option value="Nezaradený" selected="selected"> Vyberte </option>
+             <option value="Nezaradený" selected="selected"> Vyber </option>
 
 			      	@foreach ($typ_prijmu as $typ)
-			      	<option value="{{ $typ->id }}" 
-                    @if ((isset($meneny_typ)) AND ($typ->id == $meneny_typ))
-	                                                selected="selected" @endif 
-                     @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
+			      	<option value="{{ $typ->id }}" @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
 	                                                selected="selected" @endif > {{$typ->t_nazov_typu}} 
 
 			      	</option>
@@ -178,23 +182,16 @@
 </div> 
 
 
-<div  <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? ' class="control-group error"' : '' }}>
-    <div class="input-prepend">
-
+<div class="input-prepend">
 	<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Dátum <i class="icon-calendar" style="margin-left:20px;"> </i> </span>
 				  	
-	<input  name="d_datum" class="datepicker input-small" type="text"  value="<?php  if (isset($meneny_datum))
-                                                                                    echo $meneny_datum;
-																					
-																					elseif (isset($editacia[0]->d_datum)) {
+	<input  name="datum" class="datepicker input-small" type="text"  value="<?php if (isset($editacia[0]->d_datum)) {
 																  					$x = $editacia[0]->d_datum;
 																  					$x = date('m.d.Y');
 																  	 				echo $x;
 																  	 			}
 				  	 														?> ">
 	</input>
-    </div>
-    {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? '<span class="help-inline">'.$errors['d_datum'].'</span>' : '' }}
 </div>
 	  	
 		
@@ -218,12 +215,9 @@
 		<span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Zdroj príjmu: </span>
 		<span style="padding:px 600px 0px;">
 			<select name='id_zdroj_prijmu' class='input-xlarge'>
-                <option value="Nezaradený" selected="selected"> Vyberte </option>
+                <option value="Nezaradený" selected="selected"> Vyber </option>
 			      	@foreach ($zdroj_prijmu as $zdroj)
-			      	<option value="{{ $zdroj->id }}" 
-                     @if ((isset($meneny_zdroj)) AND ($zdroj->id == $meneny_zdroj))
-	                                                selected="selected" @endif 
-                    @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
+			      	<option value="{{ $zdroj->id }}" @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
 	                                                selected="selected" @endif > {{$zdroj->t_nazov}} 
 
 			      	</option>
@@ -239,7 +233,8 @@
 <div>
     <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" title="Poznámka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
 </div>
-     
+
+<div class="tlacidla">
  <?php     
 if ($uprava == "ano") {
      echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
@@ -272,6 +267,7 @@ if ($uprava == "ano") {
         }
 
 ?>    
+</div>
       
 
  

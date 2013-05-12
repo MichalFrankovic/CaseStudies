@@ -136,7 +136,7 @@ class Incomes_Controller extends Base_Controller {
 			
 	    $view->errors = Session::get('errors');
         $view->error = Session::get('error');
-        $view->meneny_osoba = Session::get('meneny_osoba');
+ $view->meneny_osoba = Session::get('meneny_osoba');
         $view->meneny_typ = Session::get('meneny_typ');
         $view->meneny_suma = Session::get('meneny_suma');
 		$view->meneny_zdroj = Session::get('meneny_zdroj');    		
@@ -199,13 +199,13 @@ class Incomes_Controller extends Base_Controller {
 	$id_typ_prijmu=Input::get('id_typ_prijmu');
 	$vl_suma_prijmu=Input::get('vl_suma_prijmu');
 	$id_obchodny_partner=Input::get('id_zdroj_prijmu');
-	$d_datum=Input::get('d_datum');
+	$d_datum=Input::get('datum');
 
 if ($id_osoba == 'Nezaradený') {  
-      $errors['id_osoba'] = 'Vyberte prosim osobu';
+      $errors['id_osoba'] = 'Vyberte prosím osobu';
     }	
 if ($id_typ_prijmu == 'Nezaradený') {  
-      $errors['id_typ_prijmu'] = 'Vyberte prosim typ prijmu';
+      $errors['id_typ_prijmu'] = 'Vyberte prosím typ príjmu';
     }
 if (empty($d_datum)) {  
            $errors['d_datum'] = 'Zadajte prosím datum';
@@ -215,10 +215,12 @@ if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu))
 {  
       $errors['vl_suma_prijmu'] = 'Suma musí obsahovať číslo';
     }
+
 if ($id_obchodny_partner == 'Nezaradený') 
 {  
-      $errors['id_obchodny_partner'] = 'Vyberte prosim zdroj prijmu';
+      $errors['id_obchodny_partner'] = 'Vyberte prosím zdroj príjmu';
     }
+    
 	if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
 
@@ -237,7 +239,7 @@ if ($id_obchodny_partner == 'Nezaradený')
 		$data = array(
 			'id_osoba'	        => Input::get('id_osoba'),
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
-			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
+			'd_datum'			=> date('Y-m-d', strtotime(Input::get('datum'))),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
 			'id_obchodny_partner'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),
