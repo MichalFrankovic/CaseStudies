@@ -43,24 +43,32 @@ if ($editacia == 'ano') {
 
    <div {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? ' class="control-group error"' : '' }}>
         <label class="control-label">    Kategória:          </label>
-        <input class="span4" type="text" name="nazov" value="<?php
+        
+        <input class="span4" type="text" name="nazov" value="<?php if (isset($menena_kategoria))
+                                                                    echo $menena_kategoria;
                                                                 if (isset($editovany_zaznam[0]->t_nazov))
                                                                     echo ($editovany_zaznam[0]->t_nazov); 
                                                              ?>">
+                                                             
     {{ isset($errors->nazov) || (is_array($errors) && isset($errors['nazov'])) ? '<span class="help-inline">'.$errors['nazov'].'</span>' : '' }}
     </div>
 
-    <div class="input-prepend">
+   <div {{ isset($errors->Nadkategoria) || (is_array($errors) && isset($errors['Nadkategoria'])) ? ' class="control-group error"' : '' }}>
       <label class="control-label">  Nadkategória:          </label>
 
-        <select name="Nadkategoria-id" class="span4">
-           <option value="" selected="selected">  </option>
+        <select name="Nadkategoria" class="span4">
+           <option value="Nezaradeny" selected="selected">Vyberte  </option>
             @foreach ($kategorie as $kat)
-            <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
+            <option value="{{ $kat->id }}" 
+             @if ((isset($menena_nadkategoria)) AND ($kat->id == $menena_nadkategoria))
+	                                                selected="selected" @endif 
+            @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
                                                 selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
             </option>
             @endforeach
         </select>
+{{ isset($errors->Nadkategoria) || (is_array($errors) && isset($errors['Nadkategoria'])) ? '<span class="help-inline">'.$errors['Nadkategoria'].'</span>' : '' }}
+
     </div>
 
 {{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}

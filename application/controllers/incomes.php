@@ -136,7 +136,7 @@ class Incomes_Controller extends Base_Controller {
 			
 	    $view->errors = Session::get('errors');
         $view->error = Session::get('error');
- $view->meneny_osoba = Session::get('meneny_osoba');
+        $view->meneny_osoba = Session::get('meneny_osoba');
         $view->meneny_typ = Session::get('meneny_typ');
         $view->meneny_suma = Session::get('meneny_suma');
 		$view->meneny_zdroj = Session::get('meneny_zdroj');    		
@@ -202,10 +202,10 @@ class Incomes_Controller extends Base_Controller {
 	$d_datum=Input::get('datum');
 
 if ($id_osoba == 'Nezaradený') {  
-      $errors['id_osoba'] = 'Vyberte prosím osobu';
+      $errors['id_osoba'] = 'Vyberte prosim osobu';
     }	
 if ($id_typ_prijmu == 'Nezaradený') {  
-      $errors['id_typ_prijmu'] = 'Vyberte prosím typ príjmu';
+      $errors['id_typ_prijmu'] = 'Vyberte prosim typ prijmu';
     }
 if (empty($d_datum)) {  
            $errors['d_datum'] = 'Zadajte prosím datum';
@@ -215,12 +215,10 @@ if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu))
 {  
       $errors['vl_suma_prijmu'] = 'Suma musí obsahovať číslo';
     }
-
 if ($id_obchodny_partner == 'Nezaradený') 
 {  
-      $errors['id_obchodny_partner'] = 'Vyberte prosím zdroj príjmu';
+      $errors['id_obchodny_partner'] = 'Vyberte prosim zdroj prijmu';
     }
-    
 	if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
 
