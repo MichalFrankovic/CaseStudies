@@ -17,11 +17,13 @@
 	}
 
 	$(document).ready(function(){
-		// Datepicker
-		$('.datepicker').datepicker({
+		// Datepicker - v externom súbore už
+	/*	$('.datepicker').datepicker({
 			format	: 'mm/dd/yyyy',
 			weekStart:	1
-		});
+		});  
+
+	*/
 		// Zmena osoby
 		$('[name=id_osoba]').change(function(){
 			var id = $(this).val()
