@@ -199,7 +199,7 @@ class Incomes_Controller extends Base_Controller {
 	$id_typ_prijmu=Input::get('id_typ_prijmu');
 	$vl_suma_prijmu=Input::get('vl_suma_prijmu');
 	$id_obchodny_partner=Input::get('id_zdroj_prijmu');
-	$d_datum=Input::get('datum');
+	$d_datum=Input::get('d_datum');
 
 if ($id_osoba == 'Nezaradený') {  
       $errors['id_osoba'] = 'Vyberte prosím osobu';
@@ -208,7 +208,7 @@ if ($id_typ_prijmu == 'Nezaradený') {
       $errors['id_typ_prijmu'] = 'Vyberte prosím typ príjmu';
     }
 if (empty($d_datum)) {  
-           $errors['d_datum'] = 'Zadajte prosím datum';
+           $errors['d_datum'] = 'Zadajte prosím dátum';
         }	
 
 if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu)) 
@@ -239,7 +239,7 @@ if ($id_obchodny_partner == 'Nezaradený')
 		$data = array(
 			'id_osoba'	        => Input::get('id_osoba'),
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
-			'd_datum'			=> date('Y-m-d', strtotime(Input::get('datum'))),
+			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
 			'id_obchodny_partner'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),

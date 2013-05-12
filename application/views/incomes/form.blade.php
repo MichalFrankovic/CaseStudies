@@ -162,9 +162,8 @@
 
 <div   {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? ' class="control-group error"' : '' }}>
     <div class="input-prepend">
-
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Typ príjmu: </span>
-		<span style="padding:px 600px 0px;"><select name='id_typ_prijmu' class='input-xlarge'>
+			<select name='id_typ_prijmu' class='input-xlarge'>
              <option value="Nezaradený" selected="selected"> Vyber </option>
 
 			      	@foreach ($typ_prijmu as $typ)
@@ -182,16 +181,23 @@
 </div> 
 
 
-<div class="input-prepend">
-	<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Dátum <i class="icon-calendar" style="margin-left:20px;"> </i> </span>
-				  	
-	<input  name="datum" class="datepicker input-small" type="text"  value="<?php if (isset($editacia[0]->d_datum)) {
-																  					$x = $editacia[0]->d_datum;
-																  					$x = date('m.d.Y');
-																  	 				echo $x;
-																  	 			}
-				  	 														?> ">
-	</input>
+<div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? ' class="control-group error"' : '' }}>
+  	<div class="input-prepend"> 
+		<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Dátum <i class="icon-calendar" style="margin-left:20px;"> </i> </span>
+					  	
+		<input  name="d_datum" class="datepicker input-small" type="text"  value="<?php if (isset($meneny_datum))
+																						  {
+                                                                                     		echo $meneny_datum; 
+                                                                                     	  }
+
+                                                                                     elseif (isset($editacia[0]->d_datum)) {
+																	  					$x = $editacia[0]->d_datum;
+																	  					$x = date('m.d.Y');
+																	  	 				echo $x;
+																	  	 			}
+					  	 														?> ">
+	</div>
+    {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? '<span class="help-inline">'.$errors['d_datum'].'</span>' : '' }}
 </div>
 	  	
 		
