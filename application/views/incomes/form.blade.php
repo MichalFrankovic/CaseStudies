@@ -146,7 +146,9 @@
              <option value="Nezaradený" selected="selected">Vyber</option>
 
 			      	@foreach ($osoby as $osoba)
-			      	<option value="{{ $osoba->id }}"  @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
+			      	<option value="{{ $osoba->id }}" @if ((isset($meneny_osoba)) AND ($osoba->id == $meneny_osoba))
+	                                                selected="selected" @endif 
+                                                     @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
 	                                                selected="selected" @endif > {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby}}
 
 			      	</option>
@@ -167,7 +169,10 @@
              <option value="Nezaradený" selected="selected"> Vyber </option>
 
 			      	@foreach ($typ_prijmu as $typ)
-			      	<option value="{{ $typ->id }}" @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
+			      	<option value="{{ $typ->id }}"@if ((isset($meneny_typ)) AND ($typ->id == $meneny_typ))
+	                                                selected="selected" @endif 
+
+                                                  @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
 	                                                selected="selected" @endif > {{$typ->t_nazov_typu}} 
 
 			      	</option>
@@ -223,7 +228,10 @@
 			<select name='id_zdroj_prijmu' class='input-xlarge'>
                 <option value="Nezaradený" selected="selected"> Vyber </option>
 			      	@foreach ($zdroj_prijmu as $zdroj)
-			      	<option value="{{ $zdroj->id }}" @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
+			      	<option value="{{ $zdroj->id }}"  @if ((isset($meneny_zdroj)) AND ($zdroj->id == $meneny_zdroj))
+	                                                selected="selected" @endif 
+	                                                
+                                                    @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->                                                     id_obchodny_partner))
 	                                                selected="selected" @endif > {{$zdroj->t_nazov}} 
 
 			      	</option>
@@ -272,7 +280,7 @@ if ($uprava == "ano") {
 
         }
 
-?>    
+?>     
 </div>
       
 
