@@ -122,7 +122,10 @@ if ($editacia == 'ano') {
             ?>
 
             @foreach ($kategorie as $kat)
-            <option value="{{ $kat->id }}" @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
+            <option value="{{ $kat->id }}" 
+             @if ((isset($meneny_kategoria)) AND ($kat->id == $meneny_kategoria))
+	                                                selected="selected" @endif 
+            @if ((isset($editovany_zaznam[0]->id_kategoria_parent)) AND ($kat->id == $editovany_zaznam[0]->id_kategoria_parent))
                                                 selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$kat->nazov); }}
                                            
             </option>

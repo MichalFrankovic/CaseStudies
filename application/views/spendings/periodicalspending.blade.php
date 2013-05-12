@@ -8,9 +8,9 @@
 
 <script>    
 
-    function daco() {
+function daco() {
 
-        $('select#abc').each(function()
+    $('select#abc').each(function()
         {
         var x = $('option:selected',$(this)).attr('value');
         //alert('ID vybranej šablóny je: ' +x);
@@ -20,14 +20,22 @@
                 $('input#cena').val(data);
                 //alert('Cena vybraná z databázy pre túto šablónu je: ' +data);
                 });
-        });
+        
+        // Osoba, ktorá je uvedená v šablóne:  --- JSON FORMÁT už z PHP funkcie---
+        $.get('vyber_osobu_pre_sablonu?id='+x,
+            function(osoba) {
 
-    }
+               $('select#zaplatil').append("<option value='"+osoba.id+"' selected='selected'>"+ osoba.meno + " "+ osoba.priezvisko +" </option>");
+                }, "json");
+    });  
+
+}
 
 </script> 
 
 @include('spendings/sp-submenu')
 
+<?php /*KVOLI ZADÁVANIU DÁTUMOV CEZ JAVASCRIPT ZA VYUŽITIA CSS ŠTÝLU */ ?>
 {{ HTML::style('assets/css/bootstrap-editable.css') }}
 {{ HTML::script('assets/js/bootstrap-editable.js') }}
 
@@ -43,7 +51,7 @@
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Dátum:          </span>
-                    <input class="span2 datepicker" type="date" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
+                    <input class="span2 datepicker" type="text" name="datum" value="<?php $x=$datum; $x = date('d.m.Y'); echo $x;?>" />
                 </div>
             </td>
 
@@ -63,7 +71,7 @@
             <td>
                 <div class="input-prepend">
                     <span class="add-on">   Zaplatil:   </span>
-                        <select name="osoba" class="span2">
+                        <select id="zaplatil" name="osoba" class="span2">
                         @foreach ($osoby as $osoba)
                             <option value="{{ $osoba->id }}">{{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }} </option>
                         @endforeach
@@ -74,7 +82,7 @@
             <td>
                  <div class="input-prepend">
                     <label class="add-on">   Suma v €:   </label>
-                            <input id="cena" class="span2" type="text" name="nazov">
+                            <input id="cena" class="span2" type="text" name="suma">
                 </div>
             </td>
         </tr>
@@ -113,7 +121,7 @@
                 <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
                 <td>    {{ $sablona->t_poznamka }}                                              </td>
                 <td>    {{ $sablona->prijemca }}                                                </td>
-                <td>    {{ $sablona->t_priezvisko_osoby }}                                      </td>
+                <td>    {{ $sablona->t_meno_osoby }} {{ $sablona->t_priezvisko_osoby }}         </td>
                 <td>    {{ $sablona->t_nazov_typu_vydavku }}                                    </td>
                 <td>    {{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }} </td>
                 <td>    {{ $sablona->kategoria }}                                               </td>

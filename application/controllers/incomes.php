@@ -74,11 +74,20 @@ class Incomes_Controller extends Base_Controller {
 	 */
 	public function get_form()
 	{	
-		$idprijmu = Input::get('id');
+		
+		 $x = Input::get('id');
+          if (isset($x)) {
+               $id = Input::get('id');
+                        }
+                          else {
+                            $id = Session::get('id');     // ak v editácii nezadali nejaké pole
+                        }
 
-		if (isset($idprijmu))
+
+		if (isset($id))
 		{
-
+			$idprijmu=$id;
+			
 			$view = View::make('incomes.form')
 							->with('active', 'prijmy')
 							->with('subactive', 'incomes/form')
@@ -127,8 +136,12 @@ class Incomes_Controller extends Base_Controller {
 			
 	    $view->errors = Session::get('errors');
         $view->error = Session::get('error');
+ $view->meneny_osoba = Session::get('meneny_osoba');
+        $view->meneny_typ = Session::get('meneny_typ');
         $view->meneny_suma = Session::get('meneny_suma');
-    		return $view;
+		$view->meneny_zdroj = Session::get('meneny_zdroj');    		
+		$view->meneny_datum = Session::get('meneny_datum');    		
+		return $view;
 
 	}
 	
@@ -182,25 +195,51 @@ class Incomes_Controller extends Base_Controller {
 	
 	$idecko = Input::get('id');	
 	$editacia = Input::get('editacia');
-	$suma=Input::get('vl_suma_prijmu');
+	$id_osoba=Input::get('id_osoba');
+	$id_typ_prijmu=Input::get('id_typ_prijmu');
+	$vl_suma_prijmu=Input::get('vl_suma_prijmu');
+	$id_obchodny_partner=Input::get('id_zdroj_prijmu');
+	$d_datum=Input::get('d_datum');
 
-if (empty($suma)) 
-{  
-      $errors['vl_suma_prijmu'] = 'Zadajte prosím sumu';
+if ($id_osoba == 'Nezaradený') {  
+      $errors['id_osoba'] = 'Vyberte prosím osobu';
+    }	
+if ($id_typ_prijmu == 'Nezaradený') {  
+      $errors['id_typ_prijmu'] = 'Vyberte prosím typ príjmu';
     }
+if (empty($d_datum)) {  
+           $errors['d_datum'] = 'Zadajte prosím dátum';
+        }	
+
+if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu)) 
+{  
+      $errors['vl_suma_prijmu'] = 'Suma musí obsahovať číslo';
+    }
+
+if ($id_obchodny_partner == 'Nezaradený') 
+{  
+      $errors['id_obchodny_partner'] = 'Vyberte prosím zdroj príjmu';
+    }
+    
 	if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
 
       $view = Redirect::to('incomes/form')
                         ->with('error', $error)
                         ->with('errors',$errors)
-                        ->with('meneny_suma',$suma);
+                        ->with('meneny_osoba',$id_osoba)
+                        ->with('meneny_typ',$id_typ_prijmu)
+                        ->with('meneny_suma',$vl_suma_prijmu)
+                        ->with('meneny_zdroj',$id_obchodny_partner)
+					    ->with('meneny_datum',$d_datum)
+					    ->with('id',$idecko);
+
 						return $view;
     }  
 		$data = array(
 			'id_osoba'	        => Input::get('id_osoba'),
 			'id_typ_prijmu'	    => Input::get('id_typ_prijmu'),
-			'd_datum'			=> date('Y-m-d', strtotime(Input::get('datum'))),
+			'd_datum'			=> date('Y-m-d', strtotime(Input::get('d_datum'))),
 			'vl_suma_prijmu'	=> Input::get('vl_suma_prijmu'),
 			'id_obchodny_partner'	=> Input::get('id_zdroj_prijmu'),
 			't_poznamka'		=> Input::get('t_poznamka'),

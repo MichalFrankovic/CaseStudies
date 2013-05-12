@@ -120,7 +120,7 @@ echo "</pre>";*/
             <td>    {{ $vydavok->partner->t_nazov }}                        </td>
             <td>     @foreach ($osoby as $osoba)
                      @if ($osoba->id == $vydavok->id_osoba) 
-                            {{$osoba->t_priezvisko_osoby }}
+                            {{$osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }}
                     @endif
                     @endforeach                                             </td>
            <td>     @foreach ($typyV as $typV)

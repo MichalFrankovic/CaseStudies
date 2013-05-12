@@ -8,9 +8,20 @@
 
 @section('styles')
 	<style type="text/css">
-	.btn.btn-primary{
-		margin-left: 180px; 
-	}
+		.btn.btn-primary{ 
+			margin-top: 15px;
+			margin-left: 180px; 
+		}
+
+		.input-prepend,.tlacidla,.input-xxlarge 
+		{
+			margin-bottom: 10px !important;
+			margin-left: 40px !important;
+		}
+
+		.control-group, .error {margin-bottom: 0px !important;}
+
+		.input-prepend {vertical-align: inherit !important;}
 	</style>
 
 	{{ HTML::style('assets/css/bootstrap-editable.css') }}
@@ -96,28 +107,65 @@
 	<form class="form-horizontal well" id="income-create" method="POST" action="{{ URL::to('incomes/form?editacia=nie') }}" accept-charset="UTF-8">
 @endif
 
-		<div class="control-group" >
-			{{ Form::label(null, 'Osoba', array('class'=>'control-label')) }}
-		    <div class="controls">
-		      	
-			    <select name='id_osoba' class='input-xlarge'>
+
+<script>
+	$(document).ready(function()
+		{
+		var inputs = $(' textarea[title]');
+			inputs.bind('focus',function()
+				{
+		var object = $(this);
+	if(object.val() == object.attr('title'))
+					{
+						object.val('');
+					}
+				}
+			);
+			
+		inputs.bind
+			('blur',function()
+				{
+		var object = $(this);
+	if(object.val() == '')
+			{
+				object.val(object.attr('title'));
+			}
+		}
+			);
+	inputs.trigger('blur');
+		}
+	);
+</script>
+
+<div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->id_osoba) || (is_array($errors) && isset($errors['id_osoba'])) ? ' class="control-group error"' : '' }}>
+	<div class="input-prepend">
+
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
+		<span style="padding:px 600px 0px;"><select name='id_osoba' class='input-xlarge'>
+			    
+             <option value="Nezaradený" selected="selected">Vyber</option>
+
 			      	@foreach ($osoby as $osoba)
-			      	<option value="{{ $osoba->id }}" @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
+			      	<option value="{{ $osoba->id }}"  @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
 	                                                selected="selected" @endif > {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby}}
 
 			      	</option>
 			      	
 			      	@endforeach
 			     </select>
-		         	
-		    </div>
-	  	</div>
+    </div>
+
+	{{ isset($errors->id_osoba) || (is_array($errors) && isset($errors['id_osoba'])) ? '<span class="help-inline">'.$errors['id_osoba'].'</span>' : '' }}
+
+</div>
 
 
-		<div class="control-group">
-			{{ Form::label(null, 'Typ príjmu', array('class'=>'control-label')) }}
-		    <div class="controls">
-		     <select name='id_typ_prijmu' class='input-xlarge'>
+<div   {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? ' class="control-group error"' : '' }}>
+    <div class="input-prepend">
+        <span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Typ príjmu: </span>
+			<select name='id_typ_prijmu' class='input-xlarge'>
+             <option value="Nezaradený" selected="selected"> Vyber </option>
+
 			      	@foreach ($typ_prijmu as $typ)
 			      	<option value="{{ $typ->id }}" @if ((isset($editacia[0]->id_typ_prijmu)) AND ($typ->id == $editacia[0]->id_typ_prijmu))
 	                                                selected="selected" @endif > {{$typ->t_nazov_typu}} 
@@ -126,45 +174,54 @@
 			      	
 			      	@endforeach
 			 </select>
-		    </div> 
-	  	</div> 
+    </div>
+
+    {{ isset($errors->id_typ_prijmu) || (is_array($errors) && isset($errors['id_typ_prijmu'])) ? '<span class="help-inline">'.$errors['id_typ_prijmu'].'</span>' : '' }}
+
+</div> 
 
 
-	  	<div class="control-group">
-	  		{{ Form::label(null, 'Dátum', array('class'=>'control-label')) }}
-	  		<div class="controls">
-	  			<div class="input-prepend">
-				  	<span style="margin-top: 1px;" class="add-on"><i class="icon-calendar"></i></span>
-				  	
-				  	<input name="datum" class="datepicker input-small" type="text" value="<?php if (isset($editacia[0]->d_datum)) 
-																  							echo date('d.m.Y', strtotime($editacia[0]->d_datum));
-				  	 																	  ?>">
-				  	</input>
-				</div>
-	  		</div>
-	  	</div>
+<div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? ' class="control-group error"' : '' }}>
+  	<div class="input-prepend"> 
+		<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Dátum <i class="icon-calendar" style="margin-left:20px;"> </i> </span>
+					  	
+		<input  name="d_datum" class="datepicker input-small" type="text"  value="<?php if (isset($meneny_datum))
+																						  {
+                                                                                     		echo $meneny_datum; 
+                                                                                     	  }
+
+                                                                                     elseif (isset($editacia[0]->d_datum)) {
+																	  					$x = $editacia[0]->d_datum;
+																	  					$x = date('m.d.Y');
+																	  	 				echo $x;
+																	  	 			}
+					  	 														?> ">
+	</div>
+    {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? '<span class="help-inline">'.$errors['d_datum'].'</span>' : '' }}
+</div>
+	  	
 		
 
-		<div <?php if(!isset($error)) echo 'class="control-group"';?>  {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? ' class="control-group error"' : '' }}>
-			{{ Form::label(null, 'Suma príjmu', array('class'=>'control-label')) }}
-			<div class="controls">
-				<div class="input-prepend" >
-				  	<span class="add-on" value=''>€</span>
+<div <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? ' class="control-group error"' : '' }}>
+
+	<div class="input-prepend" >
+		<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Suma € </span>
 				  	
-				  	<input class="input-small" type="text" value="<?php if (isset($meneny_suma))
+			<input class="input-small" type="text" value="<?php if (isset($meneny_suma))
                                                                  echo $meneny_suma;
 																 elseif (isset($editacia[0]->vl_suma_prijmu)) echo $editacia[0]->vl_suma_prijmu; ?>" name="vl_suma_prijmu"> </input>
-				</div>
-                {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? '<span class="help-inline">'.$errors['vl_suma_prijmu'].'</span>' : '' }}
-            </div>
-            
-        </div>
+	</div>
+                
+    {{ isset($errors->vl_suma_prijmu) || (is_array($errors) && isset($errors['vl_suma_prijmu'])) ? '<span class="help-inline" style="display:inline" >'.$errors['vl_suma_prijmu'].'</span>' : '' }}
+</div>
 
 		
-		<div class="control-group">
-			{{ Form::label(null, 'Zdroj príjmu - partner', array('class'=>'control-label')) }}
-		    <div class="controls">
-		      <select name='id_zdroj_prijmu' class='input-xlarge'>
+<div  <?php if(!isset($error)) echo 'class="control-group"';?>  {{ isset($errors->id_obchodny_partner) || (is_array($errors) && isset($errors['id_obchodny_partner'])) ? ' class="control-group error"' : '' }}>				
+    <div class="input-prepend" >
+		<span class="add-on" style="width:80px;text-align:left;padding-left:10px"> Zdroj príjmu: </span>
+		<span style="padding:px 600px 0px;">
+			<select name='id_zdroj_prijmu' class='input-xlarge'>
+                <option value="Nezaradený" selected="selected"> Vyber </option>
 			      	@foreach ($zdroj_prijmu as $zdroj)
 			      	<option value="{{ $zdroj->id }}" @if ((isset($editacia[0]->id_obchodny_partner)) AND ($zdroj->id == $editacia[0]->id_obchodny_partner))
 	                                                selected="selected" @endif > {{$zdroj->t_nazov}} 
@@ -172,26 +229,22 @@
 			      	</option>
 			      	
 			      	@endforeach
-			     </select>
-		    </div>
+			</select>
+    </div>
+
+	{{ isset($errors->id_obchodny_partner) || (is_array($errors) && isset($errors['id_obchodny_partner'])) ? '<span class="help-inline">'.$errors['id_obchodny_partner'].'</span>' : '' }}
+
+</div>
 			
-		</div>
-		
-		<div class="control-group">
-			
-		</div>
-		
-		<div class="control-group">
-			{{ Form::label(null, 'Poznámka', array('class'=>'control-label')) }}
-			<div class="controls">
-				<textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" value=""> <?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?> </textarea>
-			</div>
-		</div>
-      
-  <?php     
+<div>
+    <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" title="Poznámka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
+</div>
+
+<div class="tlacidla">
+ <?php     
 if ($uprava == "ano") {
      echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
-                <button type="button" class="btn btn-primary" style="margin-left:110px">
+                <button type="button" class="btn btn-primary" style="margin-left:0px">
                     <i class="icon-remove icon-white"></i>
                         Zruš
                  </button>
@@ -205,7 +258,7 @@ if ($uprava == "ano") {
     }      
       
   else {
-         echo ' <button type="reset" class="btn btn-primary" style="margin-left:110px">
+         echo ' <button type="reset" class="btn btn-primary" style="margin-left:0px">
                     <i class="icon-remove icon-white"></i>
                         Zruš
                 </button>
@@ -220,10 +273,10 @@ if ($uprava == "ano") {
         }
 
 ?>    
+</div>
       
- 	
- 
 
-	{{ Form::close() }}
+ 
+</div>
 
 @endsection

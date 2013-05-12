@@ -873,7 +873,7 @@ public function action_upravprodukt(){
                     WHERE id = '$id'");
             
         return Redirect::to('ciselniky/sprava_produktov')
-                    ->with('message', 'Zmeny boli uložené.')
+                    ->with('message', 'Zmeny boli uložené')
                     ->with('status_class','sprava-uspesna');
       }
 
