@@ -500,8 +500,7 @@ public function action_multizmazaniepartnerov()
                                     
                                    ");
        // $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
-        $view->menena_kategoria = Session::get('menena_kategoria');    		
-		$view->menena_nadkategoria = Session::get('menena_nadkategoria');
+
         $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
 
        /* $view->kategorie2 = DB::query("SELECT
@@ -544,7 +543,7 @@ public function action_multizmazaniepartnerov()
     {
         $id_domacnost = Auth::user()->id;
         $t_nazov = Input::get('nazov');
-        $id_kategoria_parent = Input::get('Nadkategoria');
+        $id_kategoria_parent = Input::get('Nadkategoria-id');
        
       $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)->where('fl_typ','=','K')->first();
       if (!empty($duplicate)) {
@@ -555,18 +554,14 @@ public function action_multizmazaniepartnerov()
            $errors['nazov'] = 'Zadajte prosím názov kategórie';
         }
 
-if ($id_kategoria_parent == 'Nezaradeny') {  
-      $errors['Nadkategoria'] = 'Vyberte prosim typ prijmu';
-	  }
-	  
+
       if (!empty($errors)) {
             $error = 'Opravte chyby vo formulári';
             
             $view = Redirect::to('ciselniky/sprava_kategorii')
                               ->with('error', $error)
-                              ->with('errors',$errors)
-                              ->with('menena_kategoria',$t_nazov)
-					          ->with('menena_nadkategoria',$id_kategoria_parent);
+                              ->with('errors',$errors);
+                              
             return $view;
           }
 
@@ -614,7 +609,7 @@ if ($id_kategoria_parent == 'Nezaradeny') {
       
         $id = Input::get('id');
         $t_nazov = Input::get('nazov');
-        $nadkategoria = Input::get('Nadkategoria');
+        $nadkategoria = Input::get('Nadkategoria-id');
        
       $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)->where('fl_typ','=','K')->first();
       if (!empty($duplicate)) {
@@ -624,10 +619,7 @@ if ($id_kategoria_parent == 'Nezaradeny') {
       if (empty($t_nazov)) {  
           $errors['nazov'] = 'Zadaj nový názov kategórie';
         }
-		
-      if ($nadkategoria == 'Nezaradeny') {  
-          $errors['Nadkategoria'] = 'Vyberte prosim typ prijmu';
-	  } 
+        
 
       if (!empty($errors)) {
           $error = 'Opravte chyby vo formulári';
@@ -1175,9 +1167,9 @@ public function action_zmazattypvydavku()
           $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
         }
 
-    //if(!empty($duplicate)){
-          //$errors['typvydavku']= 'Zadajte iný názov, tento už existuje';
-   // }
+    if(!empty($duplicate)){
+          $errors['typvydavku']= 'Zadajte iný názov, tento už existuje';
+    }
 
      if (!empty($errors)) {
       $error = 'Opravte chyby vo formulári';
