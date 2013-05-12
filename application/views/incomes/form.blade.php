@@ -178,10 +178,12 @@
 </div> 
 
 
-<div class="input-prepend">
+<div  <?php if(!isset($error)) echo 'class=""';?>  {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? ' class="control-group error"' : '' }}>
+    <div class="input-prepend">
+
 	<span  class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Dátum <i class="icon-calendar" style="margin-left:20px;"> </i> </span>
 				  	
-	<input  name="datum" class="datepicker input-small" type="text"  value="<?php  if (isset($meneny_datum))
+	<input  name="d_datum" class="datepicker input-small" type="text"  value="<?php  if (isset($meneny_datum))
                                                                                     echo $meneny_datum;
 																					
 																					elseif (isset($editacia[0]->d_datum)) {
@@ -191,6 +193,8 @@
 																  	 			}
 				  	 														?> ">
 	</input>
+    </div>
+    {{ isset($errors->d_datum) || (is_array($errors) && isset($errors['d_datum'])) ? '<span class="help-inline">'.$errors['d_datum'].'</span>' : '' }}
 </div>
 	  	
 		
