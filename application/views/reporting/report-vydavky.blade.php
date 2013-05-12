@@ -218,8 +218,8 @@ $pocet=0;
 				$porovnaj2 = $op[$i]['kategoria'];
 				
 
-				if ($porovnaj1 == $porovnaj2) {}
-					else {$dopln++;}	// Nezhoduje sa ani v 1 prípade
+				if ($porovnaj1 !== $porovnaj2) 
+					{$dopln++;}	// Nezhoduje sa ani v 1 prípade
 			}
 
 			if ($dopln == $pocet) echo '

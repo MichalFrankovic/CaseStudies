@@ -93,22 +93,69 @@ public function action_report_vydavky() {
 					->with('active', 'reporting')
 					->with('subactive','reporting/prijmy');
 
-		return $view;
+        $zac_datum = Input::get('od');
+        $kon_datum = Input::get('do');
+        $cas_jednotka = Input::get('typ_zob');
+        $id_osoba = Input::get('osoba');
+
+        //if (!isset($zobrazovanie)) $zobrazovanie = 'celkove';
+
+      // Takýto formát mi treba do DB: = '"2013-03-31"';
+
+        if (isset($zac_datum)) 
+            { 
+                $zac_datum = date('Y-m-d', strtotime($zac_datum));
+            }
+        
+        else 
+            {   // V prípade že nie je zadaný chcem selektovať od úplneho začiatku - hodnota bude 1970-01-01
+                $zac_datum = date('Y-m-d', strtotime($zac_datum)); 
+            }
+
+
+        if (isset($kon_datum)) 
+            { 
+                $kon_datum = date('Y-m-d', strtotime($kon_datum));  
+            }
+        
+        else 
+            {
+                   // Toto zbehne iba pri prvom zobrazení alebo ak sa vymaže celé pole do
+                $today = date("Y-m-d");
+                $kon_datum = $today;   
+            }
+
+
+        $view->select2 = DB::query("SELECT MONTHNAME(d_datum) as mesiac, dosoba.t_meno_osoby as meno_osoby, 
+                                   SUM(vl_suma_prijmu) as suma_prijmu
+                                    FROM F_PRIJEM fp
+                                    join D_OSOBA dosoba
+                                    join D_DOMACNOST dd
+                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost = ". Auth::user()->id ." and dosoba.id_domacnost
+                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."'
+                                    GROUP BY MONTH(d_datum), dosoba.t_meno_osoby"); 
+
+        if(Input::get('osoba') && Input::get('osoba') !== 'all'){
+            
+        $view->select2 = DB::query("SELECT MONTHNAME(d_datum) as mesiac, dosoba.t_meno_osoby as meno_osoby, SUM(vl_suma_prijmu) as suma_prijmu
+                                    FROM F_PRIJEM fp
+                                    join D_OSOBA dosoba
+                                    join D_DOMACNOST dd
+                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost = ". Auth::user()->id ." and dosoba.id_domacnost
+                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."' and dosoba.id = '".$id_osoba."'
+                                    GROUP BY MONTH(d_datum), dosoba.t_meno_osoby");
+        }
+
+        $view->vsetciosoby = DB::query("SELECT t_meno_osoby
+                                            FROM D_OSOBA
+                                            WHERE id_domacnost = ". Auth::user()->id ." ");
+		
+        if ($zac_datum == '1970-01-01') $zac_datum ='';
+
+        return $view->with('zac_datum',$zac_datum)
+                    ->with('kon_datum',$kon_datum);
+                    //->with('id',$id_osoba);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
