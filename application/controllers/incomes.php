@@ -121,6 +121,7 @@ class Incomes_Controller extends Base_Controller {
 
 		$zdroj_prijmu = DB::table('D_OBCHODNY_PARTNER')
 			->where_fl_typ('Zdroj príjmu')
+			->where_id_domacnost(Auth::user()->id)
 			->get(array('id',  't_nazov'));
 
 	if (isset($editacia)) { $uprava = 'ano';}
@@ -253,7 +254,7 @@ if ($id_obchodny_partner == 'Nezaradený')
 			if($id)
 			{
 				return Redirect::to('incomes')
-					->with('status', 'Nový Príjem bol úspešne uložený')
+					->with('status', 'Nový príjem bol úspešne uložený')
 					->with('status_class', 'sprava-uspesna');
 			} else {
 				return Redirect::to('incomes')

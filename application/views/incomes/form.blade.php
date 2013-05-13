@@ -245,7 +245,7 @@
 </div>
 			
 <div>
-    <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" title="Poznámka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
+    <textarea rows="3" cols="50" name="t_poznamka" class="input-xxlarge" placeholder="Poznámka...."><?php if (isset($editacia[0]->t_poznamka)) echo $editacia[0]->t_poznamka; ?></textarea>
 </div>
 
 <div class="tlacidla">

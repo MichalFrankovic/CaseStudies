@@ -64,7 +64,7 @@ echo "</pre>";*/
     <select name="osoba"  class="span3">
         <option value="all" selected="selected">  VŠETCI    </option>
         @foreach ($osoby as $osoba)
-        <option value="{{ $osoba->id }}" <?php if($osoba->id==$osoba2){echo 'selected="selected"';}?>> {{ $osoba->t_meno_osoby }}&nbsp;{{ $osoba->t_priezvisko_osoby }}</option>
+        <option value="{{ $osoba->id }}" <?php if($osoba->id==$osoba2){echo 'selected="selected"';}?>> {{ $osoba->t_meno_osoby }} {{ $osoba->t_priezvisko_osoby }}</option>
         @endforeach
     </select>
  </div>
