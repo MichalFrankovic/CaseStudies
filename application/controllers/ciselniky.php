@@ -192,7 +192,11 @@ public function action_upravitosobu()
         $fl_aktivna='N';
         
       $id_domacnost = Auth::user()->id;
-      $duplicate = DB::query("SELECT * FROM D_OSOBA WHERE t_meno_osoby = '$t_meno_osoby' AND t_priezvisko_osoby = '$t_priezvisko_osoby' AND id_domacnost = '$id_domacnost'");
+      $duplicate = DB::query("SELECT * FROM D_OSOBA WHERE t_meno_osoby = '$t_meno_osoby' 
+        AND t_priezvisko_osoby = '$t_priezvisko_osoby'
+        AND id_domacnost = '$id_domacnost'
+        AND id != '$id'");
+      
       if (!empty($duplicate)) {
         $errors['meno'] = 'Takáto osoba je už zaregistrovaná';
         $errors['priezvisko'] = '';
@@ -352,7 +356,8 @@ public function action_upravitpartnera()
         $view = Redirect::to('ciselniky/sprava_produktov');
   
       $duplicate = Partner::where('t_nazov', '=', $t_nazov)
-                      ->where('id_domacnost','=',$id_domacnost)->first();
+                      ->where('id_domacnost','=',$id_domacnost)
+                      ->where('id','!=',$id)->first();
 
       if (!empty($duplicate)) {
         $errors['nazov'] = 'Takýto obchodný partner je už zaregistrovaný';
@@ -623,7 +628,8 @@ public function action_multizmazaniepartnerov()
       $id_domacnost = Auth::user()->id;
       $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)
                               ->where('fl_typ','=','K')
-                              ->where('id_domacnost','=',$id_domacnost)->first();
+                              ->where('id_domacnost','=',$id_domacnost)
+                              ->where('id','!=',$id)->first();
                               
       if (!empty($duplicate)) {
         $errors['nazov'] = 'Kategória so zadaným názvom je už zaregistrovaná';
@@ -854,7 +860,8 @@ public function action_upravprodukt(){
 
     $duplicate = Kategoria::where('t_nazov', '=', $t_nazov)
                         ->where('fl_typ','=','P')
-                        ->where('id_domacnost','=',$id_domacnost)->first();
+                        ->where('id_domacnost','=',$id_domacnost)
+                        ->where('id','!=',$id)->first();
 
     if (!empty($duplicate)) {
           $errors['nazov'] = 'Produkt so zadaným názvom je už zaregistrovaný';
@@ -1195,7 +1202,8 @@ public function action_zmazattypvydavku()
 
         $duplicate = DB::table('D_TYP_VYDAVKU')
                         ->where('t_nazov_typu_vydavku', '=', $t_nazov_typu_vydavku)
-                        ->where('id_domacnost','=',$id_domacnost)->first();
+                        ->where('id_domacnost','=',$id_domacnost)
+                        ->where('id','!=',$id)->first();
 
     if (empty($t_nazov_typu_vydavku)) {  
           $errors['typvydavku'] = 'Zadajte prosím nový názov pre tento typ výdavku';
