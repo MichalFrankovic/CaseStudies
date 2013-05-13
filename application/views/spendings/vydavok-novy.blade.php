@@ -54,10 +54,10 @@
         <span class="add-on" style="width:83px">   Poznámka:   </span>
         <input name="poznamka" class="span10" type="text" value="">
     </div>
+</div>
+    
 
-     <HR>
-
-    <h4>Položky výdavku</h4>
+    <h4> Položky výdavku: </h4>
 
     <table id="tbl-vydavky" class="table table-bordered" >
         <thead>
@@ -66,31 +66,45 @@
                 <th>    Položka             </th>
                 <th>    Cena /ks (bez zľavy)</th>
                 <th>    Počet               </th>
+                <th>    Total               </th>
                 <th>    Zľava               </th>
             </tr>
         </thead>
+
         <input type="hidden" name="vydavok-id[]" id="hidden" value="N"/>
+
         <tr>
             <td><a class="btn" href=""><i class="icon-remove"></i></a></td>
+            
             <td>
-                <select name="polozka-id[]" class="span4">
+                <select name="polozka-id[]" class="span3">
                     @foreach ($polozky as $polozka)
                     <option value="{{ $polozka->id }}"> {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
                     @endforeach
                 </select>
             </td>
+
             <td>
                 <div class="input-append">
                     <input id="cena" name="cena[]" class="span2" type="text" value="" />
                     <span class="add-on">€</span>
                 </div>
             </td>
+
             <td>
                 <div class="input-append">
-                    <input name="mnozstvo[]" class="span1" type="text" value="1" />
+                    <input id="mnozstvo" name="mnozstvo[]" class="span1" type="text" value="1" />
                     <span class="add-on">m.j.</span>
                 </div>
             </td>
+
+            <td>
+                <div class="input-append">
+                    <input id="cenapolozkykratpocet" name="cenapolozkykratpocet[]" class="span1" type="text" value="" />
+                    <span class="add-on">€</span>
+                </div>
+            </td>
+
             <td>
                 <input name="zlava[]" class="span1" type="text" value="0" />
                 <select name="typ-zlavy[]" class="span2">
@@ -107,11 +121,8 @@
             Pridaj položku
     </button>
 
-    <div style="margin-top:15px; text-align:right;">
-        <a href="../ciselniky/sprava_produktov" class="btn btn-mini btn-warning"> Pridaj nový produkt </a>
-    </div>
-</div>
-    
+
+    <HR>
 
         <div class="input-prepend">
             <span class="add-on">Hodnota zľavy: </span>
@@ -151,7 +162,7 @@
     var js_polozky = {{ $dzejson }}
 
 // Vypisovanie ceny pre produkt vybraný zo selectu
-    $('table#tbl-vydavky').on('change', 'select.span4', function(){
+    $('table#tbl-vydavky').on('change', 'select.span3', function(){
 
         var x = $('option:selected',$(this)).attr('value');
         var sel = $(this);
@@ -162,17 +173,48 @@
 
     //console.log( $('input.span2', sel.closest('tr')) );
 
-                $('input.span2', sel.closest('tr')).val(data);
+                $('#cena', sel.closest('tr')).val(data);
                 //alert('Cena produktu vybraná z databázy pre tento produkt je: ' +data);
                 });
     });
 
 
+// ------- AK SA ZMENÍ INPUT CENA ALEBO MNOŽSTVO, TAK PREPOČÍTAJ ------- ZAČIATOK
+    $('table#tbl-vydavky').on('change', '#cena', function(){
+        var sel = $(this);
+
+        var cena = $(this).val();
+        var mnozstvo = $('#mnozstvo').val();
+
+        var vysledok = (0-0);
+
+        vysledok = ((cena*1)*(mnozstvo*1));
+
+        $('#cenapolozkykratpocet', sel.closest('tr')).val(vysledok);
+        
+    });
+
+    $('table#tbl-vydavky').on('change', '#mnozstvo', function(){
+        var sel = $(this);
+
+        var mnozstvo = $(this).val();
+        var cena = $('#cena').val();
+        
+        var vysledok = (0-0);
+
+        vysledok = ((cena*1)*(mnozstvo*1));
+
+        $('#cenapolozkykratpocet', sel.closest('tr')).val(vysledok);
+        
+    });
+// ------- AK SA ZMENÍ INPUT CENA ALEBO MNOŽSTVO, TAK PREPOČÍTAJ ------- KONIEC
+
+
 // Spočítavanie celkovej ceny (total) pridaných produktov
-    $('table#tbl-vydavky').live('change', function() {
+    $('table#tbl-vydavky').live('change',function() {
         var total = 0;
 
-          $('input#cena').each(function () {
+          $('input#cenapolozkykratpocet').each(function () {
             var pripocitaj = $(this).val();
             total = (total-0) + (pripocitaj-0);
           });

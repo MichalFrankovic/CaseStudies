@@ -12,13 +12,12 @@
 {{ HTML::script('assets/js/bootstrap-editable.js') }}
 {{ HTML::style('assets/css/bootstrap-editable.css') }}
 
-<h2>Jednoduchý výdavok - editácia</h2>
 
 {{ Form::open('spendings/savespending?update=1', 'POST', array('class' => 'side-by-side')); }}
 <input type="hidden" name="hlavicka-id" id="idhidden" value="{{ $vydavky[0]->id }}"/>
 
 <div class="thumbnail" style="margin-bottom:20px;">
-    <h4>Parametre:</h4>
+  <h4> Editácia výdavku z dňa {{ date('d.m.Y', strtotime($vydavky[0]->d_datum)) }} </h4>
     
     <div class="input-prepend" style="float:left;width:295px">
         <span class="add-on" style="width:83px"> Dátum:          </span>
@@ -57,9 +56,10 @@
             <input name="poznamka" class="span10" type="text" value="{{ $vydavky[0]->t_poznamka }}">
     </div>
 
-  <HR>
+  
+</div>
 
-  <h4>Položky výdavku</h4>
+  <h4> Položky výdavku: </h4>
   <table id="tbl-vydavky" class="table table-bordered">
     <thead>
       <tr>
@@ -67,44 +67,58 @@
           <th>    Položka             </th>
           <th>    Cena /ks (bez zľavy)</th>
           <th>    Počet               </th>
+          <th>    Total               </th>
           <th>    Zľava               </th>
       </tr>
     </thead>
 
-    @foreach ($polozky_vydavku as $polozka_vydavku)
-    <input type="hidden" name="vydavok-id[]" id="id-hidden" value="{{ $polozka_vydavku->id }}"/>
-  <tr>
-      <td><a class="btn" href="deletepolozka?pol={{ md5($polozka_vydavku->id).$secretword }}&vydavokid={{ $vydavky[0]->id }}"><i class="icon-remove"></i></a></td>
+@foreach ($polozky_vydavku as $polozka_vydavku)
+<tr>
+ <input type="hidden" name="vydavok-id[]" id="id-hidden" value="{{ $polozka_vydavku->id }}"/>
+ 
+  <td><a class="btn" href="deletepolozka?pol={{ md5($polozka_vydavku->id).$secretword }}&vydavokid={{ $vydavky[0]->id }}"><i class="icon-remove"></i></a></td>
     <td>
-      <select name="polozka-id[]" class="span4">
+      <select name="polozka-id[]" class="span3">
               @foreach ($polozky as $polozka)
                   <option value="{{ $polozka->id }}" @if ($polozka->id == $polozka_vydavku->id_kategoria_a_produkt)
-                                                          selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}</option>
-             @endforeach
+                                                          selected="selected" @endif > {{ str_replace(" ", "&nbsp;",$polozka->nazov); }}
+                  </option>
+              @endforeach
       </select>
   </td>
-    <td>
-        <div class="input-append">
+
+  <td>
+    <div class="input-append">
       <input id="cena" name="cena[]" class="span2" type="text" value="{{ number_format(round($polozka_vydavku->vl_jednotkova_cena,2),2) }}" />
       <span class="add-on">€</span>
-     </div>
-    </td>
-    <td>
-      <div class="input-append">
-      <input name="mnozstvo[]" class="span1" type="text" value="{{ $polozka_vydavku->num_mnozstvo }}" />
+    </div>
+  </td>
+
+  <td>
+    <div class="input-append">
+      <input id="mnozstvo" name="mnozstvo[]" class="span1" type="text" value="{{ $polozka_vydavku->num_mnozstvo }}" />
       <span class="add-on">m.j.</span>
-       </div>
-     </td>
-    <td>
+    </div>
+  </td>
+
+  <td>
+    <div class="input-append">
+      <input id="cenapolozkykratpocet" name="cenapolozkykratpocet[]" class="span1" type="text" value="" />
+      <span class="add-on">€</span>
+    </div>
+  </td>
+
+  <td>
       <input name="zlava[]" class="span1" type="text" value="{{ $polozka_vydavku->vl_zlava }}" />
       <select name="typ-zlavy[]" class="span2">
         <option value="0" @if ($polozka_vydavku->fl_typ_zlavy == '') selected="selected" @endif >Bez zlavy</option>
         <option value="P" @if ($polozka_vydavku->fl_typ_zlavy == 'P') selected="selected" @endif >Zlava v %</option>
         <option value="A" @if ($polozka_vydavku->fl_typ_zlavy == 'A') selected="selected" @endif >Zlava v EUR</option>
       </select>
-    </td>
-  </tr>
-    @endforeach
+  </td>
+
+ </tr>
+@endforeach
   </table>
 
     <button type="button" class="btn btn-primary" onclick="pridaj_riadok_do_vydavkov()">
@@ -112,13 +126,7 @@
             Pridaj položku
     </button>
 
-
-  <div style="margin-top:15px; text-align:right;">
-    <a href="../ciselniky/sprava_produktov" class="btn btn-mini btn-warning"> Pridaj nový produkt </a>
-  </div>
-   
-</div>
-
+<HR>
 
     <div class="input-prepend" style="float:left; width:185px;" >
          <span class="add-on">  Hodnota zľavy:        </span>
@@ -158,7 +166,7 @@
   var js_polozky = {{ $dzejson }}
 
 // Vypisovanie ceny pre produkt vybraný zo selectu
-    $('table#tbl-vydavky').on('change', 'select.span4', function(){
+    $('table#tbl-vydavky').on('change', 'select.span3', function(){
 
         var x = $('option:selected',$(this)).attr('value');
         var sel = $(this);
@@ -169,24 +177,55 @@
 
     //console.log( $('input.span2', sel.closest('tr')) );
 
-                $('input.span2', sel.closest('tr')).val(data);
+                $('#cena', sel.closest('tr')).val(data);
                 //alert('Cena produktu vybraná z databázy pre tento produkt je: ' +data);
                 });
     });
 
 
+// ------- AK SA ZMENÍ INPUT CENA ALEBO MNOŽSTVO, TAK PREPOČÍTAJ ------- ZAČIATOK
+    $('table#tbl-vydavky').on('change', '#cena', function(){
+        var sel = $(this);
+
+        var cena = $(this).val();
+        var mnozstvo = $('#mnozstvo').val();
+
+        var vysledok = (0-0);
+
+        vysledok = ((cena*1)*(mnozstvo*1));
+
+        $('#cenapolozkykratpocet', sel.closest('tr')).val(vysledok);
+        
+    });
+
+    $('table#tbl-vydavky').on('change', '#mnozstvo', function(){
+        var sel = $(this);
+
+        var mnozstvo = $(this).val();
+        var cena = $('#cena').val();
+        
+        var vysledok = (0-0);
+
+        vysledok = ((cena*1)*(mnozstvo*1));
+
+        $('#cenapolozkykratpocet', sel.closest('tr')).val(vysledok);
+        
+    });
+// ------- AK SA ZMENÍ INPUT CENA ALEBO MNOŽSTVO, TAK PREPOČÍTAJ ------- KONIEC
+
+
 // Spočítavanie celkovej ceny (total) pridaných produktov
-    $('table#tbl-vydavky').live('change', function() {
+    $('table#tbl-vydavky').live('change',function() {
         var total = 0;
 
-          $('input#cena').each(function () {
+          $('input#cenapolozkykratpocet').each(function () {
             var pripocitaj = $(this).val();
             total = (total-0) + (pripocitaj-0);
           });
 
           $('#total').val(total+" €");   // Zapíše sa do inputu s id názvom total
     });
-
+    
 </script>
 
 @include('foot')

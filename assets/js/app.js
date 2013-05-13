@@ -229,7 +229,7 @@ function pridaj_riadok_do_vydavkov()
     $('#tbl-vydavky').append('<tr>\
         <td><input type="hidden" name="vydavok-id[]" id="hidden" value="N"/></td>\
     <td>\
-        <select name="polozka-id[]" class="span4">\
+        <select name="polozka-id[]" class="span3">\
     '+tmptext+'\
         </select>\
     </td>\
@@ -241,8 +241,14 @@ function pridaj_riadok_do_vydavkov()
     </td>\
     <td>\
         <div class="input-append">\
-            <input name="mnozstvo[]" class="span1" type="text" value="1" />\
+            <input id="mnozstvo" name="mnozstvo[]" class="span1" type="text" value="1" />\
             <span class="add-on">m.j.</span>\
+        </div>\
+    </td>\
+    <td>\
+        <div class="input-append">\
+            <input id="cenapolozkykratpocet" name="cenapolozkykratpocet[]" class="span1" type="text" value="" />\
+            <span class="add-on">€</span>\
         </div>\
     </td>\
         <td>\
