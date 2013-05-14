@@ -51,7 +51,7 @@ class Spendings_Controller extends Base_Controller {
         $view->od = '';
         
         //Osoby - nákupcovia
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
         $view->message = Session::get('message');
 
        if (empty($view->osoby)) {
@@ -71,11 +71,11 @@ class Spendings_Controller extends Base_Controller {
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
 
         //Obchodní partneri - príjemcovia
-        $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER') ->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_nazov')->get();
 
         
         //Typy výdavkov
-        $view->typyV = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->typyV = DB::table('D_TYP_VYDAVKU')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_nazov_typu_vydavku')->get();
         
        /* $id = Input::get('id');
         $editovany_zaznam = Kategoria::where('id','=',$id)->get();
@@ -94,7 +94,7 @@ class Spendings_Controller extends Base_Controller {
             ->with('active', 'vydavky')->with('subactive', 'spendings/zoznam')->with('secretword', md5(Auth::user()->t_heslo));
         
         //Osoba - všetky osoby
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
@@ -149,7 +149,7 @@ class Spendings_Controller extends Base_Controller {
         
         //Typy výdavkov
         $view->typyV = DB::table('D_TYP_VYDAVKU')
-        ->where('id_domacnost', '=',Auth::user()->id)
+        ->where('id_domacnost', '=',Auth::user()->id)->order_by('t_nazov_typu_vydavku')
         ->get();
         //Výdavky
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->where('d_datum', '>=', $od)->where('d_datum', '<=', $do)->order_by('d_datum', 'DESC');
@@ -157,7 +157,7 @@ class Spendings_Controller extends Base_Controller {
         //Obchodný partner - prijemca
         $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER') 
         ->where('id_domacnost', '=',Auth::user()
-        ->id)->get();
+        ->id)->order_by('t_nazov')->get();
 
         
         //Filter podľa obchodného partnera
@@ -292,7 +292,7 @@ class Spendings_Controller extends Base_Controller {
         
         $view->message = Session::get('message');
 
-        $view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->get();
+        $view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov_typu_vydavku')->get();
         
         return $view;
     }
@@ -446,7 +446,7 @@ class Spendings_Controller extends Base_Controller {
 
     		$view->message = Session::get('message');
     		
-    		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+    		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
     		foreach ($view->osoby as $osoba)
     		{
     			$id_osob[] = $osoba->id;
@@ -486,13 +486,13 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
 
-            $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
+            $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov')->get();
     		
     		$view->editovana_sablona = DB::query("SELECT v.id,v.id_obchodny_partner,v.t_poznamka,v.fl_pravidelny,vkp.id_kategoria_a_produkt,vkp.vl_jednotkova_cena,op.t_nazov AS prijemca,kp.t_nazov AS kategoria, v.id_osoba, v.id_typ_vydavku " .
     				"FROM F_VYDAVOK v, R_VYDAVOK_KATEGORIA_A_PRODUKT vkp, D_OBCHODNY_PARTNER op, D_KATEGORIA_A_PRODUKT kp ".
     				"WHERE v.id = vkp.id_vydavok AND v.id_obchodny_partner = op.id AND vkp.id_kategoria_a_produkt = kp.id AND v.fl_sablona = 'A' AND v.id_osoba in (".implode(",", $id_osob).") AND v.id = '".$id."'");
     		
-    		$view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->get();
+    		$view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov_typu_vydavku')->get();
 
     		return $view;
     		
@@ -502,7 +502,7 @@ class Spendings_Controller extends Base_Controller {
     		 
     		$view->message = Session::get('message');
     		 
-    		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+    		$view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
     		foreach ($view->osoby as $osoba)
     		{
     			$id_osob[] = $osoba->id;
@@ -542,9 +542,9 @@ class Spendings_Controller extends Base_Controller {
                                     order by a.id_kategoria,a.typ
                                    ");
     		 
-    		$view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
+    		$view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov')->get();
     		
-            $view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->get();
+            $view->typy_vydavkov = DB::table('D_TYP_VYDAVKU')->where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov_typu_vydavku')->get();
 
                 //Výdavky: Vydavok (VIEW_F_VYDAVOK)
             $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();

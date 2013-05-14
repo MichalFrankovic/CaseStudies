@@ -36,7 +36,7 @@
          <label class="control-label">   Zaplatil - osoba:      </label>
              <select name="osoba" class="span3">
              @foreach ($osoby as $osoba)
-             <option value="{{ $osoba->id }}" {{ (($osoba->id == $editovana_sablona[0]->id_osoba)? " selected" : "") }}> {{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }} </option>
+             <option value="{{ $osoba->id }}" {{ (($osoba->id == $editovana_sablona[0]->id_osoba)? " selected" : "") }}> {{$osoba->t_priezvisko_osoby }} {{ $osoba->t_meno_osoby }} </option>
             @endforeach
              </select>
       </div>
