@@ -26,11 +26,11 @@ if (isset($editovany_zaznam))
 
 <?php
 if ($editacia == 'ano') {
-     echo "<h2>    Upravte typ príjmu   </h2>";
+     echo "<h3>  Upravte typ príjmu:  </h3>";
      echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravtypprijmu" accept-charset="UTF-8">';  
  }
    else  {         
-    echo "<h2>    Pridajte typ príjmu  </h2>";
+    echo "<h3>   Pridajte typ príjmu: </h3>";
     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridajtypprijmu" accept-charset="UTF-8">';
          }
 
@@ -94,7 +94,7 @@ if ($editacia == "ano") {
 </div>
 
 
-<h2 class=""> Zoznam typov príjmov </h2>
+<h3> Zoznam typov príjmov: </h3>
 
 <form id="form1" name="form1" method="post" action="multitypzmazat">
   <table class="table table-bordered table-striped">

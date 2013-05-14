@@ -35,15 +35,15 @@ if (isset($editovany_zaznam))
     <div class="alert alert-error">{{ $error }}</div>
 @endif
 
-<div class="thumbnail" style="padding-bottom:0px;">
+<div class="thumbnail">
 
 <?php
 if ($editacia == 'ano') {
-     echo "<h2>    Uprav produkt   </h2>";
+     echo "<h3>  Uprav produkt:  </h3>";
      echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular"  method="POST" action="upravprodukt" accept-charset="UTF-8">';  
  }
    else  {         
-    echo "<h2>    Pridaj produkt  </h2>";
+    echo "<h3>   Pridaj produkt: </h3>";
     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular"  method="POST" action="pridajprodukt" accept-charset="UTF-8">';
          }
 
@@ -180,17 +180,13 @@ if ($editacia == "ano") {
 
 ?>
 
-    <div style="margin-top:25px;">
-        <a href="../spendings/simplespending" class="btn btn-mini btn-warning"> Jednoduchý výdavok </a>
-    </div>
-
 {{ Form::close() }}
    
 </div>
 
 
 
-<h2 class="">   Zoznam produktov    </h2>
+<h3>   Zoznam produktov:    </h3>
 <form id="form1" name="form1" method="post" action="multizmazanie">
   <table class="table table-bordered table-striped">
     <thead>

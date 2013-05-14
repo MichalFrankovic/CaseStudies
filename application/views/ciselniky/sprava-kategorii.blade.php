@@ -24,11 +24,11 @@ if (isset($editovany_zaznam))
 
 <?php
 if ($editacia == 'ano') {
-     echo "<h2>    Uprav kategóriu   </h2>";
+     echo "<h3>    Uprav kategóriu:   </h3>";
      echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravkat" accept-charset="UTF-8">';  
  }
    else  {         
-    echo "<h2>    Pridaj kategóriu  </h2>";
+    echo "<h3>    Pridaj kategóriu:  </h3>";
     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridajkategoriu" accept-charset="UTF-8">';
          }
 
@@ -103,7 +103,7 @@ if ($editacia == "ano") {
 
 
 
-<h2 class="">   Zoznam kategórií    </h2>
+<h3>   Zoznam kategórií:    </h3>
 <form id="form1" name="form1" method="post" action="multizmazaniekat">
   <table class="table table-bordered table-striped">
     <thead>

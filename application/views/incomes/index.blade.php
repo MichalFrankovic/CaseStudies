@@ -149,7 +149,7 @@
 		
 {{ Form::open('incomes/index', 'get', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
-    <h4>Filter</h4>
+    <h4> Filter príjmov: </h4>
 
 <div class="input-prepend">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
@@ -195,7 +195,7 @@
         
  </div>
  {{ Form::close() }}
-	<h2 class="">Zoznam príjmov</h2>
+	<h3> Zoznam príjmov: </h3>
 	<form id="form1" name="form1" method="get" action="multideleteincomes">
 
 	<table class="table table-bordered">

@@ -23,11 +23,11 @@ if (isset($editovany_zaznam))
 <div class="thumbnail" >
  <?php
 if ($editacia == 'ano') {
-     echo "<h2>    Upraviť typ výdavku   </h2>";
+     echo "<h3>    Upraviť typ výdavku:  </h3>";
      echo '<form class="side-by-side" name="tentoForm" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyVydavku()" method="POST" action="upravittypvydavku" accept-charset="UTF-8">';  
  }
    else  {         
-    echo "<h2>    Pridajte typ výdavku  </h2>";
+    echo "<h3>    Pridajte typ výdavku:  </h3>";
     echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" onsubmit="return validujFormTypyVydavku()" method="POST" action="pridajtypvydavku" accept-charset="UTF-8">';
          }
 
@@ -88,7 +88,7 @@ if ($editacia == "ano") {
 
 </div>
 
-<h2 class=""> Zoznam typov výdavkov </h2>
+<h3> Zoznam typov výdavkov: </h3>
 
 
 <form id="form1" name="form1" method="post" action="multizmazattypy" >

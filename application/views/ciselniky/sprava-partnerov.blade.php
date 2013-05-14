@@ -39,12 +39,12 @@ if (isset($editovany_zaznam))
 if ($editacia == 'ano')
   {
    
-     echo "<h2>    Upraviť partnera   </h2>";
+     echo "<h3>    Upraviť partnera:   </h3>";
      echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="upravitpartnera" accept-charset="UTF-8">';  
   }
 else
   {         
-     echo "<h2>    Pridať partnera    </h2>";
+     echo "<h3>    Pridať partnera domácnosti:    </h3>";
      echo '<form class="side-by-side" name="tentoForm" id="aktualnyformular" method="POST" action="pridatpartnera" accept-charset="UTF-8">';
     }
 ?>
@@ -136,7 +136,7 @@ if ($editacia == "ano") {
    
 </div>
 
-<h2>Zoznam partnerov</h2>
+<h3> Zoznam partnerov: </h3>
 
 <form id="form1" name="form1" method="post" action="multizmazaniepartnerov">
   <table class="table table-bordered table-striped">

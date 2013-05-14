@@ -35,16 +35,17 @@ echo "</pre>";*/
 
 {{ Form::open('spendings/filter', 'POST', array('class' => 'side-by-side')); }}
 <div class="thumbnail" >
-<h2>    Filter výdavkov </h2>
-    <h4>    Dátum   </h4>
-    <div class="input-prepend" style="float:left;width:275px">
+
+    <h4> Filter výdavkov: </h4>
+    
+    <div class="input-prepend" style="float:left;width:205px">
         <span class="add-on">   Od:         </span>
-        <input class="span3 datepicker" type="text" name="od" value="{{ $od }}">
+        <input class="span2 datepicker" type="text" name="od" value="{{ $od }}">
     </div>
 
     <div class="input-prepend">
         <span class="add-on">   Do:         </span>
-        <input class="span3 datepicker" type="text" name="do" value="<?php $x=$do; $x = date('d.m.Y'); echo $x;?>">
+        <input class="span2 datepicker" type="text" name="do" value="<?php $x=$do; $x = date('d.m.Y'); echo $x;?>">
     </div>
 
  <!--Adriana Gogoľáková: Obchodný partner funkčný aj pri filtrovaní--> 
@@ -94,7 +95,7 @@ echo "</pre>";*/
 
 
 
-<h2 class="">   Zoznam výdavkov </h2>
+<h3>   Zoznam výdavkov: </h3>
 <form id="form1" name="form1" method="post" action="multideletespending">
     <table class="table table-bordered table-striped">
         <thead>
