@@ -36,7 +36,7 @@
  
  
  /* Hlavné menu */
- .navbar .nav>li>a{margin-left:30px; border-radius: 50px 50px 50px 50px !important; font-weight:bold; float:none;padding:10px 15px 10px;color:white;text-decoration:none;text-shadow:0 0px 0 #fff}.navbar .nav .dropdown-toggle .caret{margin-top:8px}.navbar .nav>li>a:focus,
+ .navbar .nav>li>a{margin:5px; margin-left: 15px; border-radius: 50px 50px 50px 50px !important; font-weight:bold; float:none;padding:10px 15px 10px;color:white;text-decoration:none;text-shadow:0 0px 0 #fff}.navbar .nav .dropdown-toggle .caret{margin-top:8px}.navbar .nav>li>a:focus,
  
  /* Formátovanie prechodov hlavného menu */
  .navbar .nav>li>a:hover{color:black;text-decoration:none;background-color:white}.navbar .nav>.active>a,.navbar .nav>.active>a:hover,

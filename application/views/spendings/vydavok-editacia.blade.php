@@ -89,7 +89,7 @@
 
   <td>
     <div class="input-append">
-      <input id="cena" name="cena[]" class="span2" type="text" value="{{ number_format(round($polozka_vydavku->vl_jednotkova_cena,2),2) }}" />
+      <input id="cena" name="cena[]" class="span2" type="text" value="{{ $polozka_vydavku->vl_jednotkova_cena }}" />
       <span class="add-on">€</span>
     </div>
   </td>

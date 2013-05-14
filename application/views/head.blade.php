@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Výdavkovač</title>
-	<LINK REL="icon" HREF="{{ URL::to('../application/obrazky/ziarovka.ico') }}" TYPE="image/x-icon">
+	<LINK REL="icon" HREF="{{ URL::to('../application/obrazky/mesec.ico') }}" TYPE="image/x-icon">
 	
 	<meta name="viewport" content="width=device-width">
 	{{ HTML::style('assets/css/bootstrap.min.css') }}
