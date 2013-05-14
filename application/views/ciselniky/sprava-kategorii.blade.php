@@ -65,15 +65,15 @@ if ($editacia == 'ano') {
 
 {{ Form::open('ciselniky/pridajkategoriu', 'POST', array('class' => 'side-by-side','id' => 'aktualnyformular')); }}
 
+
+<a href="../ciselniky/sprava_kategorii" class="btn btn-primary"> 
+    <i class="icon-remove icon-white"> </i> 
+        Zruš 
+</a> 
+
 <?php
 
 if ($editacia == "ano") {
-    echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
-                <button type="button" class="btn btn-primary">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
-                 </button>
-           </a>';
 
     echo '       <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>
@@ -81,11 +81,8 @@ if ($editacia == "ano") {
                  </button>
          ';
     }
-   else {echo ' <button type="reset" class="btn btn-primary">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
-                </button>
-              ';
+
+   else {
 
          echo ' <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>

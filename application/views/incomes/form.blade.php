@@ -10,7 +10,6 @@
 	<style type="text/css">
 		.btn.btn-primary{ 
 			margin-top: 15px;
-			margin-left: 180px; 
 		}
 
 		.input-prepend,.tlacidla,.input-xxlarge 
@@ -249,14 +248,15 @@
 </div>
 
 <div class="tlacidla">
- <?php     
+
+	<a href="../incomes/form" class="btn btn-primary"> 
+	    <i class="icon-remove icon-white"> </i> 
+	        Zruš 
+	</a> 
+
+ <?php 
+
 if ($uprava == "ano") {
-     echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
-                <button type="button" class="btn btn-primary" style="margin-left:0px">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
-                 </button>
-           </a>';
 
     echo '       <button type="submit" class="btn btn-primary" style="margin-left:1px">
                     <i class="icon-ok icon-white"></i>
@@ -266,11 +266,6 @@ if ($uprava == "ano") {
     }      
       
   else {
-         echo ' <button type="reset" class="btn btn-primary" style="margin-left:0px">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
-                </button>
-              ';
 
          echo ' <button type="submit" class="btn btn-primary" style="margin-left:1px">
                     <i class="icon-ok icon-white"></i>

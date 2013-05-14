@@ -73,10 +73,10 @@
       
 
 
-      <button type="reset" class="btn btn-primary">
-            <i class="icon-remove icon-white"></i>
-                Zruš
-      </button>
+      <a href="../spendings/sablona" class="btn btn-primary"> 
+         <i class="icon-remove icon-white"> </i> 
+              Zruš 
+      </a> 
 
       <button type="submit" class="btn btn-primary">
             <i class="icon-ok icon-white"></i>

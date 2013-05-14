@@ -87,28 +87,23 @@ $znaky = DB::table('D_OSOBA')
 </div>
 
 
+<a href="../ciselniky/sprava_osob" class="btn btn-primary"> 
+    <i class="icon-remove icon-white"> </i> 
+        Zruš 
+</a> 
+
 <?php
 
-if ($editacia == "ano") {
-     echo ' <a  onClick="history.go(-1)">    <!-- Tento Javascript vložený kvôli IE - ekvivalent takisto history.back() -->
-                <button type="button" class="btn btn-primary">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
-                 </button>
-           </a>';
-
+if (($editacia == "ano") || (isset($error))) {
+     
     echo '       <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>
                         Aktualizuj
                  </button>
          ';
     }
+
    else {
-         echo ' <button type="reset" class="btn btn-primary">
-                    <i class="icon-remove icon-white"></i>
-                        Zruš
-                </button>
-              ';
 
          echo ' <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>
