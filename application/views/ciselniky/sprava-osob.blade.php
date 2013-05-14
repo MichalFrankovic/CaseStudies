@@ -94,7 +94,7 @@ $znaky = DB::table('D_OSOBA')
 
 <?php
 
-if (($editacia == "ano") || (isset($error))) {
+if ($editacia == "ano") {
      
     echo '       <button type="submit" class="btn btn-primary">
                     <i class="icon-ok icon-white"></i>

@@ -90,7 +90,7 @@ class Admin_Controller extends Base_Controller {
 			$user->save();
 		}
                 $view->errors = $errors;
-                return Redirect::to('admin/list')->with('message', 'Domácnosť pridaná');
+                return Redirect::to('admin/list')->with('message', 'Domácnosť pridaná')->with('status_class', 'sprava-uspesna');
             }
             return $view;
         }
@@ -148,7 +148,7 @@ class Admin_Controller extends Base_Controller {
 		{
                     DB::query("UPDATE D_DOMACNOST SET t_nazov_domacnosti = '$domacnost', t_email_login = '$email', fl_aktivna = '$stav', fl_admin = '$admin' WHERE id = " . $id);
                 }                
-                return Redirect::to('admin/list')->with('message', 'Zmeny boli uložené');
+                return Redirect::to('admin/list')->with('message', 'Zmeny boli uložené')->with('status_class', 'sprava-uspesna');
             }
 	}
         
@@ -159,12 +159,12 @@ class Admin_Controller extends Base_Controller {
            
             if ($objekt->fl_aktivna == 'A'){
                 DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $id);
-                return Redirect::to('admin/list')->with('message', 'Užívateľ deaktivovaný');
+                return Redirect::to('admin/list')->with('message', 'Užívateľ deaktivovaný')->with('status_class', 'sprava-uspesna');
             }
             else{
                 DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $id);
                 
-                return Redirect::to('admin/list')->with('message', 'Užívateľ aktivovaný');
+                return Redirect::to('admin/list')->with('message', 'Užívateľ aktivovaný')->with('status_class', 'sprava-uspesna');
             }
             
         }
@@ -174,12 +174,13 @@ class Admin_Controller extends Base_Controller {
             $id = Input::get('id');
             try {
                 DB::query('DELETE FROM D_DOMACNOST WHERE id = "' . $id  . '"');
-                return Redirect::to('admin/list')->with('message', 'Domácnosť bola vymazaná');
+                return Redirect::to('admin/list')->with('message', 'Domácnosť bola vymazaná')->with('status_class', 'sprava-uspesna');
             }
             catch (Exception $e){
                 $e->getMessage();
                 
-                return Redirect::to('admin/list')->with('message', 'Danú domácnosť nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+                return Redirect::to('admin/list')->with('message', 'Danú domácnosť nie je možné vymazať, nakoľko by bola narušená konzistencia dát v DB')
+                                                 ->with('status_class', 'sprava-chyba');
             }
             
         }
@@ -200,13 +201,14 @@ class Admin_Controller extends Base_Controller {
                             catch (Exception $e){
                                 $e->getMessage();
                 
-                                return Redirect::to('admin/list')->with('message', 'Dané domácnosti nieje možné vymazať, <br />nakoľko by bola narušená konzistencia dát v DB');
+                                return Redirect::to('admin/list')->with('message', 'Dané domácnosti nie je možné vymazať, nakoľko by bola narušená konzistencia dát v DB')
+                                                                 ->with('status_class', 'sprava-chyba');
                             }
                         }    
                     }
-                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli vymazané');
+                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli vymazané')->with('status_class', 'sprava-uspesna');
                     }
-                return Redirect::to('admin/list')->with('message', 'Nebola zvolená ziadna domácnosť');
+                return Redirect::to('admin/list')->with('message', 'Nebola zvolená žiadna domácnosť')->with('status_class', 'sprava-chyba');
             }            
             //AKTIVOVANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Aktivuj'){
@@ -219,9 +221,9 @@ class Admin_Controller extends Base_Controller {
                             DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'A' WHERE id = " . $polozka);
                         }
                     }
-                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli aktivované');
+                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli aktivované')->with('status_class', 'sprava-uspesna');
                 }
-                return Redirect::to('admin/list')->with('message', 'Nebola zvolená ziadna domácnosť');
+                return Redirect::to('admin/list')->with('message', 'Nebola zvolená žiadna domácnosť')->with('status_class', 'sprava-chyba');
             }            
             //DEAKTIVOVANIE
             if (isset($_POST['Submit']) && $_POST['Submit'] == 'Deaktivuj'){
@@ -234,9 +236,9 @@ class Admin_Controller extends Base_Controller {
                             DB::query("UPDATE D_DOMACNOST SET fl_aktivna = 'N' WHERE id = " . $polozka);
                         }
                     }
-                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli deaktivované');
+                    return Redirect::to('admin/list')->with('message', 'Domácnosti boli deaktivované')->with('status_class', 'sprava-uspesna');
                 }
-                return Redirect::to('admin/list')->with('message', 'Nebola zvolená ziadna domácnosť');
+                return Redirect::to('admin/list')->with('message', 'Nebola zvolená žiadna domácnosť')->with('status_class', 'sprava-chyba');
             }
         }
 }

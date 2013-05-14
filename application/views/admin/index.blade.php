@@ -1,7 +1,10 @@
 @include('head')
 @include('admin/submenu')
-@if (isset($message) )
-    <h4 style="color: #bc8f8f;">{{ $message }}</h4>
+
+@if(Session::get('message'))
+    <div class="information {{ Session::get('status_class') }}">
+            {{ Session::get('message') }}
+    </div>
 @endif
 
 <!--CHECK ALL javaSKRIPT-->
