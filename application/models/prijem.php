@@ -104,7 +104,7 @@ class Prijem extends Eloquent
 	{
 		$person = DB::table('D_OSOBA')
 			->where_id_domacnost(Auth::user()->id)
-			->where_fl_domacnost('N')->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')
+			->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')
 			->get(array('id', 't_meno_osoby', 't_priezvisko_osoby'));
 
 		return $person;
@@ -204,11 +204,12 @@ public static function get_typ_prijmu()
 	 */
 	public static function get_partners()
 	{
-		return DB::table('D_OBCHODNY_PARTNER')
-			->where('id_domacnost', '=', Auth::user()->id)
-			->where('fl_typ','=','Zdroj príjmu')->or_where('fl_typ','=','Príjemca platby aj zdroj príjmu')
-			->order_by('t_nazov')
-			->get();
+		return DB::query("SELECT id, t_nazov 
+						  FROM D_OBCHODNY_PARTNER 
+						  WHERE (fl_typ = 'Príjemca platby aj zdroj príjmu' OR fl_typ = 'zdroj príjmu') 
+						  AND id_domacnost = ". Auth::user()->id ."
+						  ORDER BY t_nazov");
+
 	}
 
 
