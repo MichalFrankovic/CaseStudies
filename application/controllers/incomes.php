@@ -112,7 +112,7 @@ class Incomes_Controller extends Base_Controller {
 
 		$osoby = DB::table('D_OSOBA')
 			->where_id_domacnost(Auth::user()->id)
-			->where_fl_domacnost('N')
+			->where_fl_domacnost('N')->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')
 			->get(array('id', 't_meno_osoby', 't_priezvisko_osoby'));
 
 		$typ_prijmu = DB::table('D_TYP_PRIJMU')
@@ -120,8 +120,8 @@ class Incomes_Controller extends Base_Controller {
 			->get(array('id', 't_nazov_typu'));
 
 		$zdroj_prijmu = DB::table('D_OBCHODNY_PARTNER')
-			->where_fl_typ('Zdroj príjmu')
-			->where_id_domacnost(Auth::user()->id)
+			->where_fl_typ('Zdroj príjmu')->or_where('fl_typ','=','Príjemca platby aj zdroj príjmu')
+			->where_id_domacnost(Auth::user()->id)->order_by('t_nazov')
 			->get(array('id',  't_nazov'));
 
 	if (isset($editacia)) { $uprava = 'ano';}

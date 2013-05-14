@@ -121,7 +121,7 @@ function daco() {
                 <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
                 <td>    {{ $sablona->t_poznamka }}                                              </td>
                 <td>    {{ $sablona->prijemca }}                                                </td>
-                <td>    {{ $sablona->t_meno_osoby }} {{ $sablona->t_priezvisko_osoby }}         </td>
+                <td>    {{ $sablona->t_priezvisko_osoby }} {{ $sablona->t_meno_osoby }}         </td>
                 <td>    {{ $sablona->t_nazov_typu_vydavku }}                                    </td>
                 <td>    {{ (($sablona->fl_pravidelny == 'A')? "Pravidelný" : "Nepravidelný") }} </td>
                 <td>    {{ $sablona->kategoria }}                                               </td>

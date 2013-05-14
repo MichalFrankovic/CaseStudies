@@ -149,7 +149,7 @@
 			      	<option value="{{ $osoba->id }}" @if ((isset($meneny_osoba)) AND ($osoba->id == $meneny_osoba))
 	                                                selected="selected" @endif 
                                                      @if ((isset($editacia[0]->id_osoba)) AND ($osoba->id == $editacia[0]->id_osoba))
-	                                                selected="selected" @endif > {{$osoba->t_meno_osoby}} {{$osoba->t_priezvisko_osoby}}
+	                                                selected="selected" @endif > {{$osoba->t_priezvisko_osoby}} {{$osoba->t_meno_osoby}} 
 
 			      	</option>
 			      	

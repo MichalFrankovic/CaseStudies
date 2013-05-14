@@ -153,25 +153,25 @@
 
 <div class="input-prepend">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Osoba: </span>
-    <select name="osoba"  class="span3">
+    <select name="osoba"  class="span2">
         <option value="all" selected="selected">VŠETKY</option>
         @foreach ($persons as $person)
-        <option value="{{ $person->id }}" <?php if($person->id==$osoba){echo 'selected="selected"';}?>> {{ $person->t_meno_osoby }}&nbsp;{{ $person->t_priezvisko_osoby }}</option>
+        <option value="{{ $person->id }}" <?php if($person->id==$osoba){echo 'selected="selected"';}?>> {{ $person->t_priezvisko_osoby }} {{ $person->t_meno_osoby }} </option>
         @endforeach
     </select>
  </div>
     <div class="input-prepend" style="float:left;margin-right:50px">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum od: </span>
-        <input class="span3 datepicker" type="text" name="od" value="{{ $od }}" >
+        <input class="span2 datepicker" type="text" name="od" value="{{ $od }}" >
     </div>
     <div class="input-prepend" style="margin-left:50px">
     <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum do: </span>
-    <input class="span3 datepicker" type="text" name="do" value="{{ $do }}">
+    <input class="span2 datepicker" type="text" name="do" value="{{ $do }}">
 </div>
 
 <div class="input-prepend" style="float:left;margin-right:50px">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Typ príjmu: </span>
-    <select name="typ_prijmu"  class="span3">
+    <select name="typ_prijmu"  class="span2">
         <option value="all" selected="selected">VŠETKY</option>
         @foreach ($typy as $typ)
         <option value="{{ $typ->id }}" <?php if($typ->id==$styp){echo 'selected="selected"';}?>> {{ $typ->t_nazov_typu }}</option>
@@ -180,7 +180,7 @@
  </div>
  <div class="input-prepend">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Zdroj príjmu: </span>
-    <select name="zdroj"  class="span3">
+    <select name="zdroj"  class="span2">
         <option value="all" selected="selected">VŠETCI</option>
         @foreach ($partners as $source)
         <option value="{{ $source->id }}" <?php if($source->id==$zdroj){echo 'selected="selected"';}?>> {{ $source->t_nazov }}</option>
@@ -215,7 +215,7 @@
 			@foreach($incomes as $income)
 			<tr>
 				<td style="text-align: center;"><input type="checkbox" name="income[]" id="checkbox2" class="spendcheck" value="{{$income->id}}" /></td>
-				<td>{{ $income->t_meno_osoby }}&nbsp;{{ $income->t_priezvisko_osoby }}</td>
+				<td> {{ $income->t_priezvisko_osoby }} {{ $income->t_meno_osoby }} </td>
 				<td>{{ $income->t_nazov_typu }}</td>
 				<td>					
 					{{ date('d.m.Y', strtotime($income->d_datum)) }}
