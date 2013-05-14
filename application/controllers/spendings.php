@@ -195,7 +195,7 @@ class Spendings_Controller extends Base_Controller {
 
         $view->message = Session::get('message');
         
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
         foreach ($view->osoby as $osoba)
         {
         	$id_osob[] = $osoba->id;
@@ -243,7 +243,7 @@ class Spendings_Controller extends Base_Controller {
 
         }
 
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
         foreach ($view->osoby as $osoba)
         {
             $id_osob[] = $osoba->id;
@@ -288,7 +288,7 @@ class Spendings_Controller extends Base_Controller {
 
         $view->dzejson = Response::json($view->polozky);
         
-        $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->get();
+        $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov')->get();
         
         $view->message = Session::get('message');
 

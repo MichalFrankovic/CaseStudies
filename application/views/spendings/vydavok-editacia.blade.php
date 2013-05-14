@@ -37,7 +37,7 @@
             <span class="add-on"> Zaplatila osoba:   </span>
         <select name="osoba" class="span2">
             @foreach ($osoby as $osoba)
-            <option value="{{ $osoba->id }}" @if ($vydavky[0]->id_osoba ==  $osoba->id) selected="selected" @endif> {{ $osoba->t_meno_osoby }} {{$osoba->t_priezvisko_osoby }}</option>
+            <option value="{{ $osoba->id }}" @if ($vydavky[0]->id_osoba ==  $osoba->id) selected="selected" @endif> {{$osoba->t_priezvisko_osoby }} {{ $osoba->t_meno_osoby }} </option>
             @endforeach
         </select>
     </div>

@@ -47,7 +47,7 @@ public function action_sprava_osob()
 
         $view->kategorie = Kategoria::where('id', 'LIKE','%K%')->where('id_domacnost','=',Auth::user()->id)->get();
 
-        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->get();
+        $view->osoby = DB::table('D_OSOBA')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_priezvisko_osoby')->order_by('t_meno_osoby')->get();
 
         $view->produkty = Kategoria::where('id_domacnost','=',Auth::user()->id)->get();
 

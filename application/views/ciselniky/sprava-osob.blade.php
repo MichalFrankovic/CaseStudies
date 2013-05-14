@@ -132,8 +132,8 @@ if ($editacia == "ano") {
     <thead>
         <tr>
             <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>
-            <th>    Meno            </th>
             <th>    Priezvisko      </th>
+            <th>    Meno            </th>
             <th>    Aktívna         </th>
             <th>    Výber akcie     </th>
         </tr>
@@ -143,8 +143,8 @@ if ($editacia == "ano") {
         @foreach ($osoby as $osoba)
         <tr>
             <td style="text-align: center;"> <input type="checkbox" name="osoba[]" id="checkbox2" class="spendcheck" value="{{ md5($osoba->id). $secretword}}" /> </td>
-            <td>    {{ $osoba->t_meno_osoby }}          </td>
             <td>    {{ $osoba->t_priezvisko_osoby }}    </td>
+            <td>    {{ $osoba->t_meno_osoby }}          </td>
             <td>    {{ $osoba->fl_aktivna }}            </td>
             <td style="text-align: center;"> 
                 <a class="btn btn-primary" href="sprava_osob?id={{ $osoba->id }}"> Upraviť </a>
