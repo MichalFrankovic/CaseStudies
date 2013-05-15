@@ -221,7 +221,7 @@
 					{{ date('d.m.Y', strtotime($income->d_datum)) }}
 				</td>
 				<td>
-					{{ $income->vl_suma_prijmu }} €
+					{{ round($income->vl_suma_prijmu,2) }} €
 				</td>
 				<td>				
 					{{ $income->t_nazov }}

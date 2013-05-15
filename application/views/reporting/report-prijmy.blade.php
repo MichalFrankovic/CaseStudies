@@ -95,9 +95,9 @@ $(document).ready(function(){
  </div>
 
 <div class="filterbutton" >
-    <a class="btn btn-primary" href="{{ URL::to('reporting/report_prijmy') }}" ><i class="icon-remove icon-white"></i>Vymaž filter</a>
+    <a class="btn btn-primary" href="{{ URL::to('reporting/report_prijmy') }}" ><i class="icon-remove icon-white"></i>Vynulovať filter</a>
        
-    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Aplikuj filter	</button>
+    <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Zobrazovať	</button>
 </div>
 
 </div>
@@ -263,18 +263,18 @@ $(document).ready(function(){
                 $op[$i]['meno'] = $x->meno_osoby;
                 $op[$i]['mesiac'] = $x->mesiac;
 
-                if (($x->mesiac) == 'January') $januar = $x->suma_prijmu; 
-                if (($x->mesiac) == 'February') $februar = $x->suma_prijmu; 
-                if (($x->mesiac) == 'March') $marec = $x->suma_prijmu;
-                if (($x->mesiac) == 'April') $april = $x->suma_prijmu; 
-                if (($x->mesiac) == 'May') $maj = $x->suma_prijmu; 
-                if (($x->mesiac) == 'June') $jun = $x->suma_prijmu; 
-                if (($x->mesiac) == 'July') $jul = $x->suma_prijmu; 
-                if (($x->mesiac) == 'August') $august = $x->suma_prijmu; 
-                if (($x->mesiac) == 'September') $september = $x->suma_prijmu; 
-                if (($x->mesiac) == 'October') $oktober = $x->suma_prijmu; 
-                if (($x->mesiac) == 'November') $november = $x->suma_prijmu; 
-                if (($x->mesiac) == 'December') $december = $x->suma_prijmu; 
+                if (($x->mesiac) == 'January') $januar = round($x->suma_prijmu,2); 
+                if (($x->mesiac) == 'February') $februar = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'March') $marec = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'April') $april = round($x->suma_prijmu,2); 
+                if (($x->mesiac) == 'May') $maj = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'June') $jun = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'July') $jul = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'August') $august = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'September') $september = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'October') $oktober = round($x->suma_prijmu,2); 
+                if (($x->mesiac) == 'November') $november = round($x->suma_prijmu,2);
+                if (($x->mesiac) == 'December') $december = round($x->suma_prijmu,2);
 
                 $i++;
                   
