@@ -1,3 +1,13 @@
+// Ak je nejaký objekt s class="skrat_ak_dlhy" (kvôli dlhým poznámkam v zoznamoch položiek napríklad...):
+$(document).ready(function(){
+
+    $(".skrat_ak_dlhy").each(function(){
+        var o = $(this).html();
+        $(this).html(o.substring(0, 21))
+    })
+
+});
+
 
 // Funkcie pre validácie
 function validujFormOsoby()

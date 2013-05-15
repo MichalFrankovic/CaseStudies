@@ -129,7 +129,7 @@ echo "</pre>";*/
                             {{$typV->t_nazov_typu_vydavku }}
                     @endif
                     @endforeach                                             </td>
-            <td>    {{ $vydavok->t_poznamka }}                              </td>
+            <td class="skrat_ak_dlhy">    {{ $vydavok->t_poznamka }}        </td>
             <td>    {{ round($vydavok->suma_vydavku_po_celk_zlave,2) }} EUR </td>
 
                      

@@ -25,11 +25,13 @@ function daco() {
         $.get('vyber_osobu_pre_sablonu?id='+x,
             function(osoba) {
 
-               $('select#zaplatil').append("<option value='"+osoba.id+"' selected='selected'>"+ osoba.meno + " "+ osoba.priezvisko +" </option>");
+               $('select#zaplatil').append("<option value='"+osoba.id+"' selected='selected'>"+ osoba.priezvisko + " "+ osoba.meno +" </option>");
                 }, "json");
     });  
 
 }
+
+
 
 </script> 
 
@@ -119,7 +121,7 @@ function daco() {
             @foreach ($sablony as $sablona)
             <tr>
                 <td style="text-align: center;"> <input type="checkbox" name="sablona[]" id="checkbox2" class="spendcheck" value="{{ md5($sablona->id). $secretword}}" /></td>
-                <td>    {{ $sablona->t_poznamka }}                                              </td>
+                <td class="skrat_ak_dlhy">    {{ $sablona->t_poznamka }}                        </td>
                 <td>    {{ $sablona->prijemca }}                                                </td>
                 <td>    {{ $sablona->t_priezvisko_osoby }} {{ $sablona->t_meno_osoby }}         </td>
                 <td>    {{ $sablona->t_nazov_typu_vydavku }}                                    </td>

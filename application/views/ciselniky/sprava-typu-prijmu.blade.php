@@ -91,7 +91,7 @@ if ($editacia == "ano") {
 <h3> Zoznam typov príjmov: </h3>
 
 <form id="form1" name="form1" method="post" action="multitypzmazat">
-  <table class="table table-bordered table-striped">
+  <table class="table table-bordered table-striped" style="width:55%">
     <thead>
         <tr>
             <th> <input type="checkbox" value="0" id="multicheck" onclick="multiCheck();" /> </th>

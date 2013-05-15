@@ -227,7 +227,7 @@
 					{{ $income->t_nazov }}
 				</td>
 				
-				<td>					
+				<td class="skrat_ak_dlhy">					
 					{{ $income->t_poznamka }}
 					
 				</td>
