@@ -17,9 +17,14 @@
         .filterbutton{
             margin: 30px 20px 0px 10px;
             position: relative;
-            left:45px;
-            bottom:-10px;
+            left:330px;
+            /*bottom:-10px;*/
         }
+    </style>
+    <style type="text/css">
+        td {text-align: center !important;}
+
+        .uzsi {width: 50% !important;}
     </style>
 @endsection
 
@@ -74,11 +79,9 @@ $(document).ready(function(){
 </div>
 <div class="input-prepend">
         <span class="add-on" style="width:120px;text-align:left;padding-left:10px">Časová jednotka </span>
-    <select name="typ_zob"  class="span2">
-        <option value="m" selected="selected">Mesačne</option>
-        <option value="s" >Štvrťročne</option>
-        <option value="p" >Polročne</option>
-        <option value="r" >Ročne</option>
+    <select name="zob_typ"  class="span2">
+        <option value="cel" selected="selected">Celkové</option>
+        <option value="mes" <?php if ($zob_typ == 'mes') echo "selected='selected'"; ?>>Mesačne</option>
     </select>
 </div>
 <div class="input-prepend" style="float:left;margin-right:50px">
@@ -90,32 +93,107 @@ $(document).ready(function(){
         @endforeach
     </select>
  </div>
-<div class="input-prepend" style="float:left;margin-right:50px">
-        <span class="add-on" style="width:80px;text-align:left;padding-left:10px">Typ príjmu: </span>
-    <select name="typ_prijmu"  class="span2">
-        <option value="all" selected="selected">VŠETKY</option>
-        @foreach ($typy as $typ)
-        <option value="{{ $typ->id }}" <?php if($typ->id==$styp){echo 'selected="selected"';}?>> {{ $typ->t_nazov_typu }}</option>
-        @endforeach
-    </select>
- </div>
+
 <div class="filterbutton" >
-       <!-- {{ Form::reset('Vynulovať filter' , array('class' => 'btn','style'=>'width:120px')); }}-->
     <a class="btn btn-primary" href="{{ URL::to('reporting/report_prijmy') }}" ><i class="icon-remove icon-white"></i>Vymaž filter</a>
        
-       <!--{{ Form::submit('Zobraziť' , array('class' => 'btn btn-primary','style'=>'width:120px')); }}-->
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Aplikuj filter	</button>
-    </div>
+</div>
+
 </div>
 {{ Form::close() }}
 
 
-<form id="form1" name="form2" method="get" >
+<form id="form1" name="form2" method="get">
 	
     <table class="table table-bordered">
         
                 
-                <?php echo " 
+    <?php 
+
+    $suma = 0;
+
+    if ($zob_typ == 'cel') {
+
+    $pocet = 0;
+    echo "<THEAD>
+            <TR>
+                <TH style='width:250px'> Osoby </TH>
+                <TH> Suma prijmov             </TH>
+            </TR>
+          </THEAD>";
+
+            foreach ($select1 as $key => $value) {
+                echo '<tr>
+                        <td> '.$value->meno_osoby.'         </td>
+                        <td> '.round($value->suma_prijmu,2).' € </td>
+                      </tr>
+                    ';
+                $pocet++;
+                $suma = $suma + $value->suma_prijmu;
+            }
+
+
+        // Vypísanie aj prázdnych kategórií
+        $z=0;
+        
+        if (Input::get('osoba') && Input::get('osoba') !=='all'){
+            $porovnaj = Input::get('osoba');
+            $dopln = 0;
+            
+            foreach ($select1 as $key => $value) {
+                    $porovnaj2 = $value->id;
+                    if ($porovnaj == $porovnaj2) {}
+                    else {
+                         
+                            $dopln++;}
+                    }
+            
+                    
+                    if ($dopln == $pocet){
+                        foreach ($persons as $osoba) {
+                            if ($osoba->id==$porovnaj){
+                                         
+                        echo '
+                        <tr>
+                            <td>'.$osoba->t_meno_osoby.' '.$osoba->t_priezvisko_osoby.'  </td>
+                            <td> 0 €            </td>
+                            
+                        </tr>'; }}}
+
+        }
+        else {
+            foreach ($vsetciosoby as $key => $value) {
+                $porovnaj1 = $vsetciosoby[$z]->meno_osoby;
+                $dopln = 0;
+
+                foreach ($select1 as $key => $value) {
+                    $porovnaj2 = $value->meno_osoby;
+                    
+                    if ($porovnaj1 == $porovnaj2) {}
+                        else {$dopln++;}    // Nezhoduje sa ani v 1 prípade
+                }
+
+                if ($dopln == $pocet) echo '
+                            <tr>
+                                <td>'.$porovnaj1.'  </td>
+                                <td> 0 €            </td>
+                            </tr>';
+                
+        $z++;
+        }
+         echo '<tr class="info" style="font-weight:bold;">
+         <td> CELKOVÁ SUMA:          </td>
+         <td> '.round($suma,2).'     </td>
+      </tr>';
+    }
+
+
+
+    }
+
+    if ($zob_typ == 'mes') {
+                echo " 
                             <thead>
                                 
                                 <TR>
@@ -139,6 +217,19 @@ $(document).ready(function(){
                            "; 
                                           
     $i=0; 
+
+            $sum_za_januar=0;
+            $sum_za_februar=0;
+            $sum_za_marec=0;
+            $sum_za_april=0;
+            $sum_za_maj=0;
+            $sum_za_jun=0;
+            $sum_za_jul=0;
+            $sum_za_august=0;
+            $sum_za_september=0;
+            $sum_za_oktober=0;
+            $sum_za_november=0;
+            $sum_za_december=0;
 
     $data = array();
 
@@ -191,7 +282,7 @@ $(document).ready(function(){
                 }
              
                 echo '  <tr>
-                        <td>'.$op[$i-1]['meno'].'  </td>
+                        <td width="250px">'.$op[$i-1]['meno'].'  </td>
                         <td> '.$januar.' €              </td>
                         <td> '.$februar.' €             </td>
                         <td> '.$marec.' €               </td>
@@ -206,15 +297,43 @@ $(document).ready(function(){
                         <td> '.$december.' €            </td>
 
                       </tr>';
+
+                $sum_za_januar = $sum_za_januar + $januar;
+                $sum_za_februar = $sum_za_februar + $februar;
+                $sum_za_marec = $sum_za_marec + $marec;
+                $sum_za_april = $sum_za_april + $april;
+                $sum_za_maj = $sum_za_maj + $maj;
+                $sum_za_jun = $sum_za_jun + $jun;
+                $sum_za_jul = $sum_za_jul + $jul;
+                $sum_za_august = $sum_za_august + $august;
+                $sum_za_september = $sum_za_september + $september;
+                $sum_za_oktober = $sum_za_oktober + $oktober;
+                $sum_za_november = $sum_za_november + $november;
+                $sum_za_december = $sum_za_december + $december;
+                
                 }
                 
     $z=0;
-    if (Input::get('osoba')){
-                /*$porovnaj = Input::get('osoba')//->t_meno_osoby
-                 echo '$porovnaj';   
-                    /*echo '
+     if (Input::get('osoba') && Input::get('osoba') !=='all'){
+            $porovnaj = Input::get('osoba');
+            $dopln = 0;
+            
+            foreach ($select1 as $key => $value) {
+                    $porovnaj2 = $value->id;
+                    if ($porovnaj == $porovnaj2) {}
+                    else {
+                         
+                            $dopln++;}
+                    }
+            
+                    
+                    if ($dopln == $pocet){
+                        foreach ($persons as $osoba) {
+                            if ($osoba->id==$porovnaj){
+                                         
+                        echo '
                         <tr>
-                            <td>'.$porovnaj.'  </td>
+                            <td style="width:50px;">'.$osoba->t_meno_osoby.' '.$osoba->t_priezvisko_osoby.'  </td>
                             <td> 0 €            </td>
                             <td> 0 €            </td>
                             <td> 0 €            </td>
@@ -227,11 +346,12 @@ $(document).ready(function(){
                             <td> 0 €            </td>
                             <td> 0 €            </td>
                             <td> 0 €            </td>
-                        </tr>';*/
+                            
+                        </tr>'; }}}
     }
     else {
-    foreach ($vsetciosoby as $key => $value) {
-        $porovnaj1 = $vsetciosoby[$z]->t_meno_osoby;
+        foreach ($vsetciosoby as $key => $value) {
+        $porovnaj1 = $vsetciosoby[$z]->meno_osoby;
         $dopln = 0;
 
             for ($i=0; $i < $pocet ; $i++) { 
@@ -259,6 +379,22 @@ $(document).ready(function(){
                         </tr>';
              $z++;
     
+        }
+          echo '<tr class="info" style="font-weight:bold; font-size:13px;">
+                <td> SUM ZA MESIAC:             </td>
+                <td> '.$sum_za_januar.' €       </td>
+                <td> '.$sum_za_februar.' €      </td>
+                <td> '.$sum_za_marec.' €        </td>
+                <td> '.$sum_za_april.' €        </td>
+                <td> '.$sum_za_maj.' €          </td>
+                <td> '.$sum_za_jun.' €          </td>
+                <td> '.$sum_za_jul.' €          </td>
+                <td> '.$sum_za_august.' €       </td>
+                <td> '.$sum_za_september.' €    </td>
+                <td> '.$sum_za_oktober.' €      </td>
+                <td> '.$sum_za_november.' €     </td>
+                <td> '.$sum_za_december.' €     </td>
+                </tr>';
     }
 }
 

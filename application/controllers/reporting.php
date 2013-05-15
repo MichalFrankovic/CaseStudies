@@ -84,21 +84,23 @@ public function action_report_vydavky() {
 
     public function action_report_prijmy(){
 
-		$viewData = array(
-			'typy'			=> Prijem::get_typy(),
-			'persons'		=> Prijem::get_person(),
-			);
+        $viewData = array(
+            'typy'          => Prijem::get_typy(),
+            'persons'       => Prijem::get_person(),
+            );
 
-		$view = View::make('reporting.report-prijmy',$viewData)
-					->with('active', 'reporting')
-					->with('subactive','reporting/prijmy');
+        $view = View::make('reporting.report-prijmy',$viewData)
+                    ->with('active', 'reporting')
+                    ->with('subactive','reporting/prijmy');
 
         $zac_datum = Input::get('od');
         $kon_datum = Input::get('do');
         $cas_jednotka = Input::get('typ_zob');
-        $id_osoba = Input::get('osoba');
+        $osoba = Input::get('osoba');
+        $zob_typ = Input::get('zob_typ');
 
-        //if (!isset($zobrazovanie)) $zobrazovanie = 'celkove';
+        if (!isset($zob_typ)) $zob_typ = 'cel';
+        if (!isset($osoba)) $osoba = 'all';
 
       // Takýto formát mi treba do DB: = '"2013-03-31"';
 
@@ -126,36 +128,66 @@ public function action_report_vydavky() {
             }
 
 
-        $view->select2 = DB::query("SELECT MONTHNAME(d_datum) as mesiac, dosoba.t_meno_osoby as meno_osoby, 
-                                   SUM(vl_suma_prijmu) as suma_prijmu
-                                    FROM F_PRIJEM fp
-                                    join D_OSOBA dosoba
-                                    join D_DOMACNOST dd
-                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost = ". Auth::user()->id ." and dosoba.id_domacnost
-                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."'
-                                    GROUP BY MONTH(d_datum), dosoba.t_meno_osoby"); 
+        
 
         if(Input::get('osoba') && Input::get('osoba') !== 'all'){
             
-        $view->select2 = DB::query("SELECT MONTHNAME(d_datum) as mesiac, dosoba.t_meno_osoby as meno_osoby, SUM(vl_suma_prijmu) as suma_prijmu
-                                    FROM F_PRIJEM fp
-                                    join D_OSOBA dosoba
+        $view->select1 = DB::query("SELECT CONCAT(t_meno_osoby, ' ', t_priezvisko_osoby) as meno_osoby, SUM(fp.vl_suma_prijmu) as suma_prijmu, dosoba.id as id
+                                    FROM D_OSOBA dosoba
+                                    LEFT OUTER JOIN F_PRIJEM fp ON fp.id_osoba = dosoba.id
                                     join D_DOMACNOST dd
-                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost = ". Auth::user()->id ." and dosoba.id_domacnost
-                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."' and dosoba.id = '".$id_osoba."'
-                                    GROUP BY MONTH(d_datum), dosoba.t_meno_osoby");
+                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost and dosoba.id_domacnost= ". Auth::user()->id ." and dosoba.id_domacnost
+                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."' and dosoba.id = '".$osoba."'
+                                    GROUP BY meno_osoby ");
+
+        $view->select2 = DB::query("SELECT CONCAT(t_meno_osoby, ' ', t_priezvisko_osoby) as meno_osoby, MONTHNAME(fp.d_datum) as mesiac,
+                                   SUM(fp.vl_suma_prijmu) as suma_prijmu
+                                    FROM D_OSOBA dosoba
+                                    LEFT OUTER JOIN F_PRIJEM fp ON fp.id_osoba = dosoba.id
+                                    join D_DOMACNOST dd
+                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost and dosoba.id_domacnost= ". Auth::user()->id ." and dosoba.id_domacnost
+                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."' and dosoba.id = '".$osoba."'
+                                    GROUP BY meno_osoby, MONTH(fp.d_datum)"); 
+        }
+        else { 
+
+        $view->select1 = DB::query("SELECT CONCAT(t_meno_osoby, ' ', t_priezvisko_osoby) as meno_osoby, SUM(fp.vl_suma_prijmu) as suma_prijmu, dosoba.id as id
+                                    FROM D_OSOBA dosoba
+                                    LEFT OUTER JOIN F_PRIJEM fp ON fp.id_osoba = dosoba.id
+                                    join D_DOMACNOST dd
+                                    WHERE fp.id_osoba = dosoba.id and dd.id = dosoba.id_domacnost and dosoba.id_domacnost= ". Auth::user()->id ." and dosoba.id_domacnost
+                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."'
+                                    GROUP BY meno_osoby ");
+
+        $view->select2 = DB::query("SELECT CONCAT(t_meno_osoby, ' ', t_priezvisko_osoby) as meno_osoby, MONTHNAME(fp.d_datum) as mesiac,
+                                   SUM(fp.vl_suma_prijmu) as suma_prijmu
+                                    FROM D_OSOBA dosoba
+                                    LEFT OUTER JOIN F_PRIJEM fp ON fp.id_osoba = dosoba.id
+                                    join D_DOMACNOST dd
+                                    WHERE dd.id = dosoba.id_domacnost and dosoba.id_domacnost= ". Auth::user()->id ." and dosoba.id_domacnost
+                                    and d_datum >=  '".$zac_datum."' AND d_datum <=  '".$kon_datum."'
+                                    GROUP BY meno_osoby, MONTH(fp.d_datum)"); 
+        
+        $view->vsetciosoby = DB::query("SELECT CONCAT(t_meno_osoby, ' ', t_priezvisko_osoby) as meno_osoby
+                                        FROM D_OSOBA dos
+                                        join D_DOMACNOST d
+                                        WHERE dos.id_domacnost = d.id and dos.id_domacnost = ". Auth::user()->id ." 
+                                        GROUP BY meno_osoby");
         }
 
-        $view->vsetciosoby = DB::query("SELECT t_meno_osoby
-                                            FROM D_OSOBA
-                                            WHERE id_domacnost = ". Auth::user()->id ." ");
-		
+        $view->vsetciosoby = DB::query("SELECT CONCAT(t_meno_osoby, ' ', t_priezvisko_osoby) as meno_osoby
+                                        FROM D_OSOBA dos
+                                        join D_DOMACNOST d
+                                        WHERE dos.id_domacnost = d.id and dos.id_domacnost = ". Auth::user()->id ." 
+                                        GROUP BY meno_osoby");
+        
         if ($zac_datum == '1970-01-01') $zac_datum ='';
 
         return $view->with('zac_datum',$zac_datum)
-                    ->with('kon_datum',$kon_datum);
-                    //->with('id',$id_osoba);
-	}
+                    ->with('kon_datum',$kon_datum)
+                    ->with('osoba',$osoba)
+                    ->with('zob_typ',$zob_typ);
+    }
 
 
 
