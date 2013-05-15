@@ -18,7 +18,7 @@
 	{{ HTML::script('assets/js/app.js') }}
 
 	<style type="">
-		.navbar-inner{background-image:url({{ URL::to('../application/obrazky/modra.jpg') }}) !important; border: 1px !important;
+		.navbar-inner{background-image:url({{ URL::to('../application/obrazky/modra.jpg') }}) !important; border: 1px !important; z-index:5 !important; opacity:10; filter:alpha(opacity=40);}
 	</style>
 
 </head>
