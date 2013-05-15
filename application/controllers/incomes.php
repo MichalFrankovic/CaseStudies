@@ -217,6 +217,9 @@ if (!preg_match('/[1-9]|[1-9]./', $vl_suma_prijmu))
 {  
       $errors['vl_suma_prijmu'] = 'Suma musí obsahovať číslo';
     }
+if ($vl_suma_prijmu == '0') {
+	  $errors['vl_suma_prijmu'] = 'Zadajte prosím sumu vyššiu ako nula';
+}
 
 if ($id_obchodny_partner == 'Nezaradený') 
 {  
