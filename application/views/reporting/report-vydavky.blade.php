@@ -7,25 +7,17 @@
 
 <style type="text/css">
 td {text-align: center !important;}
+
+.uzsi {width: 50% !important;}
 </style>
 
 <form class="side-by-side" name="tentoForm" id="aktualnyformular"  method="POST" action="report_vydavky" accept-charset="UTF-8">  
 <div class="thumbnail" >
-    <h4> Reporting výdavkov </h4>
-
-    <div class="input-prepend">
-		<span class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Zvoľ level: </span>
-
-		<select name='level' class="span3"> 
-			<option value='level1'>	Level 1 	</option>
-
-		</select>	
-	</div>
-
+    <h4> Filter pre reporting výdavkov: </h4>
 
     <div class="input-prepend" style="float:left;margin-right:50px">
         <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum od: </span>
-        <input class="span3 datepicker" type="text" name="od" value="<?php 
+        <input class="span2 datepicker" type="text" name="od" value="<?php 
         																if ($zaciatok == '') { }
         																	else {
 																				$date = new DateTime($zaciatok);
@@ -37,7 +29,7 @@ td {text-align: center !important;}
 
     <div class="input-prepend" style="margin-left:50px">
 	    <span class="add-on" style="width:80px;text-align:left;padding-left:10px;">Dátum do: </span>
-	    <input class="span3 datepicker" type="text" name="do" value="<?php 
+	    <input class="span2 datepicker" type="text" name="do" value="<?php 
 																		$date = new DateTime($koniec);
 																		echo $date->format('d.m.Y'); 
 																	?>">
@@ -45,14 +37,29 @@ td {text-align: center !important;}
 
 
 	<div class="input-prepend">
+		<span class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Zvoľ level: </span>
+
+		<select name='level' class="span2"> 
+			<option value='level1'>	Level 1 	</option>
+
+		</select>	
+	</div>
+
+
+	<div class="input-prepend">
 		<span class="add-on" style="width:80px;text-align:left;padding-left:10px;"> Zobrazenie: </span>
 
-		<select name='zobrazovanie' class="span3"> 
+		<select name='zobrazovanie' class="span2"> 
 			<option value='celkove'> Celkové		</option>
 			<option value='mesacne' <?php if ($zobrazovanie == 'mesacne') echo "selected='selected'"; ?>> Po mesiacoch 	</option>
 
 		</select>	
 	</div>
+
+	<a href="../reporting/report_vydavky" class="btn btn-primary"> 
+	    <i class="icon-remove icon-white"> </i> 
+	        Zruš 
+	</a> 
 
     <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Zobraziť	</button>
         
@@ -60,10 +67,12 @@ td {text-align: center !important;}
  {{ Form::close() }}
 
 <?php
+$suma = 0;
+
 if ($zobrazovanie == 'celkove') {
 
 	$pocet = 0;
-	echo "<TABLE class='table table-bordered table-striped side-by-side'>
+	echo "<TABLE class='table table-striped side-by-side uzsi'>
 			<THEAD>
 			<TR>
 				<TH style='width:250px'> Názov kategórie	</TH>
@@ -74,10 +83,12 @@ if ($zobrazovanie == 'celkove') {
 			foreach ($select1 as $key => $value) {
 				echo '<tr>
 						<td> '.$value->t_nazov.' 	   	 </td>
-						<td> '.$value->suma_vydavkov.' € </td>
+						<td> '.round($value->suma_vydavkov,2).' € </td>
 					  </tr>
 					';
 				$pocet++;
+
+				$suma = $suma + $value->suma_vydavkov;
 			}
 
 
@@ -103,6 +114,10 @@ if ($zobrazovanie == 'celkove') {
 		$z++;
 		}
 
+echo '<tr class="info" style="font-weight:bold;">
+		 <td> CELKOVÁ SUMA:			 </td>
+		 <td> '.round($suma,2).'	 </td>
+	  </tr>';
 }
 
 
@@ -128,6 +143,21 @@ echo "
 		</TR>
 	</THEAD>";
 
+// Pre spočítavanie sumy za každý mesiac:
+			$sum_za_januar=0;
+			$sum_za_februar=0;
+			$sum_za_marec=0;
+			$sum_za_april=0;
+			$sum_za_maj=0;
+			$sum_za_jun=0;
+			$sum_za_jul=0;
+			$sum_za_august=0;
+			$sum_za_september=0;
+			$sum_za_oktober=0;
+			$sum_za_november=0;
+			$sum_za_december=0;
+
+			
  $i=0; 
 
 	$data = array();
@@ -138,6 +168,7 @@ $pocet=0;
 		}
 
 	$op = array();
+
 
 	foreach ($data as $daco) {
 
@@ -203,7 +234,18 @@ $pocet=0;
 					  </tr>';
 
 
-					
+			$sum_za_januar = $sum_za_januar + $januar;
+			$sum_za_februar = $sum_za_februar + $februar;
+			$sum_za_marec = $sum_za_marec + $marec;
+			$sum_za_april = $sum_za_april + $april;
+			$sum_za_maj = $sum_za_maj + $maj;
+			$sum_za_jun = $sum_za_jun + $jun;
+			$sum_za_jul = $sum_za_jul + $jul;
+			$sum_za_august = $sum_za_august + $august;
+			$sum_za_september = $sum_za_september + $september;
+			$sum_za_oktober = $sum_za_oktober + $oktober;
+			$sum_za_november = $sum_za_november + $november;
+			$sum_za_december = $sum_za_december + $december;
 	}
 		//echo $data['BYVANIE'][1]->mesiac;
 
@@ -242,6 +284,22 @@ $pocet=0;
 	$z++;
 	}
 
+
+echo '<tr class="info" style="font-weight:bold; font-size:13px;">
+		<td> SUM ZA MESIAC:				</td>
+		<td> '.$sum_za_januar.' €		</td>
+		<td> '.$sum_za_februar.' €		</td>
+		<td> '.$sum_za_marec.' €		</td>
+		<td> '.$sum_za_april.' €		</td>
+		<td> '.$sum_za_maj.' €			</td>
+		<td> '.$sum_za_jun.' €			</td>
+		<td> '.$sum_za_jul.' €			</td>
+		<td> '.$sum_za_august.' €		</td>
+		<td> '.$sum_za_september.' €	</td>
+		<td> '.$sum_za_oktober.' €		</td>
+		<td> '.$sum_za_november.' €		</td>
+		<td> '.$sum_za_december.' €		</td>
+	</tr>';
 }
 
 ?>

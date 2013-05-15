@@ -54,7 +54,7 @@ public function action_report_vydavky() {
                                     join R_VYDAVOK_KATEGORIA_A_PRODUKT rv
                                     join D_KATEGORIA_A_PRODUKT dkap
                                     join D_DOMACNOST dd
-                                    WHERE fv.id = rv.id_vydavok and dkap.id = rv.id_kategoria_a_produkt and dd.id = dkap.id_domacnost = ". Auth::user()->id ." and dkap.id_domacnost and dkap.id_kategoria_parent IS NULL
+                                    WHERE fv.id = rv.id_vydavok and dkap.id = rv.id_kategoria_a_produkt and dkap.id_domacnost = ". Auth::user()->id ." and dkap.id_kategoria_parent IS NULL
                                     and d_datum >=  '".$zaciatok."' AND d_datum <=  '".$koniec."'
                                     GROUP BY dkap.t_nazov, dkap.id, dkap.id_kategoria_parent"); 
 
