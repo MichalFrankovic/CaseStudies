@@ -229,36 +229,39 @@ function pridaj_riadok_do_vydavkov()
     $('#tbl-vydavky').append('<tr>\
         <td><input type="hidden" name="vydavok-id[]" id="hidden" value="N"/></td>\
     <td>\
-        <select name="polozka-id[]" class="span3">\
+        <select name="polozka-id[]" class="span3 trieda_polozky">\
     '+tmptext+'\
         </select>\
     </td>\
         <td>\
         <div class="input-append">\
-            <input id="cena" name="cena[]" class="span2" type="text"/>\
+            <input name="cena[]" class="span2 trieda_cena" type="text"/>\
             <span class="add-on">€</span>\
         </div>\
     </td>\
     <td>\
         <div class="input-append">\
-            <input id="mnozstvo" name="mnozstvo[]" class="span1" type="text" value="1" />\
+            <input name="mnozstvo[]" class="span1 trieda_mnozstvo" type="text" value="1" />\
             <span class="add-on">m.j.</span>\
         </div>\
     </td>\
     <td>\
         <div class="input-append">\
-            <input id="cenapolozkykratpocet" name="cenapolozkykratpocet[]" class="span1" type="text" value="" />\
+            <input name="zlava[]" class="span1 trieda_zlava" type="text" value="0" />\
+            <select name="typ-zlavy[]" class="span2">\
+                <option value="0" selected="selected">Bez zlavy</option>\
+                <option value="P" >Zlava v %</option>\
+                <option value="A" >Zlava v EUR</option>\
+            </select>\
+        </div>\
+    </td>\
+    <td>\
+        <div class="input-append">\
+            <input name="total[]" class="span1 trieda_total" type="text" value="" />\
             <span class="add-on">€</span>\
         </div>\
     </td>\
-        <td>\
-        <input name="zlava[]" class="span1" type="text" value="0" />\
-    <select name="typ-zlavy[]" class="span2">\
-    <option value="0" selected="selected">Bez zlavy</option>\
-    <option value="P" >Zlava v %</option>\
-    <option value="A" >Zlava v EUR</option>\
-</select>\
-</td></tr>');
+    </tr>');
 }
 
 
