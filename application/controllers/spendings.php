@@ -71,7 +71,9 @@ class Spendings_Controller extends Base_Controller {
         $view->vydavky = Vydavok::where_in('id_osoba',$id_osob)->order_by('d_datum', 'DESC')->get();
 
         //Obchodní partneri - príjemcovia
-        $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER')->where('id_domacnost', '=',Auth::user()->id)->order_by('t_nazov')->get();
+        $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER')
+                                ->where('id_domacnost', '=',Auth::user()->id)
+                                ->where('fl_typ', '!=','Zdroj príjmu')->order_by('t_nazov')->get();
 
         
         //Typy výdavkov
