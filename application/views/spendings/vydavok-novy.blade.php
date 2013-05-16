@@ -24,8 +24,8 @@
     </div>
 
     <div class="input-prepend" style="float:left;width:350px">
-        <span class="add-on">   Partner:          </span>
-        <select name="partner" class="span3">
+        <span class="add-on">   Partner - príjemca:          </span>
+        <select name="partner" class="span2">
             @foreach ($partneri as $partner)
             <option value="{{ $partner->id }}"> {{ $partner->t_nazov }} </option>
             @endforeach

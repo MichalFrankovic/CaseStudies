@@ -158,8 +158,8 @@ class Spendings_Controller extends Base_Controller {
 
         //Obchodný partner - prijemca
         $view->obch_partneri = DB::table('D_OBCHODNY_PARTNER') 
-        ->where('id_domacnost', '=',Auth::user()
-        ->id)->order_by('t_nazov')->get();
+        ->where('id_domacnost', '=',Auth::user()->id)
+        ->where('fl_typ', '!=','Zdroj príjmu')->order_by('t_nazov')->get();
 
         
         //Filter podľa obchodného partnera
@@ -290,7 +290,8 @@ class Spendings_Controller extends Base_Controller {
 
         $view->dzejson = Response::json($view->polozky);
         
-        $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)->order_by('t_nazov')->get();
+        $view->partneri = Partner::where('id_domacnost','=',Auth::user()->id)
+                            ->where('fl_typ', '!=','Zdroj príjmu')->order_by('t_nazov')->get();
         
         $view->message = Session::get('message');
 
