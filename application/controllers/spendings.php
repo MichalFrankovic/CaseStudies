@@ -107,7 +107,7 @@ class Spendings_Controller extends Base_Controller {
         $view->polozky = DB::query("select
                                       a.id,
                                       concat(
-                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria,(LOCATE('K','a.id_kategoria')), 4))
                                     else space(length(a.id_kategoria)-4)
                                     end,
                                     ' ',
@@ -254,7 +254,7 @@ class Spendings_Controller extends Base_Controller {
         $view->polozky = DB::query("select
                                       a.id,
                                       concat(
-                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria,(LOCATE('K','a.id_kategoria')) ,4))
                                     else space(length(a.id_kategoria)-4)
                                     end,
                                     ' ',
@@ -458,7 +458,7 @@ class Spendings_Controller extends Base_Controller {
         	$view->polozky = DB::query("select
                                       a.id,
                                       concat(
-                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria,(LOCATE('K','a.id_kategoria')), 4))
                                     else space(length(a.id_kategoria)-4)
                                     end,
                                     ' ',
@@ -514,7 +514,7 @@ class Spendings_Controller extends Base_Controller {
     		$view->polozky = DB::query("select
                                       a.id,
                                       concat(
-                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria, 4))
+                                    case when a.typ =  'K' then concat(space(length(a.id_kategoria)-4), substr(a.id_kategoria,(LOCATE('K','a.id_kategoria')), 4))
                                     else space(length(a.id_kategoria)-4)
                                     end,
                                     ' ',
